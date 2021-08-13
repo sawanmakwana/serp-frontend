@@ -18,8 +18,18 @@ body {
   background: #3F51B5;
   color: #fff;
 }
+.keyword-modal .MuiTypography-h6 {
+  font-size: 18px;
+  line-height: 1.8;
+}
 .helperText {
  margin-top: -6px !important;
+}
+.tableHeader {
+  font-size: 16px !important;
+}
+.tableHeader span{
+  font-weight: 400;
 }
 .spinner {
   height: 100vh;
@@ -33,4 +43,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.ml-2{
+  margin-left: 1rem !important;
 }

@@ -89,7 +89,14 @@ function AddModal({open, setOpen}) {
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   return (
-    <Dialog fullScreen={fullScreen} className="keyword-modal" onClose={() => setOpen(false)} open={open}>
+    <Dialog
+      disableBackdropClick
+      fullScreen={fullScreen}
+      disableEscapeKeyDown
+      className="keyword-modal"
+      onClose={() => setOpen(false)}
+      open={open}
+    >
       <MuiDialogTitle disableTypography className={classes.root}>
         <Typography variant="h6">Keyword for domain</Typography>
         <IconButton className={classes.closeButton} onClick={() => setOpen(false)}>
@@ -164,6 +171,7 @@ function AddModal({open, setOpen}) {
         <Button onClick={() => setOpen(false)}>Cancel</Button>
         <Button
           loading
+          className="ml-2"
           loadingPosition="start"
           variant="contained"
           autoFocus
@@ -171,7 +179,7 @@ function AddModal({open, setOpen}) {
           color="primary"
           disabled={isLoading}
         >
-          {isLoading ? 'Loading...' : 'Save'}
+          {isLoading ? 'Loading...' : 'Add Keyword'}
         </Button>
       </DialogActions>
     </Dialog>

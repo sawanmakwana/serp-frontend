@@ -47,8 +47,8 @@ function Home() {
   return (
     <Paper>
       <Toolbar className={classesTool.root}>
-        <Typography className={classesTool.title} variant="h6" id="tableTitle" component="div">
-          Keyword ({data.data?.total})
+        <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
+          Keyword <span> ({data.data?.total})</span>
         </Typography>
       </Toolbar>
       <TableContainer>
