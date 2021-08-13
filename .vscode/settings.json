@@ -1,0 +1,29 @@
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#000",
+    "titleBar.inactiveForeground": "#000000CC",
+    "titleBar.activeBackground": "#62d1b583",
+    "titleBar.inactiveBackground": "#60d3b667"
+  },
+  // These are all my auto-save configs
+  "editor.formatOnSave": true,
+  // turn it off for JS and JSX, we will do this via eslint
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": false
+  },
+  // tell the ESLint plugin to run on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  // eslint only
+  "javascript.validate.enable": false,
+
+  // no pretter prettier
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+
+  // keep this otherwise eslint will make you cry
+  "files.eol": "\n"
+}

@@ -1,0 +1,19 @@
+body, h1, h2, h3, h4, h5 {
+  padding: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.5;
+}
+body {
+  margin: 0;
+  overflow-x: auto;
+  min-width: 320px;
+  background: #f5f7fa;
+  font-size: 14px;
+  color: #001f3d;
+}
+.keyword-modal .MuiFormHelperText-contained {
+  margin-left: 3px;
+}
+.helperText {
+ margin-top: -6px !important;
+}

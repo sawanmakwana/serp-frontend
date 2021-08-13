@@ -1,0 +1,48 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "extends": "wesbos",
+  "rules": {
+    "no-shadow": 0,
+    "no-nested-ternary": 1,
+    "react/destructuring-assignment": 1,
+    "react/jsx-filename-extension": 1,
+    "react/jsx-props-no-spreading": 1,
+    "jsx-a11y/click-events-have-key-events": 1,
+    "jsx-a11y/no-static-element-interactions": 1,
+    "jsx-a11y/label-has-associated-control": 0,
+    "no-useless-escape": 1,
+    "import/no-unresolved": 0,
+    "react/prop-types": 0,
+    "no-console": 1,
+    "linebreak-style": 0,
+    "radix": 0,
+    "max-len": 0,
+    "no-param-reassign": 0,
+    "no-eval": 1,
+    "arrow-body-style": 0,
+    "object-curly-newline": 0,
+    "no-underscore-dangle": 0,
+    "arrow-parens": 0,
+    "array-callback-return": 0,
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "es5",
+        "singleQuote": true,
+        "printWidth": 120,
+        "tabWidth": 2
+      }
+    ]
+  }
+}
