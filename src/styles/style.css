@@ -14,6 +14,23 @@ body {
 .keyword-modal .MuiFormHelperText-contained {
   margin-left: 3px;
 }
+.keyword-modal .MuiDialogTitle-root {
+  background: #3F51B5;
+  color: #fff;
+}
 .helperText {
  margin-top: -6px !important;
+}
+.spinner {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.urlEcllips {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

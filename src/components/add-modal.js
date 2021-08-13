@@ -21,6 +21,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {QueryClient, useMutation, useQueryClient} from 'react-query'
 import axios from 'axios'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import {currencies} from '../constants/constants'
 import {addKeyword} from '../validations/add-keyword'
 
@@ -34,7 +35,7 @@ function AddModal({open, setOpen}) {
       position: 'absolute',
       right: theme.spacing(1),
       top: theme.spacing(1),
-      color: theme.palette.grey[500],
+      color: '#fff',
     },
   }))
   const useStylesForm = makeStyles(theme => ({
@@ -75,15 +76,14 @@ function AddModal({open, setOpen}) {
     }
   )
 
-  console.log(`isLoading ${isLoading}`)
-  console.log(`isError ${isError}`)
-  console.log(`error ${error}`)
-  console.log(`isSuccess ${isSuccess}`)
+  // console.log(`isLoading ${isLoading}`)
+  // console.log(`isError ${isError}`)
+  // console.log(`error ${error}`)
+  // console.log(`isSuccess ${isSuccess}`)
 
   const submitForm = submitdata => {
     mutate(submitdata)
     console.log(submitdata)
-    // setOpen(false)
   }
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -108,6 +108,7 @@ function AddModal({open, setOpen}) {
                 error={errors.locationCode}
                 variant="outlined"
                 onBlur={onBlur}
+                disabled={isLoading}
                 helperText={errors.locationCode && errors.locationCode.message}
               >
                 {currencies.map(option => (
@@ -126,6 +127,7 @@ function AddModal({open, setOpen}) {
               <TextField
                 label={!errors.keyword ? 'Keyword' : 'Error'}
                 multiline
+                disabled={isLoading}
                 rows={5}
                 margin="dense"
                 fullWidth
@@ -147,6 +149,7 @@ function AddModal({open, setOpen}) {
               <TextField
                 variant="outlined"
                 label={!errors.domain ? 'Enter domain' : 'Error'}
+                disabled={isLoading}
                 onBlur={onBlur}
                 value={value}
                 error={errors.domain}
@@ -166,6 +169,7 @@ function AddModal({open, setOpen}) {
           autoFocus
           onClick={handleSubmit(submitForm)}
           color="primary"
+          disabled={isLoading}
         >
           {isLoading ? 'Loading...' : 'Save'}
         </Button>

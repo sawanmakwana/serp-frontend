@@ -1,10 +1,17 @@
 import * as React from 'react'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const AppRoutes = React.lazy(() => import('./app-route'))
 
 function App() {
   return (
-    <React.Suspense fallback={<h1>Loading...</h1>}>
+    <React.Suspense
+      fallback={
+        <div className="spinner">
+          <CircularProgress />
+        </div>
+      }
+    >
       <AppRoutes />
     </React.Suspense>
   )
