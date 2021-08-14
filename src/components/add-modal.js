@@ -50,6 +50,8 @@ function AddModal({open, setOpen}) {
   }))
   const classes = useStyles()
   const classesFrom = useStylesForm()
+  const [tost, settost] = useState(false)
+  const [tostMsg, settostMsg] = useState('')
 
   const {handleSubmit, errors, control} = useForm({
     mode: 'onTouched',
@@ -72,6 +74,8 @@ function AddModal({open, setOpen}) {
     {
       onSuccess: () => {
         setOpen(false)
+        // settost(true)
+        // settostMsg('Keyword')
         console.log('onSuccess: Keyword added')
         queryClient.invalidateQueries('reposData')
       },
@@ -196,7 +200,7 @@ function AddModal({open, setOpen}) {
         </Button>
       </DialogActions>
 
-      {/* <Snackbar autoHideDuration={6000} open message="I love snacks" /> */}
+      {/* {tost && <Snackbar autoHideDuration={6000} open message={tostMsg} />} */}
 
       {/* <Snackbar autoHideDuration={6000} open>
         <MuiAlert elevation={6} variant="filled" severity="success">

@@ -114,7 +114,7 @@ function Home() {
                 <TableCell>{keyword.keyword}</TableCell>
                 <TableCell>-</TableCell>
                 <TableCell>{keyword.item.rankAbsolute}</TableCell>
-                <TableCell>diff</TableCell>
+                <TableCell>-</TableCell>
                 <Tooltip TransitionComponent={Zoom} title={keyword.item.url} placement="top">
                   <TableCell className="urlEcllips">{keyword.item.url}</TableCell>
                 </Tooltip>
