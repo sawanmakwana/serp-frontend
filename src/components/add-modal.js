@@ -44,7 +44,7 @@ function AddModal({open, setOpen}) {
     root: {
       '& > *': {
         margin: theme.spacing(1),
-        width: '50ch',
+        width: 'calc(100% - 18px)',
       },
     },
   }))
@@ -102,10 +102,12 @@ function AddModal({open, setOpen}) {
 
   return (
     <Dialog
-      disableBackdropClick
       fullScreen={fullScreen}
-      disableEscapeKeyDown
+      maxWidth="sm"
+      fullWidth
       className="keyword-modal"
+      disableBackdropClick
+      disableEscapeKeyDown
       onClose={() => setOpen(false)}
       open={open}
     >
