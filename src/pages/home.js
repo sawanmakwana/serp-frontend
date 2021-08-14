@@ -20,8 +20,12 @@ import {
   TableSortLabel,
   lighten,
 } from '@material-ui/core'
-import {useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
+import {useQuery, useQueryClient} from 'react-query'
+import CallMadeIcon from '@material-ui/icons/CallMade'
+import CallReceivedIcon from '@material-ui/icons/CallReceived'
+import RemoveIcon from '@material-ui/icons/Remove'
+import CheckIcon from '@material-ui/icons/Check'
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
@@ -115,7 +119,32 @@ function Home() {
 
   if (error) return `An error has occurred: ${error.message}`
 
-  console.log(data)
+  const getDifference = (prevRank, currentRank, type = '') => {
+    console.log(prevRank)
+    let diff
+    switch (type) {
+      case 'GET_NUM':
+        diff = currentRank - prevRank
+        return diff
+
+      case 'GET_ClASS':
+        if (!prevRank) return 'noprevRank'
+        if (currentRank === prevRank) return 'sameRank'
+        if (currentRank > prevRank) return 'incRank'
+        if (currentRank < prevRank) return 'decRank'
+        break
+
+      case 'GET_ICON':
+        if (!prevRank) return <RemoveIcon />
+        if (currentRank === prevRank) return <CheckIcon />
+        if (currentRank > prevRank) return <CallMadeIcon />
+        if (currentRank < prevRank) return <CallReceivedIcon />
+        break
+
+      default:
+        break
+    }
+  }
 
   return (
     <Paper>
@@ -159,15 +188,18 @@ function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.data?.result?.map((keyword, index) => (
+            {data.data?.result?.map(({keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
               <TableRow hover key={index}>
                 <TableCell className="pl-4">{index + 1}</TableCell>
-                <TableCell>{keyword.keyword}</TableCell>
-                <TableCell>{keyword.prevRankAbsolute ? keyword.prevRankAbsolute : '-'}</TableCell>
-                <TableCell>{keyword.rankAbsolute || '-'}</TableCell>
-                <TableCell>{keyword.rankAbsolute - keyword.prevRankAbsolute}</TableCell>
-                <Tooltip TransitionComponent={Zoom} title={keyword.url} placement="top">
-                  <TableCell className="urlEcllips">{keyword.url}</TableCell>
+                <TableCell>{keyword}</TableCell>
+                <TableCell>{prevRankAbsolute || '-'}</TableCell>
+                <TableCell>{rankAbsolute || '-'}</TableCell>
+                <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
+                  {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
+                  {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
+                </TableCell>
+                <Tooltip TransitionComponent={Zoom} title={url} placement="top">
+                  <TableCell className="urlEcllips">{url}</TableCell>
                 </Tooltip>
               </TableRow>
             ))}
