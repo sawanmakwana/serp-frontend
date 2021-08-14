@@ -24,10 +24,10 @@ import axios from 'axios'
 const useToolbarStyles = makeStyles(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-  title: {
-    flex: '1 1 100%',
+    paddingRight: theme.spacing(2),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 }))
 
@@ -77,6 +77,9 @@ function Home() {
         <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
           Keyword <span> ({data.data?.total})</span>
         </Typography>
+        <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
+          Current page <span> ({page + 1})</span>
+        </Typography>
       </Toolbar>
       <TableContainer>
         <Table aria-labelledby="tableTitle" size="medium" aria-label="enhanced table">
@@ -107,7 +110,7 @@ function Home() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 100]}
+        rowsPerPageOptions={[5, 10, 25, 50, 100]}
         component="div"
         count={data.data?.total}
         page={page}
