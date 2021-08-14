@@ -46,7 +46,7 @@ function Home() {
     setPage(0)
   }
 
-  async function fetchTable(page) {
+  async function fetchTable(page = 0) {
     const {data} = await axios.get(
       `http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${page + 1}`
     )
@@ -56,7 +56,10 @@ function Home() {
   const {isLoading, error, data} = useQuery(['reposData', page, rowsPerPage], () => fetchTable(page))
 
   useEffect(() => {
-    queryClient.prefetchQuery(['reposData', page + 1, rowsPerPage], () => fetchTable(page))
+    queryClient.prefetchQuery(['reposData', page + 1, rowsPerPage], () => fetchTable(page + 1), {
+      keepPreviousData: true,
+      staleTime: 5000,
+    })
   }, [data, page, queryClient, rowsPerPage])
 
   if (isLoading)
