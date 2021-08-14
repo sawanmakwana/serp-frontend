@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, {useState} from 'react'
-import {useQuery, useQueryClient} from 'react-query'
+import React, {useState, useEffect} from 'react'
 import {
   TableHead,
   TablePagination,
@@ -18,6 +18,8 @@ import {
   CircularProgress,
   makeStyles,
 } from '@material-ui/core'
+import {useQuery, useQueryClient} from 'react-query'
+import axios from 'axios'
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
@@ -44,17 +46,17 @@ function Home() {
     setPage(0)
   }
 
-  // eslint-disable-next-line no-unused-vars
-  const {isLoading, error, data, isFetching} = useQuery(['reposData', page, rowsPerPage], () =>
-    fetch(`http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${page + 1}`).then(res => res.json())
-  )
-
-  React.useEffect(() => {
-    queryClient.prefetchQuery(['reposData', page + 1, rowsPerPage], () =>
-      fetch(`http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${page + 1}`).then(res =>
-        res.json()
-      )
+  async function fetchTable(page) {
+    const {data} = await axios.get(
+      `http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${page + 1}`
     )
+    return data
+  }
+
+  const {isLoading, error, data} = useQuery(['reposData', page, rowsPerPage], () => fetchTable(page))
+
+  useEffect(() => {
+    queryClient.prefetchQuery(['reposData', page + 1, rowsPerPage], () => fetchTable(page))
   }, [data, page, queryClient, rowsPerPage])
 
   if (isLoading)
