@@ -14,6 +14,7 @@ import {
   TextField,
   Typography,
   useMediaQuery,
+  LinearProgress,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
@@ -65,6 +66,9 @@ function AddModal({open, setOpen}) {
   })
 
   const queryClient = useQueryClient()
+  const fincc = () => {
+    return <Snackbar autoHideDuration={6000} open message="I love snacks" />
+  }
 
   const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
     keywordData => axios.post('http://localhost:3000/api/v1/serp/sendTask', keywordData),
@@ -73,16 +77,17 @@ function AddModal({open, setOpen}) {
         setOpen(false)
         console.log('onSuccess: Keyword added')
         queryClient.invalidateQueries('reposData')
+        fincc()
       },
       onError: e => {
         console.log('onError: ', e)
       },
-      onSettled: () => {
-        console.log('onSettled: settled')
-      },
+      // onSettled: () => {
+      //   console.log('onSettled: settled')
+      // },
     }
   )
-  // console.log(rest)
+
   // console.log(`isLoading ${isLoading}`)
   // console.log(`isError ${isError}`)
   // console.log(`error ${error}`)
@@ -106,7 +111,12 @@ function AddModal({open, setOpen}) {
     >
       <MuiDialogTitle disableTypography className={classes.root}>
         <Typography variant="h6">Keyword for domain</Typography>
-        <IconButton className={classes.closeButton} onClick={() => setOpen(false)}>
+
+        <IconButton
+          style={{display: isLoading ? 'none' : ''}}
+          className={classes.closeButton}
+          onClick={() => setOpen(false)}
+        >
           <CloseIcon />
         </IconButton>
       </MuiDialogTitle>
@@ -174,8 +184,11 @@ function AddModal({open, setOpen}) {
           />
         </form>
       </DialogContent>
+      {isLoading && <LinearProgress />}
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
+        <Button style={{display: isLoading ? 'none' : ''}} onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
         <Button
           loading
           className="ml-2"
