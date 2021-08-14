@@ -45,7 +45,7 @@ function AppProviders({children}) {
         {tost && <Snackbar open autoHideDuration={6000} message={tostmsg} key={new Date()} />}
         {children}
       </Router>
-      <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
+      <ReactQueryDevtools position="bottom-left" initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react'
-import {useQuery} from 'react-query'
+import React, {useState} from 'react'
+import {useQuery, useQueryClient} from 'react-query'
 import {
   TableHead,
   TablePagination,
@@ -31,11 +31,33 @@ const useToolbarStyles = makeStyles(theme => ({
 
 function Home() {
   const classesTool = useToolbarStyles()
-  const {isLoading, error, data, isFetching} = useQuery('reposData', () =>
-    fetch('http://localhost:3000/api/v1/serp/getAllTasks?limit=10&page=1').then(res => res.json())
+  const queryClient = useQueryClient()
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  const {isLoading, error, data, isFetching} = useQuery(['reposData', page, rowsPerPage], () =>
+    fetch(`http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${page + 1}`).then(res => res.json())
   )
 
-  if (isLoading || isFetching)
+  React.useEffect(() => {
+    queryClient.prefetchQuery(['reposData', page + 1, rowsPerPage], () =>
+      fetch(`http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${page + 1}`).then(res =>
+        res.json()
+      )
+    )
+  }, [data, page, queryClient, rowsPerPage])
+
+  if (isLoading)
     return (
       <div className="spinner table">
         <CircularProgress />
@@ -83,12 +105,10 @@ function Home() {
         rowsPerPageOptions={[5, 10, 25, 100]}
         component="div"
         count={data.data?.total}
-        rowsPerPage={10}
-        page={0}
-
-        // page={data.data?.page}
-        // onPageChange={handleChangePage}
-        // onRowsPerPageChange={handleChangeRowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
   )
