@@ -66,9 +66,6 @@ function AddModal({open, setOpen}) {
   })
 
   const queryClient = useQueryClient()
-  const fincc = () => {
-    return <Snackbar autoHideDuration={6000} open message="I love snacks" />
-  }
 
   const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
     keywordData => axios.post('http://localhost:3000/api/v1/serp/sendTask', keywordData),
@@ -77,7 +74,6 @@ function AddModal({open, setOpen}) {
         setOpen(false)
         console.log('onSuccess: Keyword added')
         queryClient.invalidateQueries('reposData')
-        fincc()
       },
       onError: e => {
         console.log('onError: ', e)
@@ -87,11 +83,6 @@ function AddModal({open, setOpen}) {
       // },
     }
   )
-
-  // console.log(`isLoading ${isLoading}`)
-  // console.log(`isError ${isError}`)
-  // console.log(`error ${error}`)
-  // console.log(`isSuccess ${isSuccess}`)
 
   const submitForm = submitdata => {
     mutate(submitdata)
