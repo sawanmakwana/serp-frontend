@@ -71,9 +71,6 @@ body {
 .sameRank svg {
  background: #3f51b536 !important;
 }
-/* .noprevRank {
-  color: #b5d2f347 !important;
-} */
 .noprevRank svg {
   background: #b5d2f347 !important;
 }
@@ -83,9 +80,9 @@ body {
 .sameRank svg {
   padding: 3px;
   vertical-align: text-bottom;
-  margin-left: 2px;
-  height: 12px;
-  width: 12px;
+  margin-left: 5px;
+  height: 11px;
+  width: 11px;
   background: #e7ffe8;
   border-radius: 20px;
 }
