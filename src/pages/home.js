@@ -34,15 +34,17 @@ const useToolbarStyles = makeStyles(theme => ({
 function Home() {
   const classesTool = useToolbarStyles()
   const queryClient = useQueryClient()
+  const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
 
   const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10))
+    setRowsPerPage(parseInt(event.target.value))
+    window.localStorage.setItem('Rowsperpage', event.target.value)
     setPage(0)
   }
 
