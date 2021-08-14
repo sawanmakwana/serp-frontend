@@ -23,8 +23,8 @@ import axios from 'axios'
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -85,8 +85,22 @@ function Home() {
         <Table aria-labelledby="tableTitle" size="medium" aria-label="enhanced table">
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
+              <TableCell className="pl-4">#</TableCell>
               <TableCell>Keyword</TableCell>
+              {/* <TableCell key={headCell.id} sortDirection={orderBy === headCell.id ? order : false}>
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : 'asc'}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  Keyword
+                  {orderBy === headCell.id ? (
+                    <span className={classes.visuallyHidden}>
+                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    </span>
+                  ) : null}
+                </TableSortLabel>
+              </TableCell> */}
               <TableCell>Previous week</TableCell>
               <TableCell>Current week</TableCell>
               <TableCell>Difference</TableCell>
@@ -96,11 +110,11 @@ function Home() {
           <TableBody>
             {data.data?.result?.map((keyword, index) => (
               <TableRow hover key={index}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell className="pl-4">{index + 1}</TableCell>
                 <TableCell>{keyword.keyword}</TableCell>
                 <TableCell>-</TableCell>
                 <TableCell>{keyword.item.rankAbsolute}</TableCell>
-                <TableCell>rows</TableCell>
+                <TableCell>diff</TableCell>
                 <Tooltip TransitionComponent={Zoom} title={keyword.item.url} placement="top">
                   <TableCell className="urlEcllips">{keyword.item.url}</TableCell>
                 </Tooltip>
