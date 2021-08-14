@@ -66,17 +66,23 @@ function AddModal({open, setOpen}) {
 
   const queryClient = useQueryClient()
 
-  const {isLoading, isError, error, isSuccess, mutate} = useMutation(
+  const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
     keywordData => axios.post('http://localhost:3000/api/v1/serp/sendTask', keywordData),
     {
       onSuccess: () => {
         setOpen(false)
-        console.log('Keyword added')
+        console.log('onSuccess: Keyword added')
         queryClient.invalidateQueries('reposData')
+      },
+      onError: e => {
+        console.log('onError: ', e)
+      },
+      onSettled: () => {
+        console.log('onSettled: settled')
       },
     }
   )
-
+  // console.log(rest)
   // console.log(`isLoading ${isLoading}`)
   // console.log(`isError ${isError}`)
   // console.log(`error ${error}`)
