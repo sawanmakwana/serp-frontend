@@ -74,17 +74,9 @@ function AddModal({open, setOpen}) {
     {
       onSuccess: () => {
         setOpen(false)
-        // settost(true)
-        // settostMsg('Keyword')
         console.log('onSuccess: Keyword added')
         queryClient.invalidateQueries('reposData')
       },
-      onError: e => {
-        console.log('onError: ', e)
-      },
-      // onSettled: () => {
-      //   console.log('onSettled: settled')
-      // },
     }
   )
 
@@ -200,7 +192,7 @@ function AddModal({open, setOpen}) {
         </Button>
       </DialogActions>
 
-      {/* {tost && <Snackbar autoHideDuration={6000} open message={tostMsg} />} */}
+      {tost && <Snackbar autoHideDuration={6000} open={tost} message={tostMsg} />}
 
       {/* <Snackbar autoHideDuration={6000} open>
         <MuiAlert elevation={6} variant="filled" severity="success">

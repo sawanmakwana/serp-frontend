@@ -6,20 +6,22 @@ import {ReactQueryDevtools} from 'react-query/devtools'
 import {Snackbar} from '@material-ui/core'
 
 function AppProviders({children}) {
-  const [tost, settost] = useState(false)
-  const [tostmsg, settostmsg] = useState('')
+  const [toast, setToast] = useState(false)
+  const [toastmsg, setToastmsg] = useState('')
 
   const queryCache = new QueryCache({
     onError(error) {
-      console.log(error)
-      settost(true)
-      settostmsg(error)
+      console.log(error.response.data.message)
+      setToast(true)
+      setToastmsg(error.response.data.message)
     },
   })
 
   const mutationCache = new MutationCache({
     onError(error) {
-      console.log(error.message)
+      console.log(error.response.data.message)
+      setToast(true)
+      setToastmsg(error.response.data.message)
     },
   })
 
@@ -42,7 +44,15 @@ function AppProviders({children}) {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        {tost && <Snackbar open autoHideDuration={6000} message={tostmsg} key={new Date()} />}
+        {toast && (
+          <Snackbar
+            open={toast}
+            autoHideDuration={6000}
+            onClose={() => setToast(false)}
+            message={toastmsg}
+            key={new Date()}
+          />
+        )}
         {children}
       </Router>
       <ReactQueryDevtools position="bottom-left" initialIsOpen={false} />

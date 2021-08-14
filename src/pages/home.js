@@ -17,6 +17,8 @@ import {
   Tooltip,
   CircularProgress,
   makeStyles,
+  TableSortLabel,
+  lighten,
 } from '@material-ui/core'
 import {useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
@@ -31,12 +33,45 @@ const useToolbarStyles = makeStyles(theme => ({
   },
 }))
 
+const useToolbarStyles11 = makeStyles(theme => ({
+  root: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+  },
+  highlight:
+    theme.palette.type === 'light'
+      ? {
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark,
+        },
+  title: {
+    flex: '1 1 100%',
+  },
+}))
+
 function Home() {
   const classesTool = useToolbarStyles()
+  const classes = useToolbarStyles11()
   const queryClient = useQueryClient()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [currentSortingParams, setCurrentSortingParams] = useState({
+    sortBy: '',
+    sortType: '',
+  })
+
+  const handleSort = (clickedColumn, type) => () => {
+    setCurrentSortingParams({
+      ...currentSortingParams,
+      sortBy: clickedColumn,
+      sortType: type,
+    })
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -73,6 +108,8 @@ function Home() {
 
   if (error) return `An error has occurred: ${error.message}`
 
+  console.log(data)
+
   return (
     <Paper>
       <Toolbar className={classesTool.root}>
@@ -88,8 +125,13 @@ function Home() {
           <TableHead>
             <TableRow>
               <TableCell className="pl-4">#</TableCell>
-              <TableCell>Keyword</TableCell>
-              {/* <TableCell key={headCell.id} sortDirection={orderBy === headCell.id ? order : false}>
+              <TableCell sortDirection={false}>
+                <TableSortLabel onClick={handleSort('titleAZ', 'ascending')}>
+                  Keyword
+                  {/* <span className={classes.visuallyHidden}>sorted descending</span> */}
+                </TableSortLabel>
+              </TableCell>
+              {/* <TableCell sortDirection={orderBy === headCell.id ? order : false}>
                 <TableSortLabel
                   active={orderBy === headCell.id}
                   direction={orderBy === headCell.id ? order : 'asc'}
@@ -114,11 +156,11 @@ function Home() {
               <TableRow hover key={index}>
                 <TableCell className="pl-4">{index + 1}</TableCell>
                 <TableCell>{keyword.keyword}</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>{keyword.item.rankAbsolute}</TableCell>
-                <TableCell>-</TableCell>
-                <Tooltip TransitionComponent={Zoom} title={keyword.item.url} placement="top">
-                  <TableCell className="urlEcllips">{keyword.item.url}</TableCell>
+                <TableCell>{keyword.prevRankAbsolute ? keyword.prevRankAbsolute : '-'}</TableCell>
+                <TableCell>{keyword.rankAbsolute || '-'}</TableCell>
+                <TableCell>{keyword.rankAbsolute - keyword.prevRankAbsolute}</TableCell>
+                <Tooltip TransitionComponent={Zoom} title={keyword.url} placement="top">
+                  <TableCell className="urlEcllips">{keyword.url}</TableCell>
                 </Tooltip>
               </TableRow>
             ))}
