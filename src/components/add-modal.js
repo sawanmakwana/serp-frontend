@@ -183,6 +183,9 @@ function AddModal({open, setOpen}) {
           {isLoading ? 'Loading...' : 'Add Keyword'}
         </Button>
       </DialogActions>
+
+      {/* <Snackbar autoHideDuration={6000} open message="I love snacks" /> */}
+
       {/* <Snackbar autoHideDuration={6000} open>
         <MuiAlert elevation={6} variant="filled" severity="success">
           asda
