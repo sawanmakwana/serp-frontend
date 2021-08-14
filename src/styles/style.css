@@ -38,6 +38,9 @@ body {
   align-items: center;
   justify-content: center;
 }
+.spinner.table {
+  height: 90vh;
+}
 .urlEcllips {
   max-width: 150px;
   white-space: nowrap;

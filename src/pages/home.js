@@ -37,7 +37,7 @@ function Home() {
 
   if (isLoading || isFetching)
     return (
-      <div className="spinner">
+      <div className="spinner table">
         <CircularProgress />
       </div>
     )
@@ -65,7 +65,7 @@ function Home() {
           </TableHead>
           <TableBody>
             {data.data?.result?.map((keyword, index) => (
-              <TableRow hover>
+              <TableRow hover key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{keyword.keyword}</TableCell>
                 <TableCell>-</TableCell>

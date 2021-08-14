@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react'
+import React, {useState} from 'react'
 import {
   Button,
   Dialog,
@@ -10,6 +10,7 @@ import {
   FormHelperText,
   IconButton,
   MenuItem,
+  Snackbar,
   TextField,
   Typography,
   useMediaQuery,
@@ -182,6 +183,11 @@ function AddModal({open, setOpen}) {
           {isLoading ? 'Loading...' : 'Add Keyword'}
         </Button>
       </DialogActions>
+      {/* <Snackbar autoHideDuration={6000} open>
+        <MuiAlert elevation={6} variant="filled" severity="success">
+          asda
+        </MuiAlert>
+      </Snackbar> */}
     </Dialog>
   )
 }
