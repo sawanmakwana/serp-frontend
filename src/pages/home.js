@@ -84,6 +84,13 @@ function Home() {
   }
 
   async function fetchTable(page = 0) {
+    // let URL = `http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${
+    //   page + 1
+    // }`
+    // if (currentSortingParams.sortBy)
+    //   URL = `${URL}&sort=:${currentSortingParams.sortBy}`
+    // const {data} = await axios.get(`${URL}`)
+
     const {data} = await axios.get(
       `http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${page + 1}`
     )
@@ -126,7 +133,7 @@ function Home() {
             <TableRow>
               <TableCell className="pl-4">#</TableCell>
               <TableCell sortDirection={false}>
-                <TableSortLabel onClick={handleSort('titleAZ', 'ascending')}>
+                <TableSortLabel onClick={handleSort('keyword', 'asc')}>
                   Keyword
                   {/* <span className={classes.visuallyHidden}>sorted descending</span> */}
                 </TableSortLabel>

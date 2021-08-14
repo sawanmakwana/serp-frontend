@@ -21,7 +21,7 @@ function Header() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            SERP
+            SERP (Search Engine Results Page)
           </Typography>
           <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
             Add Keyword
