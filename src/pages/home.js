@@ -40,7 +40,7 @@ function Home() {
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
-  const [Sorting, setSorting] = useState('')
+  let [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
 
@@ -69,6 +69,38 @@ function Home() {
       keepPreviousData: true,
       staleTime: 5000,
     })
+    queryClient.prefetchQuery(
+      ['reposData', page, rowsPerPage, (Sorting = '&sort=keyword:asc')],
+      () => fetchTable(page, Sorting),
+      {
+        keepPreviousData: true,
+        staleTime: 5000,
+      }
+    )
+    queryClient.prefetchQuery(
+      ['reposData', page, rowsPerPage, (Sorting = '&sort=keyword:desc')],
+      () => fetchTable(page, Sorting),
+      {
+        keepPreviousData: true,
+        staleTime: 5000,
+      }
+    )
+    queryClient.prefetchQuery(
+      ['reposData', page, rowsPerPage, (Sorting = '&sort=rankAbsolute:asc')],
+      () => fetchTable(page, Sorting),
+      {
+        keepPreviousData: true,
+        staleTime: 5000,
+      }
+    )
+    queryClient.prefetchQuery(
+      ['reposData', page, rowsPerPage, (Sorting = '&sort=rankAbsolute:desc')],
+      () => fetchTable(page, Sorting),
+      {
+        keepPreviousData: true,
+        staleTime: 5000,
+      }
+    )
   }, [data, page, queryClient, rowsPerPage, Sorting])
 
   if (isLoading)
