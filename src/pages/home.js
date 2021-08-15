@@ -90,15 +90,15 @@ function Home() {
       case 'GET_ClASS':
         if (!prevRank) return 'noprevRank'
         if (currentRank === prevRank) return 'sameRank'
-        if (currentRank > prevRank) return 'incRank'
-        if (currentRank < prevRank) return 'decRank'
+        if (currentRank > prevRank) return 'decRank'
+        if (currentRank < prevRank) return 'incRank'
         break
 
       case 'GET_ICON':
         if (!prevRank) return <RemoveIcon />
         if (currentRank === prevRank) return <CheckIcon />
-        if (currentRank > prevRank) return <CallMadeIcon />
-        if (currentRank < prevRank) return <CallReceivedIcon />
+        if (currentRank > prevRank) return <CallReceivedIcon />
+        if (currentRank < prevRank) return <CallMadeIcon />
         break
 
       default:
