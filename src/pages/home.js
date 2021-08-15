@@ -137,7 +137,7 @@ function Home() {
               <TableCell sortDirection={false}>
                 <TableSortLabel
                   active={Sorting.includes('rankAbsolute')}
-                  direction={weekSortingtype === 'asc' ? 'asc' : 'desc'}
+                  direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
                   onClick={() => {
                     setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
                     setSorting(`&sort=rankAbsolute:${weekSortingtype}`)
