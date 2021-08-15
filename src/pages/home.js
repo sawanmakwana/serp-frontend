@@ -117,7 +117,7 @@ function Home() {
     switch (type) {
       case 'GET_NUM':
         diff = currentRank - prevRank
-        return diff
+        return diff.toString().replace('-', '')
 
       case 'GET_ClASS':
         if (!prevRank) return 'noprevRank'
