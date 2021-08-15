@@ -71,6 +71,9 @@ body {
 .sameRank svg {
  background: #3f51b536 !important;
 }
+.noprevRank {
+  color: #455f79 !important;
+}
 .noprevRank svg {
   background: #b5d2f347 !important;
 }
