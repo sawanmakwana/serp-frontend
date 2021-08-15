@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-console */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, {useState, useEffect} from 'react'
 import {
   TableHead,
@@ -18,7 +16,6 @@ import {
   CircularProgress,
   makeStyles,
   TableSortLabel,
-  lighten,
 } from '@material-ui/core'
 import axios from 'axios'
 import {useQuery, useQueryClient} from 'react-query'
@@ -37,45 +34,15 @@ const useToolbarStyles = makeStyles(theme => ({
   },
 }))
 
-const useToolbarStyles11 = makeStyles(theme => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
-  title: {
-    flex: '1 1 100%',
-  },
-}))
-
 function Home() {
   const classesTool = useToolbarStyles()
-  const classes = useToolbarStyles11()
   const queryClient = useQueryClient()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
-  const [currentSortingParams, setCurrentSortingParams] = useState({
-    sortBy: '',
-    sortType: '',
-  })
-
-  const handleSort = (clickedColumn, type) => () => {
-    setCurrentSortingParams({
-      ...currentSortingParams,
-      sortBy: clickedColumn,
-      sortType: type,
-    })
-  }
+  const [Sorting, setSorting] = useState('')
+  const [keySortingtype, setkeySortingtype] = useState('asc')
+  const [weekSortingtype, setweekSortingtype] = useState('asc')
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -87,28 +54,22 @@ function Home() {
     setPage(0)
   }
 
-  async function fetchTable(page = 0) {
-    // let URL = `http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${
-    //   page + 1
-    // }`
-    // if (currentSortingParams.sortBy)
-    //   URL = `${URL}&sort=:${currentSortingParams.sortBy}`
-    // const {data} = await axios.get(`${URL}`)
-
-    const {data} = await axios.get(
-      `http://localhost:3000/api/v1/serp/getAllTasks?limit=${rowsPerPage}&page=${page + 1}`
-    )
+  async function fetchTable(page = 0, Sorting) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getAllTasks?limit=${rowsPerPage}&page=${
+      page + 1
+    }${Sorting}`
+    const {data} = await axios.get(fetchURL)
     return data
   }
 
-  const {isLoading, error, data} = useQuery(['reposData', page, rowsPerPage], () => fetchTable(page))
+  const {isLoading, error, data} = useQuery(['reposData', page, rowsPerPage, Sorting], () => fetchTable(page, Sorting))
 
   useEffect(() => {
-    queryClient.prefetchQuery(['reposData', page + 1, rowsPerPage], () => fetchTable(page + 1), {
+    queryClient.prefetchQuery(['reposData', page + 1, rowsPerPage, Sorting], () => fetchTable(page + 1, Sorting), {
       keepPreviousData: true,
       staleTime: 5000,
     })
-  }, [data, page, queryClient, rowsPerPage])
+  }, [data, page, queryClient, rowsPerPage, Sorting])
 
   if (isLoading)
     return (
@@ -120,7 +81,6 @@ function Home() {
   if (error) return `An error has occurred: ${error.message}`
 
   const getDifference = (prevRank, currentRank, type = '') => {
-    console.log(prevRank)
     let diff
     switch (type) {
       case 'GET_NUM':
@@ -162,27 +122,30 @@ function Home() {
             <TableRow>
               <TableCell className="pl-4">#</TableCell>
               <TableCell sortDirection={false}>
-                <TableSortLabel onClick={handleSort('keyword', 'asc')}>
-                  Keyword
-                  {/* <span className={classes.visuallyHidden}>sorted descending</span> */}
-                </TableSortLabel>
-              </TableCell>
-              {/* <TableCell sortDirection={orderBy === headCell.id ? order : false}>
                 <TableSortLabel
-                  active={orderBy === headCell.id}
-                  direction={orderBy === headCell.id ? order : 'asc'}
-                  onClick={createSortHandler(headCell.id)}
+                  active={Sorting.includes('keyword')}
+                  direction={keySortingtype === 'asc' ? 'desc' : 'asc'}
+                  onClick={() => {
+                    setkeySortingtype(keySortingtype === 'asc' ? 'desc' : 'asc')
+                    setSorting(`&sort=keyword:${keySortingtype}`)
+                  }}
                 >
                   Keyword
-                  {orderBy === headCell.id ? (
-                    <span className={classes.visuallyHidden}>
-                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                    </span>
-                  ) : null}
                 </TableSortLabel>
-              </TableCell> */}
+              </TableCell>
               <TableCell>Previous week</TableCell>
-              <TableCell>Current week</TableCell>
+              <TableCell sortDirection={false}>
+                <TableSortLabel
+                  active={Sorting.includes('rankAbsolute')}
+                  direction={weekSortingtype === 'asc' ? 'asc' : 'desc'}
+                  onClick={() => {
+                    setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
+                    setSorting(`&sort=rankAbsolute:${weekSortingtype}`)
+                  }}
+                >
+                  Current week
+                </TableSortLabel>
+              </TableCell>
               <TableCell>Difference</TableCell>
               <TableCell>URL</TableCell>
             </TableRow>

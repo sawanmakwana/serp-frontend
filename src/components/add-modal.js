@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-/* eslint-disable react/jsx-props-no-spreading */
-import React, {useState} from 'react'
+import React from 'react'
 import {
   Button,
   Dialog,
@@ -10,7 +8,6 @@ import {
   FormHelperText,
   IconButton,
   MenuItem,
-  Snackbar,
   TextField,
   Typography,
   useMediaQuery,
@@ -21,9 +18,8 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles, useTheme} from '@material-ui/core/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
-import {QueryClient, useMutation, useQueryClient} from 'react-query'
+import {useMutation, useQueryClient} from 'react-query'
 import axios from 'axios'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import {currencies} from '../constants/constants'
 import {addKeyword} from '../validations/add-keyword'
 
@@ -50,8 +46,6 @@ function AddModal({open, setOpen}) {
   }))
   const classes = useStyles()
   const classesFrom = useStylesForm()
-  const [tost, settost] = useState(false)
-  const [tostMsg, settostMsg] = useState('')
 
   const {handleSubmit, errors, control} = useForm({
     mode: 'onTouched',
@@ -70,20 +64,16 @@ function AddModal({open, setOpen}) {
   const queryClient = useQueryClient()
 
   const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
-    keywordData => axios.post('http://localhost:3000/api/v1/serp/sendTask', keywordData),
+    keywordData => axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/sendTask`, keywordData),
     {
       onSuccess: () => {
         setOpen(false)
-        console.log('onSuccess: Keyword added')
         queryClient.invalidateQueries('reposData')
       },
     }
   )
 
-  const submitForm = submitdata => {
-    mutate(submitdata)
-    console.log(submitdata)
-  }
+  const submitForm = submitdata => mutate(submitdata)
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
@@ -191,14 +181,6 @@ function AddModal({open, setOpen}) {
           {isLoading ? 'Loading...' : 'Add Keyword'}
         </Button>
       </DialogActions>
-
-      {tost && <Snackbar autoHideDuration={6000} open={tost} message={tostMsg} />}
-
-      {/* <Snackbar autoHideDuration={6000} open>
-        <MuiAlert elevation={6} variant="filled" severity="success">
-          asda
-        </MuiAlert>
-      </Snackbar> */}
     </Dialog>
   )
 }
