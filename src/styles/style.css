@@ -11,8 +11,8 @@ body {
   font-size: 14px;
   color: #001f3d;
 }
-.keyword-modal .MuiFormHelperText-contained {
-  margin-left: 3px;
+.MuiFormHelperText-contained {
+  margin-left: 3px !important;
 }
 .keyword-modal .MuiDialogTitle-root {
   background: #3F51B5;
