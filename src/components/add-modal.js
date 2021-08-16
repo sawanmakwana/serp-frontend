@@ -70,6 +70,9 @@ function AddModal({open, setOpen}) {
         setOpen(false)
         queryClient.invalidateQueries('reposData')
       },
+      onSettled: () => {
+        queryClient.invalidateQueries('reposData')
+      },
     }
   )
 
