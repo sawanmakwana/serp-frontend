@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {
   TableHead,
   TablePagination,
@@ -18,7 +18,7 @@ import {
   TableSortLabel,
 } from '@material-ui/core'
 import axios from 'axios'
-import {useQuery, useQueryClient} from 'react-query'
+import {useQuery} from 'react-query'
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
 import RemoveIcon from '@material-ui/icons/Remove'
@@ -36,7 +36,6 @@ const useToolbarStyles = makeStyles(theme => ({
 
 function Home() {
   const classesTool = useToolbarStyles()
-  const queryClient = useQueryClient()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
