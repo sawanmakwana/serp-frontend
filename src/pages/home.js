@@ -68,43 +68,6 @@ function Home() {
     {keepPreviousData: true}
   )
 
-  // useEffect(() => {
-  //   queryClient.prefetchQuery(['reposData', page, rowsPerPage, Sorting], () => fetchTable(page, Sorting))
-  //   queryClient.prefetchQuery(['reposData', page + 1, rowsPerPage, Sorting], () => fetchTable(page + 1, Sorting))
-  // queryClient.prefetchQuery(
-  //   ['reposData', page, rowsPerPage, (Sorting = '&sort=keyword:asc')],
-  //   () => fetchTable(page, Sorting),
-  //   {
-  //     keepPreviousData: true,
-  //     staleTime: 5000,
-  //   }
-  // )
-  // queryClient.prefetchQuery(
-  //   ['reposData', page, rowsPerPage, (Sorting = '&sort=keyword:desc')],
-  //   () => fetchTable(page, Sorting),
-  //   {
-  //     keepPreviousData: true,
-  //     staleTime: 5000,
-  //   }
-  // )
-  // queryClient.prefetchQuery(
-  //   ['reposData', page, rowsPerPage, (Sorting = '&sort=rankAbsolute:asc')],
-  //   () => fetchTable(page, Sorting),
-  //   {
-  //     keepPreviousData: true,
-  //     staleTime: 5000,
-  //   }
-  // )
-  // queryClient.prefetchQuery(
-  //   ['reposData', page, rowsPerPage, (Sorting = '&sort=rankAbsolute:desc')],
-  //   () => fetchTable(page, Sorting),
-  //   {
-  //     keepPreviousData: true,
-  //     staleTime: 5000,
-  //   }
-  // )
-  // }, [data, page, rowsPerPage, queryClient, Sorting])
-
   if (isLoading)
     return (
       <div className="spinner table">
