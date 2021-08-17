@@ -146,8 +146,8 @@ function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.data?.result?.map(({keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
-              <TableRow hover key={index}>
+            {data.data?.result?.map(({_id, keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
+              <TableRow hover key={_id}>
                 <TableCell className="pl-4">{index + 1}</TableCell>
                 <TableCell>{keyword}</TableCell>
                 <TableCell>{prevRankAbsolute || '-'}</TableCell>
