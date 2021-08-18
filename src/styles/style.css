@@ -89,3 +89,13 @@ body {
   background: #e7ffe8;
   border-radius: 20px;
 }
+.Toastify__toast {
+  align-items: center;
+  min-height: 54px !important;
+}
+.Toastify__close-button {
+  margin: auto 6px !important;
+}
+.Toastify__toast--success {
+    background: #3F51B5 !important;
+}
