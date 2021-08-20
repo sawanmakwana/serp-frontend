@@ -10,7 +10,15 @@ function Logout({openLogout, setOpenLogout}) {
   }
 
   return (
-    <Dialog className="logout-modal" open={openLogout} maxWidth="xs" fullWidth onClose={handleClose}>
+    <Dialog
+      className="logout-modal"
+      open={openLogout}
+      maxWidth="xs"
+      disableBackdropClick
+      disableEscapeKeyDown
+      fullWidth
+      onClose={handleClose}
+    >
       <DialogTitle>Logout</DialogTitle>
       <DialogContent>
         <DialogContentText>Are you sure you want to logout?</DialogContentText>
