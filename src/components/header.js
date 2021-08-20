@@ -2,9 +2,9 @@ import React, {useState} from 'react'
 import {AppBar, Button, IconButton, Toolbar, Tooltip, Typography, useMediaQuery, Zoom} from '@material-ui/core'
 import {makeStyles, useTheme} from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
-import {useAuth} from 'context/auth-context'
-import {AccountCircle} from '@material-ui/icons'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import {AddModal} from './add-modal'
+import {Logout} from './logout-modal'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -17,9 +17,10 @@ const useStyles = makeStyles(() => ({
 function Header() {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
+  const [openLogout, setOpenLogout] = useState(false)
+
   const theme = useTheme()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
-  const {logout} = useAuth()
 
   return (
     <div className={classes.root}>
@@ -37,15 +38,16 @@ function Header() {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={logout}
+              onClick={() => setOpenLogout(true)}
               color="inherit"
             >
-              <AccountCircle />
+              <ExitToAppIcon />
             </IconButton>
           </Tooltip>
         </Toolbar>
       </AppBar>
       {open && <AddModal open={open} setOpen={setOpen} />}
+      {openLogout && <Logout openLogout={openLogout} setOpenLogout={setOpenLogout} />}
     </div>
   )
 }

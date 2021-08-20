@@ -89,6 +89,12 @@ body {
   background: #e7ffe8;
   border-radius: 20px;
 }
+.signinWrap {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
 .Toastify__toast {
   align-items: center;
   min-height: 54px !important;

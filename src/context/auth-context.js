@@ -1,7 +1,5 @@
 import * as React from 'react'
 import {useQueryClient} from 'react-query'
-
-import {logout as authLogout} from 'auth/auth-methods'
 import {getToken, getUser, localStorageKey, userKey} from 'auth/auth-utils'
 
 const authContext = React.createContext()
@@ -24,7 +22,6 @@ function AuthProvider(props) {
 
   const login = React.useCallback(data => {
     const {token, ...userData} = data
-    console.log(token)
 
     window.localStorage.setItem(localStorageKey, token)
     const userInfo = JSON.stringify(userData)
@@ -35,7 +32,7 @@ function AuthProvider(props) {
 
   const logout = React.useCallback(() => {
     queryClient.clear()
-    authLogout()
+    window.localStorage.clear()
     setUser(null)
   }, [queryClient])
 

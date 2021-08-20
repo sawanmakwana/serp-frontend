@@ -1,16 +1,6 @@
-/* eslint-disable no-console */
 import React from 'react'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import TextField from '@material-ui/core/TextField'
-import Link from '@material-ui/core/Link'
-import Grid from '@material-ui/core/Grid'
-import Box from '@material-ui/core/Box'
+import {Avatar, Button, Container, CssBaseline, makeStyles, TextField, Typography} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import Typography from '@material-ui/core/Typography'
-import {makeStyles} from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
 import {Controller, useForm} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation} from 'react-query'
@@ -18,21 +8,8 @@ import {useAuth} from 'context/auth-context'
 import axios from 'axios'
 import {addUser} from '../validations/user'
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
 const useStyles = makeStyles(theme => ({
   paper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -42,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.primary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -65,23 +42,13 @@ function SignIn() {
     },
   })
 
-  // const {isLoading, mutate} = useMutation(
-  //   submitdata => axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/login`, submitdata),
-  //   {
-  //     onSuccess: () => {
-  //       history.push('/home')
-  //     },
-  //   }
-  // )
-
   const {login} = useAuth()
 
   const {mutate, isLoading} = useMutation(
     submitdata => axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/login`, submitdata),
     {
       onSuccess: submitdata => {
-        login(submitdata)
-        console.log(submitdata)
+        login(submitdata.data.data)
       },
     }
   )
@@ -89,14 +56,14 @@ function SignIn() {
   const submitForm = data => mutate(data)
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container className="signinWrap" component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign in to SERP
         </Typography>
         <form className={classes.form}>
           <Controller
@@ -112,6 +79,7 @@ function SignIn() {
                 name="email"
                 autoComplete="email"
                 onBlur={onBlur}
+                disabled={isLoading}
                 error={errors.email}
                 variant="outlined"
                 helperText={errors.email && errors.email.message}
@@ -135,6 +103,7 @@ function SignIn() {
                 id="password"
                 autoComplete="current-password"
                 onBlur={onBlur}
+                disabled={isLoading}
                 error={errors.password}
                 variant="outlined"
                 helperText={errors.password && errors.password.message}
@@ -146,31 +115,17 @@ function SignIn() {
           <Button
             type="submit"
             fullWidth
+            size="large"
             variant="contained"
-            onClick={handleSubmit(submitForm)}
             color="primary"
+            onClick={handleSubmit(submitForm)}
             disabled={isLoading}
             className={classes.submit}
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                Don't have an account? Sign Up
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   )
 }
