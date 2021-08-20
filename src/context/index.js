@@ -5,6 +5,7 @@ import {QueryClient, QueryClientProvider, MutationCache, QueryCache} from 'react
 import {ReactQueryDevtools} from 'react-query/devtools'
 import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import {AuthProvider} from './auth-context'
 
 const queryCache = new QueryCache({
   onError(error) {
@@ -54,7 +55,7 @@ function AppProviders({children}) {
           pauseOnFocusLoss
           draggable
         />
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </Router>
       <ReactQueryDevtools position="bottom-left" initialIsOpen={false} />
     </QueryClientProvider>
