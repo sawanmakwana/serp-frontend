@@ -10,8 +10,8 @@ function Logout({openLogout, setOpenLogout}) {
   }
 
   return (
-    <Dialog open={openLogout} maxWidth="xs" fullWidth onClose={handleClose}>
-      <DialogTitle>Logout From SERP</DialogTitle>
+    <Dialog className="logout-modal" open={openLogout} maxWidth="xs" fullWidth onClose={handleClose}>
+      <DialogTitle>Logout</DialogTitle>
       <DialogContent>
         <DialogContentText>Are you sure you want to logout?</DialogContentText>
       </DialogContent>

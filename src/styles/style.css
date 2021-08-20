@@ -14,13 +14,21 @@ body {
 .MuiFormHelperText-contained {
   margin-left: 3px !important;
 }
-.keyword-modal .MuiDialogTitle-root {
+.keyword-modal .MuiDialogTitle-root,
+.logout-modal .MuiDialogTitle-root{
   background: #3F51B5;
   color: #fff;
 }
 .keyword-modal .MuiTypography-h6 {
   font-size: 18px;
   line-height: 1.8;
+}
+.logout-modal .MuiTypography-h6 {
+  font-size: 18px;
+  line-height: 1.1;
+}
+.logout-modal .MuiDialogContent-root {
+  padding: 18px 24px !important;
 }
 .keyword-modal .MuiDialogActions-root {
   padding: 14px;
