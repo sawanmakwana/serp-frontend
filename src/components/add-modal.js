@@ -76,7 +76,10 @@ function AddModal({open, setOpen}) {
     }
   )
 
-  const submitForm = submitdata => mutate(submitdata)
+  const submitForm = submitdata => {
+    mutate({...submitdata, domain: submitdata.domain.replace('http://', '').replace('https://', '')})
+  }
+
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
