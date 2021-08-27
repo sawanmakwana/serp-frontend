@@ -112,7 +112,7 @@ function AddModal({open, setOpen}) {
             name="locationCode"
             render={({onChange, onBlur}) => (
               <TextField
-                label={!errors.locationCode ? 'Select locationCode' : 'Error'}
+                label="Select locationCode"
                 select
                 error={errors.locationCode}
                 variant="outlined"
@@ -134,7 +134,7 @@ function AddModal({open, setOpen}) {
             name="keyword"
             render={({onChange, value, onBlur}) => (
               <TextField
-                label={!errors.keyword ? 'Keyword' : 'Error'}
+                label="Keyword"
                 multiline
                 disabled={isLoading}
                 rows={5}
@@ -157,7 +157,7 @@ function AddModal({open, setOpen}) {
             render={({onChange, value, onBlur}) => (
               <TextField
                 variant="outlined"
-                label={!errors.domain ? 'Enter domain' : 'Error'}
+                label="Enter domain"
                 disabled={isLoading}
                 onBlur={onBlur}
                 value={value}
