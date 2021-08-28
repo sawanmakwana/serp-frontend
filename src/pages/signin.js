@@ -1,11 +1,12 @@
 import React from 'react'
-import {Avatar, Button, Container, CssBaseline, makeStyles, TextField, Typography} from '@material-ui/core'
+import {Avatar, Button, Container, CssBaseline, TextField, Typography} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import {Controller, useForm} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation} from 'react-query'
 import {useAuth} from 'context/auth-context'
 import axios from 'axios'
+import {makeStyles} from '@material-ui/styles'
 import {addUser} from '../validations/user'
 
 const useStyles = makeStyles(theme => ({

@@ -13,10 +13,11 @@ import {
   Paper,
   Tooltip,
   CircularProgress,
-  makeStyles,
   TableSortLabel,
 } from '@material-ui/core'
 import axios from 'axios'
+import {makeStyles} from '@material-ui/styles'
+
 import {useQuery} from 'react-query'
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
@@ -25,14 +26,13 @@ import CheckIcon from '@material-ui/icons/Check'
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
+    // paddingLeft: theme.spacing(3),
+    // paddingRight: theme.spacing(3),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
 }))
-
 function Home() {
   const classesTool = useToolbarStyles()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))

@@ -1,16 +1,16 @@
-body, h1, h2, h3, h4, h5 {
+/* body, h1, h2, h3, h4, h5 {
   padding: 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   line-height: 1.5;
-}
-body {
+} */
+/* body {
   margin: 0;
   overflow-x: auto;
   min-width: 320px;
   background: #f5f7fa;
   font-size: 14px;
   color: #001f3d;
-}
+} */
 .MuiFormHelperText-contained {
   margin-left: 3px !important;
 }
@@ -113,3 +113,8 @@ body {
 .Toastify__toast--success {
     background: #3F51B5 !important;
 }
+ /* h5 {
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    letter-spacing: -0.05px !important;
+  }  */

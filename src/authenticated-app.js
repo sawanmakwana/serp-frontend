@@ -1,7 +1,7 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {AppLayout} from 'layouts/app-layout'
 import {Home} from 'pages/home'
-import {HomeNew} from 'pages/home_new'
+import DashboardLayout from 'pages/DashboardLayout'
 
 function AppRoutespath() {
   return (
@@ -9,8 +9,8 @@ function AppRoutespath() {
       <Route path="/home">
         <Home />
       </Route>
-      <Route path="/dashboard">
-        <HomeNew />
+      <Route path="/new_layout">
+        <DashboardLayout />
       </Route>
 
       <Redirect to="/home" />
@@ -20,9 +20,10 @@ function AppRoutespath() {
 
 function AuthenticatedApp() {
   return (
-    <AppLayout>
-      <AppRoutespath />
-    </AppLayout>
+    // <AppLayout>
+    //   <AppRoutespath />
+    // </AppLayout>
+    <AppRoutespath />
   )
 }
 
