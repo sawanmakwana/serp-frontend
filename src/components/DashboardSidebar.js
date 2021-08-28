@@ -2,64 +2,40 @@ import {useEffect} from 'react'
 import {Link as RouterLink, useLocation} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Avatar, Box, Divider, Drawer, Hidden, List, Typography} from '@material-ui/core'
-import {
-  AlertCircle as AlertCircleIcon,
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
-  Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
-  User as UserIcon,
-  UserPlus as UserPlusIcon,
-  Users as UsersIcon,
-} from 'react-feather'
+import {BarChart, Lock, Settings, User, Users} from 'react-feather'
 import NavItem from './NavItem'
 
 const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
+  // avatar: '/static/images/avatars/avatar_6.png',
+  name: 'Trupesh Chapaneri',
+  jobTitle: 'Developer',
 }
 
 const items = [
   {
     href: '/app/dashboard',
-    icon: BarChartIcon,
+    icon: BarChart,
     title: 'Dashboard',
   },
   {
     href: '/app/customers',
-    icon: UsersIcon,
-    title: 'Customers',
-  },
-  {
-    href: '/app/products',
-    icon: ShoppingBagIcon,
-    title: 'Products',
+    icon: Users,
+    title: 'User',
   },
   {
     href: '/app/account',
-    icon: UserIcon,
-    title: 'Account',
+    icon: User,
+    title: 'My Account',
   },
   {
     href: '/app/settings',
-    icon: SettingsIcon,
+    icon: Settings,
     title: 'Settings',
   },
   {
     href: '/login',
-    icon: LockIcon,
-    title: 'Login',
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register',
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error',
+    icon: Lock,
+    title: 'Logout',
   },
 ]
 
@@ -75,6 +51,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
 
   const content = (
     <Box
+      elevation={5}
       sx={{
         display: 'flex',
         flexDirection: 'column',

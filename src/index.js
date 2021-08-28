@@ -4,7 +4,7 @@ import './global-styles'
 import {App} from 'app'
 import {AppProviders} from 'context'
 import {ThemeProvider} from '@material-ui/core'
-import theme from 'theme'
+import theme from './theme/index'
 import GlobalStyles from './components/GlobalStyles'
 
 ReactDOM.render(
