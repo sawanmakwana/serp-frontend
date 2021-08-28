@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
-import {makeStyles, useTheme} from '@material-ui/core/styles'
+import {makeStyles, useTheme} from '@material-ui/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient} from 'react-query'

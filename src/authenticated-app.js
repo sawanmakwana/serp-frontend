@@ -13,7 +13,7 @@ function AppRoutespath() {
         <DashboardLayout />
       </Route>
 
-      <Redirect to="/home" />
+      <Redirect to="/new_layout" />
     </Switch>
   )
 }
