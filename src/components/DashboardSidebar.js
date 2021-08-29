@@ -52,24 +52,24 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
   const content = (
     <Box
       elevation={5}
-      sx={{
+      style={{
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
       }}
     >
       <Box
-        sx={{
+        style={{
           alignItems: 'center',
           display: 'flex',
           flexDirection: 'column',
-          p: 2,
+          padding: '16px',
         }}
       >
         <Avatar
           component={RouterLink}
           src={user.avatar}
-          sx={{
+          style={{
             cursor: 'pointer',
             width: 64,
             height: 64,
@@ -84,7 +84,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
         </Typography>
       </Box>
       <Divider />
-      <Box sx={{p: 2}}>
+      <Box style={{padding: '16px'}}>
         <List>
           {items.map(item => (
             <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
@@ -103,10 +103,9 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           open={openMobile}
           variant="temporary"
           PaperProps={{
-            className: 'hello',
-            // sx: {
-            //   width: 256,
-            // },
+            style: {
+              width: 256,
+            },
           }}
         >
           {content}
@@ -118,7 +117,11 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           open
           variant="persistent"
           PaperProps={{
-            className: 'hello2',
+            style: {
+              width: 256,
+              top: 64,
+              height: 'calc(100% - 64px)',
+            },
           }}
         >
           {content}

@@ -18,15 +18,17 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
   return (
     <ListItem
       disableGutters
-      sx={{
+      style={{
         display: 'flex',
-        py: 0,
+        // py: 0,
+        // paddingLeft: 0,
+        // paddingRight: 0,
       }}
       {...rest}
     >
       <Button
         component={RouterLink}
-        sx={{
+        style={{
           color: 'text.secondary',
           fontWeight: 'medium',
           justifyContent: 'flex-start',
