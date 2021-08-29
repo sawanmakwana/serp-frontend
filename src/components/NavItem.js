@@ -21,19 +21,21 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
       style={{
         display: 'flex',
         // py: 0,
-        // paddingLeft: 0,
-        // paddingRight: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
       }}
       {...rest}
     >
       <Button
         component={RouterLink}
         style={{
-          color: 'text.secondary',
+          color: '#6b778c',
           fontWeight: 'medium',
           justifyContent: 'flex-start',
           letterSpacing: 0,
-          py: 1.25,
+          // py: 1.25,
+          paddingTop: 10,
+          paddingBottom: 10,
           textTransform: 'none',
           width: '100%',
           ...(active && {
@@ -45,7 +47,7 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
         }}
         to={href}
       >
-        {Icon && <Icon size="20" />}
+        {Icon && <Icon style={{marginRight: 8}} size="20" />}
         <span>{title}</span>
       </Button>
     </ListItem>
