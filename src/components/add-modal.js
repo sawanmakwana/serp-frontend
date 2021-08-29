@@ -28,6 +28,7 @@ function AddModal({open, setOpen}) {
     root: {
       margin: 0,
       padding: theme.spacing(2),
+      backgroundColor: theme.palette.primary.main,
     },
     closeButton: {
       position: 'absolute',

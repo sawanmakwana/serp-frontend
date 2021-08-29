@@ -14,11 +14,19 @@
 .MuiFormHelperText-contained {
   margin-left: 3px !important;
 }
-.keyword-modal .MuiDialogTitle-root,
+.hello {
+  width: 256px;
+}
+.hello2 {
+   width: 256px;
+   top: 64px;
+   height: calc(100% - 64px);
+}
+/* .keyword-modal .MuiDialogTitle-root,
 .logout-modal .MuiDialogTitle-root{
   background: #3F51B5;
   color: #fff;
-}
+} */
 .keyword-modal .MuiTypography-h6 {
   font-size: 18px;
   line-height: 1.8;

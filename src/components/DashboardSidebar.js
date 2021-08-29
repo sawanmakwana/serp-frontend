@@ -103,25 +103,22 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           open={openMobile}
           variant="temporary"
           PaperProps={{
-            sx: {
-              width: 256,
-            },
+            className: 'hello',
+            // sx: {
+            //   width: 256,
+            // },
           }}
         >
           {content}
         </Drawer>
       </Hidden>
-      <Hidden lgDown>
+      <Hidden mdDown>
         <Drawer
           anchor="left"
           open
           variant="persistent"
           PaperProps={{
-            sx: {
-              width: 256,
-              top: 64,
-              height: 'calc(100% - 64px)',
-            },
+            className: 'hello2',
           }}
         >
           {content}
