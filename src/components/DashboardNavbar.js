@@ -18,7 +18,6 @@ const useStyles = makeStyles(() => ({
 }))
 
 const DashboardNavbar = ({onMobileNavOpen}) => {
-  const classes = useStyles()
   const [open, setOpen] = useState(false)
   const [openLogout, setOpenLogout] = useState(false)
 
@@ -27,10 +26,10 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
       <Toolbar>
         <Typography variant="h6"> SERP </Typography>
         <Box sx={{flexGrow: 1}} />
+        <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
+          Add Keyword
+        </Button>
         <Hidden lgDown>
-          <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
-            Add Keyword
-          </Button>
           <Tooltip TransitionComponent={Zoom} title="Logout">
             <IconButton
               className="ml-2"
@@ -45,9 +44,6 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
           </Tooltip>
         </Hidden>
         <Hidden lgUp>
-          <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
-            Add Keyword
-          </Button>
           <Tooltip TransitionComponent={Zoom} title="Logout">
             <IconButton
               className="ml-2"
