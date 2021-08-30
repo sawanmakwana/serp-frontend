@@ -7,15 +7,21 @@ import theme from 'theme'
 const NavItem = ({href, icon: Icon, title, ...rest}) => {
   const location = useLocation()
 
-  const active = href
-    ? !!matchPath(
-        {
-          path: href,
-          end: false,
-        },
-        location.pathname
-      )
-    : false
+  // const active = href
+  //   ? !!matchPath(
+  //       {
+  //         path: href,
+  //         end: false,
+  //       },
+  //       location.pathname
+  //     )
+  //   : false
+
+  const active = link => {
+    return window.location.href.split('/')[3] === link ? 'active' : ''
+  }
+
+  console.log(active)
 
   return (
     <ListItem
@@ -29,8 +35,9 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
     >
       <Button
         component={RouterLink}
+        className={`${active(href)}`}
         style={{
-          color: theme.palette.text.secondary,
+          // color: theme.palette.text.secondary,
           fontWeight: 'medium',
           justifyContent: 'flex-start',
           letterSpacing: 0,
@@ -38,9 +45,10 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
           paddingBottom: 10,
           textTransform: 'none',
           width: '100%',
-          ...(active && {
-            color: theme.palette.primary.main,
-          }),
+          // ...(active && {
+          // color: active ? theme.palette.primary.main : '',
+          // active: theme.palette.primary.main
+          // }),
         }}
         to={href}
       >

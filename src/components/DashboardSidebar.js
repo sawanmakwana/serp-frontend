@@ -13,22 +13,22 @@ const user = {
 
 const items = [
   {
-    href: '/app/dashboard',
+    href: '/',
     icon: BarChart,
     title: 'Dashboard',
   },
   {
-    href: '/app/customers',
+    href: '/customers',
     icon: Users,
     title: 'User',
   },
   {
-    href: '/app/account',
+    href: '/account',
     icon: User,
     title: 'My Account',
   },
   {
-    href: '/app/settings',
+    href: '/settings',
     icon: Settings,
     title: 'Settings',
   },
