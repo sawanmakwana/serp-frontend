@@ -6,17 +6,14 @@ import {Box, Container} from '@material-ui/core'
 import theme from 'theme'
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  DashboardLayoutRoot: {
     backgroundColor: theme.palette.background.default,
     display: 'flex',
     height: '100%',
     overflow: 'hidden',
     width: '100%',
   },
-}))
-
-const useStyles1 = makeStyles(theme => ({
-  root: {
+  DashboardLayoutWrapper: {
     display: 'flex',
     flex: '1 1 auto',
     overflow: 'hidden',
@@ -25,45 +22,35 @@ const useStyles1 = makeStyles(theme => ({
       paddingLeft: 256,
     },
   },
-}))
-
-const useStyles2 = makeStyles(() => ({
-  root: {
+  DashboardLayoutContainer: {
     display: 'flex',
     flex: '1 1 auto',
     overflow: 'hidden',
   },
-}))
-
-const useStyles3 = makeStyles(() => ({
-  root: {
+  DashboardLayoutContent: {
     flex: '1 1 auto',
     height: '100%',
     overflow: 'auto',
+  },
+  DashboardLayoutBox: {
+    background: theme.palette.background.default,
+    minHeight: '100%',
+    padding: '24px 0',
   },
 }))
 
 function AppLayout({children}) {
   const classes = useStyles()
-  const classes1 = useStyles1()
-  const classes2 = useStyles2()
-  const classes3 = useStyles3()
 
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   return (
-    <div className={classes.root}>
+    <div className={classes.DashboardLayoutRoot}>
       <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
       <DashboardSidebar onMobileClose={() => setMobileNavOpen(false)} openMobile={isMobileNavOpen} />
-      <div className={classes1.root}>
-        <div className={classes2.root}>
-          <div className={classes3.root}>
-            <Box
-              sx={{
-                background: theme.palette.background.default,
-                minHeight: '100%',
-                py: 3,
-              }}
-            >
+      <div className={classes.DashboardLayoutWrapper}>
+        <div className={classes.DashboardLayoutContainer}>
+          <div className={classes.DashboardLayoutContent}>
+            <Box className={classes.DashboardLayoutBox}>
               <Container maxWidth={false}>{children}</Container>
             </Box>
           </div>
