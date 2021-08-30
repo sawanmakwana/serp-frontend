@@ -95,8 +95,8 @@
   padding: 3px;
   vertical-align: text-bottom;
   margin-left: 5px;
-  height: 11px;
-  width: 11px;
+  height: 17px;
+  width: 17px;
   background: #e7ffe8;
   border-radius: 20px;
 }
@@ -114,10 +114,5 @@
   margin: auto 6px !important;
 }
 .Toastify__toast--success {
-    background: #3F51B5 !important;
+    background: #5664D2 !important;
 }
- /* h5 {
-    font-weight: 500 !important;
-    font-size: 16px !important;
-    letter-spacing: -0.05px !important;
-  }  */

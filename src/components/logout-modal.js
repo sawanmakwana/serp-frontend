@@ -1,25 +1,32 @@
 import React from 'react'
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  makeStyles,
+} from '@material-ui/core'
 import {useAuth} from 'context/auth-context'
 
 function Logout({openLogout, setOpenLogout}) {
   const {logout} = useAuth()
+  const useStyles = makeStyles(theme => ({
+    root: {
+      backgroundColor: theme.palette.primary.main,
+      color: '#fff',
+    },
+  }))
+  const classes = useStyles()
 
   const handleClose = () => {
     setOpenLogout(false)
   }
 
   return (
-    <Dialog
-      className="logout-modal"
-      open={openLogout}
-      maxWidth="xs"
-      disableBackdropClick
-      disableEscapeKeyDown
-      fullWidth
-      onClose={handleClose}
-    >
-      <DialogTitle>Logout</DialogTitle>
+    <Dialog className="logout-modal" open={openLogout} maxWidth="xs" fullWidth onClose={handleClose}>
+      <DialogTitle className={classes.root}>Logout</DialogTitle>
       <DialogContent>
         <DialogContentText>Are you sure you want to logout?</DialogContentText>
       </DialogContent>

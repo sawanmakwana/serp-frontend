@@ -16,15 +16,18 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
   },
   avatar: {
-    // margin: theme.spacing(1),
-    // backgroundColor: theme.palette.primary.main,
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: '100%',
-    // marginTop: theme.spacing(1),
+    marginTop: theme.spacing(1),
   },
   submit: {
-    // margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(3, 0, 2),
+  },
+  header: {
+    fontWeight: 400,
   },
 }))
 function SignIn() {
@@ -63,7 +66,7 @@ function SignIn() {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h3" className={classes.header}>
           Sign in to SERP
         </Typography>
         <form className={classes.form}>
