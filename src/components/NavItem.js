@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import {Button, ListItem} from '@material-ui/core'
 import theme from 'theme'
 
-const NavItem = ({href, icon: Icon, title, ...rest}) => {
-  const location = useLocation()
+const NavItem = ({href, icon: Icon, title}) => {
+  // const location = useLocation()
 
   // const active = href
   //   ? !!matchPath(
@@ -17,12 +17,6 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
   //     )
   //   : false
 
-  const active = link => {
-    return window.location.href.split('/')[3] === link ? 'active' : ''
-  }
-
-  console.log(active)
-
   return (
     <ListItem
       disableGutters
@@ -31,13 +25,11 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
         paddingTop: 0,
         paddingBottom: 0,
       }}
-      {...rest}
     >
       <Button
         component={RouterLink}
-        className={`${active(href)}`}
         style={{
-          // color: theme.palette.text.secondary,
+          color: theme.palette.text.secondary,
           fontWeight: 'medium',
           justifyContent: 'flex-start',
           letterSpacing: 0,

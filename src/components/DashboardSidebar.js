@@ -1,9 +1,11 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {Link as RouterLink, useLocation} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Avatar, Box, Divider, Drawer, Hidden, List, Typography} from '@material-ui/core'
+import {Avatar, Box, Button, Divider, Drawer, Hidden, List, ListItem, Typography} from '@material-ui/core'
 import {BarChart, Lock, Settings, User, Users} from 'react-feather'
+import theme from 'theme'
 import NavItem from './NavItem'
+import {Logout} from './logout-modal'
 
 const user = {
   // avatar: '/static/images/avatars/avatar_6.png',
@@ -32,15 +34,16 @@ const items = [
     icon: Settings,
     title: 'Settings',
   },
-  {
-    href: '/login',
-    icon: Lock,
-    title: 'Logout',
-  },
+  // {
+  //   href: '/login',
+  //   icon: Lock,
+  //   title: 'Logout',
+  // },
 ]
 
 const DashboardSidebar = ({onMobileClose, openMobile}) => {
   const location = useLocation()
+  const [openLogout, setOpenLogout] = useState(false)
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -86,9 +89,36 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
       <Divider />
       <Box sx={{p: 2}}>
         <List>
-          {items.map(item => (
-            <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
-          ))}
+          <>
+            {items.map(item => (
+              <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
+            ))}
+            <ListItem
+              disableGutters
+              style={{
+                display: 'flex',
+                paddingTop: 0,
+                paddingBottom: 0,
+              }}
+            >
+              <Button
+                onClick={() => setOpenLogout(true)}
+                style={{
+                  color: theme.palette.text.secondary,
+                  fontWeight: 'medium',
+                  justifyContent: 'flex-start',
+                  letterSpacing: 0,
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  textTransform: 'none',
+                  width: '100%',
+                }}
+              >
+                <Lock style={{marginRight: 8}} size="20" />
+                <span>Logout</span>
+              </Button>
+            </ListItem>
+          </>
         </List>
       </Box>
     </Box>
@@ -127,6 +157,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           {content}
         </Drawer>
       </Hidden>
+      {openLogout && <Logout openLogout={openLogout} setOpenLogout={setOpenLogout} />}
     </>
   )
 }
