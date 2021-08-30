@@ -52,18 +52,18 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
   const content = (
     <Box
       elevation={5}
-      style={{
+      sx={{
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
       }}
     >
       <Box
-        style={{
+        sx={{
           alignItems: 'center',
           display: 'flex',
           flexDirection: 'column',
-          padding: '16px',
+          p: 2,
         }}
       >
         <Avatar
@@ -84,7 +84,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
         </Typography>
       </Box>
       <Divider />
-      <Box style={{padding: '16px'}}>
+      <Box sx={{p: 2}}>
         <List>
           {items.map(item => (
             <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />

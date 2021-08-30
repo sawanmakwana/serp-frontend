@@ -1,8 +1,9 @@
 import {useState} from 'react'
-import {styled, makeStyles} from '@material-ui/styles'
+import {makeStyles} from '@material-ui/styles'
 import DashboardNavbar from 'components/DashboardNavbar'
 import DashboardSidebar from 'components/DashboardSidebar'
 import {Box, Container} from '@material-ui/core'
+import theme from 'theme'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,7 +60,7 @@ const DashboardLayout = () => {
           <div className={classes3.root}>
             <Box
               sx={{
-                backgroundColor: 'background.default',
+                background: theme.palette.background.default,
                 minHeight: '100%',
                 py: 3,
               }}
