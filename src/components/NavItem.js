@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import {NavLink as RouterLink, matchPath, useLocation} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Button, ListItem} from '@material-ui/core'
+import theme from 'theme'
 
 const NavItem = ({href, icon: Icon, title, ...rest}) => {
   const location = useLocation()
@@ -20,7 +22,6 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
       disableGutters
       style={{
         display: 'flex',
-        // py: 0,
         paddingTop: 0,
         paddingBottom: 0,
       }}
@@ -29,17 +30,16 @@ const NavItem = ({href, icon: Icon, title, ...rest}) => {
       <Button
         component={RouterLink}
         style={{
-          // color: '#6b778c',
+          color: theme.palette.text.secondary,
           fontWeight: 'medium',
           justifyContent: 'flex-start',
           letterSpacing: 0,
-          // py: 1.25,
           paddingTop: 10,
           paddingBottom: 10,
           textTransform: 'none',
           width: '100%',
           ...(active && {
-            color: 'primary.main',
+            color: theme.palette.primary.main,
           }),
         }}
         to={href}
