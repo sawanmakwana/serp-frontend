@@ -13,7 +13,7 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
   return (
     <AppBar elevation={0}>
       <Toolbar>
-        <Typography variant="h6"> SERP </Typography>
+        <Typography variant="h5">SERP (Search Engine Results Page)</Typography>
         <Box sx={{flexGrow: 1}} />
         <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
           Add Keyword
