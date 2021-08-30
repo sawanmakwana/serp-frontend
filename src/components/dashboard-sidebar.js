@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {useEffect, useState} from 'react'
 import {Link as RouterLink, useLocation} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Avatar, Box, Button, Divider, Drawer, Hidden, List, ListItem, Typography} from '@material-ui/core'
 import {BarChart, Lock, Settings, User, Users} from 'react-feather'
 import theme from 'theme'
-import NavItem from './NavItem'
+import NavItem from './nav-item'
 import {Logout} from './logout-modal'
 
 const user = {
@@ -34,11 +35,6 @@ const items = [
     icon: Settings,
     title: 'Settings',
   },
-  // {
-  //   href: '/login',
-  //   icon: Lock,
-  //   title: 'Logout',
-  // },
 ]
 
 const DashboardSidebar = ({onMobileClose, openMobile}) => {
@@ -49,7 +45,6 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
     if (openMobile && onMobileClose) {
       onMobileClose()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
 
   const content = (
@@ -76,6 +71,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
             cursor: 'pointer',
             width: 64,
             height: 64,
+            marginBottom: 8,
           }}
           to="/app/account"
         />
