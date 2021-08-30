@@ -173,7 +173,13 @@ function AddModal({open, setOpen}) {
       </DialogContent>
       {isLoading && <LinearProgress />}
       <DialogActions>
-        <Button style={{display: isLoading ? 'none' : ''}} onClick={() => setOpen(false)}>
+        <Button
+          style={{
+            display: isLoading ? 'none' : '',
+            color: theme.palette.text.secondary,
+          }}
+          onClick={() => setOpen(false)}
+        >
           Cancel
         </Button>
         <Button

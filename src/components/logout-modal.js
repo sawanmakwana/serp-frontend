@@ -9,6 +9,7 @@ import {
   makeStyles,
 } from '@material-ui/core'
 import {useAuth} from 'context/auth-context'
+import theme from 'theme'
 
 function Logout({openLogout, setOpenLogout}) {
   const {logout} = useAuth()
@@ -31,7 +32,9 @@ function Logout({openLogout, setOpenLogout}) {
         <DialogContentText>Are you sure you want to logout?</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>No</Button>
+        <Button onClick={handleClose} style={{color: theme.palette.text.secondary}}>
+          No
+        </Button>
         <Button
           loading
           className="ml-2"
