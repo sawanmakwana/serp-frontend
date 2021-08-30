@@ -16,7 +16,7 @@ const user = {
 
 const items = [
   {
-    href: '/',
+    href: '/home',
     icon: BarChart,
     title: 'Dashboard',
   },

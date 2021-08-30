@@ -1,21 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import {NavLink as RouterLink, matchPath, useLocation} from 'react-router-dom'
+import {NavLink as RouterLink, useLocation} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Button, ListItem} from '@material-ui/core'
 import theme from 'theme'
 
 const NavItem = ({href, icon: Icon, title}) => {
-  // const location = useLocation()
-
-  // const active = href
-  //   ? !!matchPath(
-  //       {
-  //         path: href,
-  //         end: false,
-  //       },
-  //       location.pathname
-  //     )
-  //   : false
+  const location = useLocation()
+  const active = location.pathname === href
 
   return (
     <ListItem
@@ -28,8 +19,9 @@ const NavItem = ({href, icon: Icon, title}) => {
     >
       <Button
         component={RouterLink}
+        to={href}
         style={{
-          color: theme.palette.text.secondary,
+          color: active ? theme.palette.primary.main : theme.palette.text.secondary,
           fontWeight: 'medium',
           justifyContent: 'flex-start',
           letterSpacing: 0,
@@ -37,12 +29,7 @@ const NavItem = ({href, icon: Icon, title}) => {
           paddingBottom: 10,
           textTransform: 'none',
           width: '100%',
-          // ...(active && {
-          // color: active ? theme.palette.primary.main : '',
-          // active: theme.palette.primary.main
-          // }),
         }}
-        to={href}
       >
         {Icon && <Icon style={{marginRight: 8}} size="20" />}
         <span>{title}</span>
