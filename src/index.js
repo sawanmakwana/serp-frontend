@@ -5,7 +5,7 @@ import {App} from 'app'
 import {AppProviders} from 'context'
 import {ThemeProvider} from '@material-ui/core'
 import theme from './theme/index'
-import GlobalStyles from './components/GlobalStyles'
+import GlobalStyles from './theme/GlobalStyles'
 
 ReactDOM.render(
   <React.StrictMode>

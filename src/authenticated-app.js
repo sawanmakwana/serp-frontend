@@ -1,30 +1,24 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {Home} from 'pages/home'
-import {AppLayoutNew} from './layouts/app-layout-new'
+import {AppLayout} from './layouts/app-layout'
 
 function AppRoutespath() {
   return (
     <Switch>
-      {/* <Route path="/home">
-        <Home />
-      </Route> */}
-      <Route path="/">
+      <Route path="/home">
         <Home />
       </Route>
 
-      <Redirect to="/" />
+      <Redirect to="/home" />
     </Switch>
   )
 }
 
 function AuthenticatedApp() {
   return (
-    // <AppLayout>
-    //   <AppRoutespath />
-    // </AppLayout>
-    <AppLayoutNew>
+    <AppLayout>
       <AppRoutespath />
-    </AppLayoutNew>
+    </AppLayout>
   )
 }
 
