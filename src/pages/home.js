@@ -14,6 +14,9 @@ import {
   Tooltip,
   CircularProgress,
   TableSortLabel,
+  Card,
+  Divider,
+  CardContent,
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
@@ -24,10 +27,8 @@ import CallReceivedIcon from '@material-ui/icons/CallReceived'
 import RemoveIcon from '@material-ui/icons/Remove'
 import CheckIcon from '@material-ui/icons/Check'
 
-const useToolbarStyles = makeStyles(theme => ({
+const useToolbarStyles = makeStyles(() => ({
   root: {
-    // paddingLeft: theme.spacing(3),
-    // paddingRight: theme.spacing(3),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -103,76 +104,82 @@ function Home() {
 
   return (
     <Paper>
-      <Toolbar className={classesTool.root}>
-        <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
-          Keyword <span> ({data.data?.total})</span>
-        </Typography>
-        <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
-          Current page <span> ({page + 1})</span>
-        </Typography>
-      </Toolbar>
-      <TableContainer>
-        <Table aria-labelledby="tableTitle" size="medium" aria-label="enhanced table">
-          <TableHead>
-            <TableRow>
-              <TableCell className="pl-4">#</TableCell>
-              <TableCell sortDirection={false}>
-                <TableSortLabel
-                  active={Sorting.includes('keyword')}
-                  direction={keySortingtype === 'asc' ? 'desc' : 'asc'}
-                  onClick={() => {
-                    setkeySortingtype(keySortingtype === 'asc' ? 'desc' : 'asc')
-                    setSorting(`&sort=keyword:${keySortingtype}`)
-                  }}
-                >
-                  Keyword
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Previous week</TableCell>
-              <TableCell sortDirection={false}>
-                <TableSortLabel
-                  active={Sorting.includes('rankAbsolute')}
-                  direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
-                  onClick={() => {
-                    setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
-                    setSorting(`&sort=rankAbsolute:${weekSortingtype}`)
-                  }}
-                >
-                  Current week
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Difference</TableCell>
-              <TableCell>URL</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.data?.result?.map(({_id, keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
-              <TableRow hover key={_id}>
-                <TableCell className="pl-4">{index + 1}</TableCell>
-                <TableCell>{keyword}</TableCell>
-                <TableCell>{prevRankAbsolute || '-'}</TableCell>
-                <TableCell>{rankAbsolute || '-'}</TableCell>
-                <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
-                  {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
-                  {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
-                </TableCell>
-                <Tooltip TransitionComponent={Zoom} title={url} placement="top">
-                  <TableCell className="urlEcllips">{url}</TableCell>
-                </Tooltip>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 50, 100]}
-        component="div"
-        count={data.data?.total}
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <Card sx>
+        <Toolbar className={classesTool.root}>
+          <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
+            Total Keyword <span> ({data.data?.total})</span>
+          </Typography>
+          <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
+            Current page <span> ({page + 1})</span>
+          </Typography>
+        </Toolbar>
+        <Divider />
+        <CardContent style={{padding: '0'}}>
+          <TableContainer>
+            <Table size="medium">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="pl-4">#</TableCell>
+                  <TableCell sortDirection={false}>
+                    <TableSortLabel
+                      active={Sorting.includes('keyword')}
+                      direction={keySortingtype === 'asc' ? 'desc' : 'asc'}
+                      onClick={() => {
+                        setkeySortingtype(keySortingtype === 'asc' ? 'desc' : 'asc')
+                        setSorting(`&sort=keyword:${keySortingtype}`)
+                      }}
+                    >
+                      Keyword
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell>Previous week</TableCell>
+                  <TableCell sortDirection={false}>
+                    <TableSortLabel
+                      active={Sorting.includes('rankAbsolute')}
+                      direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
+                      onClick={() => {
+                        setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
+                        setSorting(`&sort=rankAbsolute:${weekSortingtype}`)
+                      }}
+                    >
+                      Current week
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell>Difference</TableCell>
+                  <TableCell>URL</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.data?.result?.map(({_id, keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
+                  <TableRow hover key={_id}>
+                    <TableCell className="pl-4">{index + 1}</TableCell>
+                    <TableCell>{keyword}</TableCell>
+                    <TableCell>{prevRankAbsolute || '-'}</TableCell>
+                    <TableCell>{rankAbsolute || '-'}</TableCell>
+                    <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
+                      {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
+                      {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
+                    </TableCell>
+                    <Tooltip TransitionComponent={Zoom} title={url} placement="top">
+                      <TableCell className="urlEcllips">{url}</TableCell>
+                    </Tooltip>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            component="div"
+            count={data.data?.total}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </CardContent>
+      </Card>
     </Paper>
   )
 }
