@@ -1,8 +1,8 @@
 import {useState} from 'react'
 import {makeStyles} from '@material-ui/styles'
-import DashboardNavbar from 'components/DashboardNavbar'
-import DashboardSidebar from 'components/DashboardSidebar'
 import {Box, Container} from '@material-ui/core'
+import DashboardSidebar from 'components/dashboard-sidebar'
+import DashboardNavbar from 'components/dashboard-navbar'
 
 const useStyles = makeStyles(theme => ({
   DashboardLayoutRoot: {
