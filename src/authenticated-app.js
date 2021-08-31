@@ -5,11 +5,14 @@ import {AppLayout} from './layouts/app-layout'
 function AppRoutespath() {
   return (
     <Switch>
-      <Route path="/home">
+      <Route exact path="/">
         <Home />
       </Route>
+      <Route path="/customers">
+        <h1>customers</h1>
+      </Route>
 
-      <Redirect to="/home" />
+      <Redirect to="/" />
     </Switch>
   )
 }
