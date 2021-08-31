@@ -9,7 +9,6 @@ import NavItem from './nav-item'
 import {Logout} from './logout-modal'
 
 const user = {
-  // avatar: '/static/images/avatars/avatar_6.png',
   name: 'Trupesh Chapaneri',
   jobTitle: 'Developer',
 }
@@ -66,15 +65,17 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
       >
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          alt="Remy Sharp"
           style={{
             cursor: 'pointer',
             width: 64,
             height: 64,
             marginBottom: 8,
           }}
-          to="/app/account"
-        />
+          to="/my-account"
+        >
+          TC
+        </Avatar>
         <Typography color="textPrimary" variant="h5">
           {user.name}
         </Typography>

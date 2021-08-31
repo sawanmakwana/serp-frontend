@@ -16,29 +16,17 @@ import {
 const customers = [
   {
     id: 1,
-    address: {
-      country: 'USA',
-      state: 'West Virginia',
-      city: 'Parkersburg',
-      street: '2849 Fulton Street',
-    },
     createdAt: 1555016400000,
-    email: 'ekaterina.tankova@devias.io',
-    name: 'Ekaterina Tankova',
-    phone: '304-428-3097',
+    email: 'trupesh789@gmail.com',
+    name: 'Trupesh Chapaneri',
+    phone: '123123123',
   },
   {
     id: 2,
-    address: {
-      country: 'USA',
-      state: 'Bristow',
-      city: 'Iowa',
-      street: '1865  Pleasant Hill Road',
-    },
     createdAt: 1555016400000,
-    email: 'cao.yu@devias.io',
-    name: 'Cao Yu',
-    phone: '712-351-5711',
+    email: 'trupesh789@gmail.com',
+    name: 'Trupesh Chapaneri',
+    phone: '123123123',
   },
 ]
 
@@ -73,7 +61,6 @@ function User() {
                     <TableCell>#</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Email</TableCell>
-                    <TableCell>Location</TableCell>
                     <TableCell>Phone</TableCell>
                     <TableCell>Registration date</TableCell>
                   </TableRow>
@@ -89,16 +76,14 @@ function User() {
                             display: 'flex',
                           }}
                         >
-                          <Avatar style={{marginRight: 16}} />
+                          <Avatar style={{marginRight: 16}}>T</Avatar>
                           <Typography color="textPrimary" variant="body1">
                             {customer.name}
                           </Typography>
                         </Box>
                       </TableCell>
                       <TableCell>{customer.email}</TableCell>
-                      <TableCell>
-                        {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                      </TableCell>
+
                       <TableCell>{customer.phone}</TableCell>
                       <TableCell>11</TableCell>
                     </TableRow>
