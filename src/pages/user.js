@@ -43,9 +43,13 @@ function User() {
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
+            <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+              Users (2)
+            </Typography>
             <Button color="primary" variant="contained">
               Add user
             </Button>
@@ -53,7 +57,8 @@ function User() {
         </Box>
         <Box sx={{pt: 3}}>
           <Card>
-            <Box sx={{minWidth: 1050}}>
+            <Box>
+              {/* <Box sx={{minWidth: 1050}}> */}
               {/* <PerfectScrollbar> */}
               <Table>
                 <TableHead>

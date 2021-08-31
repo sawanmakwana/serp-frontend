@@ -1,7 +1,8 @@
-import {AppBar, Box, Hidden, IconButton, Toolbar, Typography, Button} from '@material-ui/core'
+import {AppBar, Box, Hidden, IconButton, Toolbar, Typography, Button, useMediaQuery} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import PropTypes from 'prop-types'
 import AddIcon from '@material-ui/icons/Add'
+import {useTheme} from '@material-ui/core/styles'
 import {useState} from 'react'
 import {AddModal} from './add-modal'
 import {Logout} from './logout-modal'
@@ -9,11 +10,13 @@ import {Logout} from './logout-modal'
 const DashboardNavbar = ({onMobileNavOpen}) => {
   const [open, setOpen] = useState(false)
   const [openLogout, setOpenLogout] = useState(false)
+  const theme = useTheme()
+  const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   return (
     <AppBar elevation={0}>
       <Toolbar>
-        <Typography variant="h5">SERP (Search Engine Results Page)</Typography>
+        <Typography variant="h5">SERP {!xsScreen && `(Search Engine Results Page)`}</Typography>
         <Box sx={{flexGrow: 1}} />
         <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
           Add Keyword
