@@ -12,7 +12,6 @@ import {
   Typography,
   Avatar,
 } from '@material-ui/core'
-import PerfectScrollbar from 'react-perfect-scrollbar'
 
 const customers = [
   {
@@ -66,48 +65,48 @@ function User() {
         </Box>
         <Box sx={{pt: 3}}>
           <Card>
-            <PerfectScrollbar>
-              <Box sx={{minWidth: 1050}}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>#</TableCell>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Email</TableCell>
-                      <TableCell>Location</TableCell>
-                      <TableCell>Phone</TableCell>
-                      <TableCell>Registration date</TableCell>
+            <Box sx={{minWidth: 1050}}>
+              {/* <PerfectScrollbar> */}
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>#</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Location</TableCell>
+                    <TableCell>Phone</TableCell>
+                    <TableCell>Registration date</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {customers.map(customer => (
+                    <TableRow hover key={customer.id}>
+                      <TableCell>{customer.id}</TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{
+                            alignItems: 'center',
+                            display: 'flex',
+                          }}
+                        >
+                          <Avatar style={{marginRight: 16}} />
+                          <Typography color="textPrimary" variant="body1">
+                            {customer.name}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell>{customer.email}</TableCell>
+                      <TableCell>
+                        {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                      </TableCell>
+                      <TableCell>{customer.phone}</TableCell>
+                      <TableCell>11</TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {customers.map(customer => (
-                      <TableRow hover key={customer.id}>
-                        <TableCell>{customer.id}</TableCell>
-                        <TableCell>
-                          <Box
-                            sx={{
-                              alignItems: 'center',
-                              display: 'flex',
-                            }}
-                          >
-                            <Avatar style={{marginRight: 16}} />
-                            <Typography color="textPrimary" variant="body1">
-                              {customer.name}
-                            </Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell>{customer.email}</TableCell>
-                        <TableCell>
-                          {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                        </TableCell>
-                        <TableCell>{customer.phone}</TableCell>
-                        <TableCell>11</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Box>
-            </PerfectScrollbar>
+                  ))}
+                </TableBody>
+              </Table>
+              {/* </PerfectScrollbar> */}
+            </Box>
             <TablePagination component="div" count={customers.length} rowsPerPageOptions={[5, 10, 25]} />
           </Card>
         </Box>
