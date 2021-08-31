@@ -1,7 +1,8 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {Home} from 'pages/home'
+import {User} from 'pages/user'
 import {AppLayout} from './layouts/app-layout'
-import {MyAccount} from './components/my-account'
+import {MyAccount} from './pages/my-account'
 
 function AppRoutespath() {
   return (
@@ -10,7 +11,7 @@ function AppRoutespath() {
         <Home />
       </Route>
       <Route path="/user">
-        <h1>Users</h1>
+        <User />
       </Route>
       <Route path="/my-account">
         <MyAccount />
