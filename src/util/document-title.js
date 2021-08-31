@@ -10,4 +10,4 @@ const DocumentTitle = ({title}) => {
   )
 }
 
-export default DocumentTitle
+export {DocumentTitle}

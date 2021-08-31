@@ -1,7 +1,7 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {Home} from 'pages/home'
 import {User} from 'pages/user'
-import DocumentTitle from 'util/document-title'
+import {DocumentTitle} from 'util/document-title'
 import {AppLayout} from './layouts/app-layout'
 import {MyAccount} from './pages/my-account'
 
