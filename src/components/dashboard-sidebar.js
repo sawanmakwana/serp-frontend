@@ -71,6 +71,8 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
             width: 64,
             height: 64,
             marginBottom: 8,
+            background: 'rgb(101 118 255 / 28%)',
+            color: 'rgb(86, 100, 210)',
           }}
           to="/my-account"
         >
