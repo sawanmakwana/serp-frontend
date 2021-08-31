@@ -104,12 +104,12 @@ function Home() {
 
   return (
     <Paper>
-      <Card sx>
+      <Card>
         <Toolbar className={classesTool.root}>
-          <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
+          <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
             Total Keyword <span> ({data.data?.total})</span>
           </Typography>
-          <Typography className={`${classesTool.title} tableHeader`} sty variant="h6" id="tableTitle" component="div">
+          <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
             Current page <span> ({page + 1})</span>
           </Typography>
         </Toolbar>
