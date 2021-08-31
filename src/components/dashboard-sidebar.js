@@ -21,12 +21,12 @@ const items = [
     title: 'Dashboard',
   },
   {
-    href: '/customers',
+    href: '/user',
     icon: Users,
     title: 'User',
   },
   {
-    href: '/account',
+    href: '/my-account',
     icon: User,
     title: 'My Account',
   },

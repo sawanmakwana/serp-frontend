@@ -1,6 +1,7 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {Home} from 'pages/home'
 import {AppLayout} from './layouts/app-layout'
+import {MyAccount} from './components/my-account'
 
 function AppRoutespath() {
   return (
@@ -8,8 +9,11 @@ function AppRoutespath() {
       <Route exact path="/">
         <Home />
       </Route>
-      <Route path="/customers">
-        <h1>customers</h1>
+      <Route path="/user">
+        <h1>Users</h1>
+      </Route>
+      <Route path="/my-account">
+        <MyAccount />
       </Route>
 
       <Redirect to="/" />
