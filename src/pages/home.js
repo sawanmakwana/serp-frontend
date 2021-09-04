@@ -20,6 +20,7 @@ import {
   Box,
   Container,
   Grid,
+  LinearProgress,
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
@@ -66,7 +67,7 @@ function Home() {
     return data
   }
 
-  const {isLoading, error, data} = useQuery(
+  const {isLoading, error, data, isFetching} = useQuery(
     ['reposData', page, rowsPerPage, Sorting],
     () => fetchTable(page, Sorting),
     {keepPreviousData: true}
@@ -179,10 +180,11 @@ function Home() {
                     <TableCell>URL</TableCell>
                   </TableRow>
                 </TableHead>
+
                 <TableBody>
                   {data.data?.result?.map(({_id, keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
                     <TableRow hover key={_id}>
-                      <TableCell className="pl-4">{index + 1}</TableCell>
+                      <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                       <TableCell>{keyword}</TableCell>
                       <TableCell>{prevRankAbsolute || '-'}</TableCell>
                       <TableCell>{rankAbsolute || '-'}</TableCell>
@@ -198,7 +200,7 @@ function Home() {
                 </TableBody>
               </Table>
             </TableContainer>
-
+            {isFetching && <LinearProgress />}
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
