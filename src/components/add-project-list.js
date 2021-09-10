@@ -18,13 +18,12 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles, useTheme} from '@material-ui/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
-import {useMutation, useQueryClient} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
 import {currencies} from '../constants/constants'
 import {ProjectList} from '../validations/project'
 
-function AddProjectListModal({open, setOpen, editId}) {
-  console.log(editId)
+function AddProjectListModal({open, setOpen, editId, setEditId}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -50,7 +49,7 @@ function AddProjectListModal({open, setOpen, editId}) {
   const classes = useStyles()
   const classesFrom = useStylesForm()
 
-  const {handleSubmit, errors, control} = useForm({
+  const {handleSubmit, errors, control, reset} = useForm({
     mode: 'onTouched',
     shouldFocusError: true,
     reValidateMode: 'onChange',
@@ -66,7 +65,10 @@ function AddProjectListModal({open, setOpen, editId}) {
   const queryClient = useQueryClient()
 
   const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
-    keywordData => axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, keywordData),
+    keywordData =>
+      !editId
+        ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, keywordData)
+        : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject`, keywordData),
     {
       onSuccess: () => {
         setOpen(false)
@@ -77,6 +79,25 @@ function AddProjectListModal({open, setOpen, editId}) {
       },
     }
   )
+
+  async function fetchApi(editId) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/viewProject/${editId}`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {data: singleCustomerData, isSuccess: isSingleCustomerSuccess} = useQuery({
+    queryKey: ['customer', editId],
+    queryFn: () => fetchApi(editId),
+    onSuccess: ({data}) => {
+      const {domain, projectName} = data
+      reset({
+        domain,
+        projectName,
+      })
+    },
+    enabled: Boolean(editId),
+  })
 
   const submitForm = submitdata => {
     mutate({
@@ -96,16 +117,21 @@ function AddProjectListModal({open, setOpen, editId}) {
       className="keyword-modal"
       disableBackdropClick
       disableEscapeKeyDown
-      onClose={() => setOpen(false)}
+      onClose={() => {
+        setOpen(false)
+        setEditId(null)
+      }}
       open={open}
     >
       <MuiDialogTitle disableTypography className={classes.root}>
-        <Typography variant="h6">Add Project</Typography>
-
+        <Typography variant="h6">{editId ? 'Update Project' : 'Add Project'}</Typography>
         <IconButton
           style={{display: isLoading ? 'none' : ''}}
           className={classes.closeButton}
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false)
+            setEditId(null)
+          }}
         >
           <CloseIcon />
         </IconButton>
@@ -153,7 +179,10 @@ function AddProjectListModal({open, setOpen, editId}) {
             display: isLoading ? 'none' : '',
             color: theme.palette.text.secondary,
           }}
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false)
+            setEditId(null)
+          }}
         >
           Cancel
         </Button>
@@ -167,7 +196,7 @@ function AddProjectListModal({open, setOpen, editId}) {
           color="primary"
           disabled={isLoading}
         >
-          {isLoading ? 'Loading...' : 'Add Project'}
+          {isLoading ? 'Loading...' : `${editId ? 'Update Project' : 'Add Project'}`}
         </Button>
       </DialogActions>
     </Dialog>

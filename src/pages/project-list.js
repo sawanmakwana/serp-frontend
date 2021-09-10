@@ -156,47 +156,51 @@ function PorjectList() {
                           <Button
                             className="selectTablebtn"
                             onClick={e => {
-                              setAnchorEl(e.currentTarget)
+                              // setAnchorEl(e.currentTarget)
+                              // e.stopPropagation()
+                              setAddProjectModal(true)
                               e.stopPropagation()
+                              setEditId(_id)
                             }}
                           >
                             <MoreVertical />
                           </Button>
-                          <Menu
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={anchorEl}
-                            onClose={e => {
-                              setAnchorEl(null)
-                              e.stopPropagation()
-                            }}
-                            PaperProps={{
-                              style: {
-                                maxHeight: 220,
-                                width: 120,
-                              },
-                            }}
-                          >
-                            <MenuItem
-                              onClick={e => {
+                          {/* <Menu
+                              anchorEl={anchorEl}
+                              keepMounted
+                              open={anchorEl}
+                              onClose={e => {
                                 setAnchorEl(null)
-                                setAddProjectModal(true)
                                 e.stopPropagation()
-                                setEditId(_id)
+                              }}
+                              PaperProps={{
+                                style: {
+                                  maxHeight: 220,
+                                  width: 120,
+                                },
                               }}
                             >
-                              Edite
-                            </MenuItem>
-                            <MenuItem
-                              onClick={e => {
-                                e.stopPropagation()
-                                deleteProject(_id)
-                                setAnchorEl(null)
-                              }}
-                            >
-                              Delete
-                            </MenuItem>
-                          </Menu>
+                              <MenuItem
+                                onClick={e => {
+                                  setAnchorEl(null)
+                                  setAddProjectModal(true)
+                                  e.stopPropagation()
+                                  console.log(_id)
+                                  setEditId(_id)
+                                }}
+                              >
+                                Edite
+                              </MenuItem>
+                              <MenuItem
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  deleteProject(_id)
+                                  setAnchorEl(null)
+                                }}
+                              >
+                                Delete
+                              </MenuItem>
+                            </Menu> */}
                         </>
                       </TableCell>
                     </TableRow>
@@ -216,7 +220,14 @@ function PorjectList() {
             />
           </CardContent>
         </Card>
-        {addProjectModal && <AddProjectListModal editId={editId} open={addProjectModal} setOpen={setAddProjectModal} />}
+        {addProjectModal && (
+          <AddProjectListModal
+            editId={editId}
+            setEditId={setEditId}
+            open={addProjectModal}
+            setOpen={setAddProjectModal}
+          />
+        )}
       </Paper>
     </>
   )
