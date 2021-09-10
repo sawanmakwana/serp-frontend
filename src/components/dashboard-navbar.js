@@ -5,8 +5,8 @@ import AddIcon from '@material-ui/icons/Add'
 import {useTheme} from '@material-ui/core/styles'
 import {useState} from 'react'
 import {useLocation} from 'react-router-dom'
-import {AddModal} from './add-modal'
 import {Logout} from './logout-modal'
+import {AddProjectListModal} from './add-project-list'
 
 const DashboardNavbar = ({onMobileNavOpen}) => {
   const {pathname} = useLocation()
@@ -22,7 +22,7 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
         <Box sx={{flexGrow: 1}} />
         {pathname === '/project' && (
           <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
-            Add Keyword
+            Add Project
           </Button>
         )}
 
@@ -32,7 +32,7 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
           </IconButton>
         </Hidden>
       </Toolbar>
-      {open && <AddModal open={open} setOpen={setOpen} />}
+      {open && <AddProjectListModal open={open} setOpen={setOpen} />}
       {openLogout && <Logout openLogout={openLogout} setOpenLogout={setOpenLogout} />}
     </AppBar>
   )

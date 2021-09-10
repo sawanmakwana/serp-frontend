@@ -21,9 +21,9 @@ import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient} from 'react-query'
 import axios from 'axios'
 import {currencies} from '../constants/constants'
-import {addKeyword} from '../validations/add-keyword'
+import {SubProject} from '../validations/sub-project'
 
-function AddModal({open, setOpen}) {
+function AddSubProjectListModal({open, setOpen}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -55,7 +55,7 @@ function AddModal({open, setOpen}) {
     reValidateMode: 'onChange',
     submitFocusError: true,
     shouldUnregister: false,
-    resolver: joiResolver(addKeyword),
+    resolver: joiResolver(SubProject),
     defaultValues: {
       locationCode: '',
       keyword: '',
@@ -199,4 +199,4 @@ function AddModal({open, setOpen}) {
   )
 }
 
-export {AddModal}
+export {AddSubProjectListModal}

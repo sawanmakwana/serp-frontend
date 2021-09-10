@@ -1,11 +1,7 @@
 import Joi from 'joi'
 
-export const addKeyword = Joi.object({
-  locationCode: Joi.string().required().messages({
-    'string.empty': `Please select any one Loacation`,
-  }),
-
-  keyword: Joi.string().trim().required().messages({
+export const ProjectList = Joi.object({
+  projectName: Joi.string().trim().required().messages({
     'string.empty': `Keyword cannot be an empty field`,
   }),
   domain: Joi.string()
