@@ -23,7 +23,8 @@ import axios from 'axios'
 import {currencies} from '../constants/constants'
 import {ProjectList} from '../validations/project'
 
-function AddProjectListModal({open, setOpen}) {
+function AddProjectListModal({open, setOpen, editId}) {
+  console.log(editId)
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -78,7 +79,10 @@ function AddProjectListModal({open, setOpen}) {
   )
 
   const submitForm = submitdata => {
-    mutate({...submitdata, domain: submitdata.domain.replace('http://', '').replace('https://', '')})
+    mutate({
+      ...submitdata,
+      domain: submitdata.domain.replace('http://', '').replace('https://', ''),
+    })
   }
 
   const theme = useTheme()

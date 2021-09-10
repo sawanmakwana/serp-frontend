@@ -3,6 +3,7 @@ import {PorjectList} from 'pages/project-list'
 import {Project} from 'pages/project'
 import {DocumentTitle} from 'util/document-title'
 import {Dashbord} from 'pages/dashbord'
+import {User} from 'pages/user'
 import {AppLayout} from './layouts/app-layout'
 
 function AppRoutespath() {
@@ -23,8 +24,8 @@ function AppRoutespath() {
       {/* <Route path="/user">
         <DocumentTitle title="User" />
         <User />
-      </Route>
-      <Route path="/my-account">
+      </Route> */}
+      {/* <Route path="/my-account">
         <DocumentTitle title="My Account" />
         <MyAccount />
       </Route> */}

@@ -14,7 +14,7 @@ const uservalue = JSON.parse(userlocal)
 
 const user = {
   name: uservalue?.email,
-  jobTitle: uservalue?.permissionLevel === 1 ? 'Admin' : 'noPermission',
+  jobTitle: uservalue?.permissionLevel === 1 ? 'Admin' : '-',
 }
 
 const DashboardSidebar = ({onMobileClose, openMobile}) => {
@@ -57,9 +57,9 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           }}
           to="/my-account"
         >
-          {uservalue?.email ? uservalue.email.toString().charAt(0).toUpperCase() : 'A'}
+          {uservalue?.email.toString().charAt(0).toUpperCase()}
         </Avatar>
-        <Typography color="textPrimary" variant="h5">
+        <Typography color="textPrimary" variant="h5" style={{margin: '5px 0 2px'}}>
           {user.name}
         </Typography>
         <Typography color="textSecondary" variant="body2">

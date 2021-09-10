@@ -9,7 +9,6 @@ import {AddProjectListModal} from './add-project-list'
 
 const DashboardNavbar = ({onMobileNavOpen}) => {
   const {pathname} = useLocation()
-  const [open, setOpen] = useState(false)
   const theme = useTheme()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
@@ -18,11 +17,11 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
       <Toolbar>
         <Typography variant="h5">SERP {!xsScreen && `(Search Engine Results Page)`}</Typography>
         <Box sx={{flexGrow: 1}} />
-        {pathname === '/project' && (
+        {/* {pathname === '/project' && (
           <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
             Add Project
           </Button>
-        )}
+        )} */}
 
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen}>
@@ -30,7 +29,6 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
           </IconButton>
         </Hidden>
       </Toolbar>
-      {open && <AddProjectListModal open={open} setOpen={setOpen} />}
     </AppBar>
   )
 }
