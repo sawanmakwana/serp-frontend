@@ -156,51 +156,47 @@ function PorjectList() {
                           <Button
                             className="selectTablebtn"
                             onClick={e => {
-                              // setAnchorEl(e.currentTarget)
-                              // e.stopPropagation()
-                              setAddProjectModal(true)
+                              setAnchorEl(e.currentTarget)
                               e.stopPropagation()
                               setEditId(_id)
                             }}
                           >
                             <MoreVertical />
                           </Button>
-                          {/* <Menu
-                              anchorEl={anchorEl}
-                              keepMounted
-                              open={anchorEl}
-                              onClose={e => {
+                          <Menu
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={anchorEl}
+                            onClose={e => {
+                              setAnchorEl(null)
+                              e.stopPropagation()
+                            }}
+                            PaperProps={{
+                              style: {
+                                maxHeight: 220,
+                                width: 120,
+                              },
+                            }}
+                          >
+                            <MenuItem
+                              onClick={e => {
                                 setAnchorEl(null)
+                                setAddProjectModal(true)
                                 e.stopPropagation()
                               }}
-                              PaperProps={{
-                                style: {
-                                  maxHeight: 220,
-                                  width: 120,
-                                },
+                            >
+                              Edite
+                            </MenuItem>
+                            <MenuItem
+                              onClick={e => {
+                                e.stopPropagation()
+                                deleteProject(editId)
+                                setAnchorEl(null)
                               }}
                             >
-                              <MenuItem
-                                onClick={e => {
-                                  setAnchorEl(null)
-                                  setAddProjectModal(true)
-                                  e.stopPropagation()
-                                  console.log(_id)
-                                  setEditId(_id)
-                                }}
-                              >
-                                Edite
-                              </MenuItem>
-                              <MenuItem
-                                onClick={e => {
-                                  e.stopPropagation()
-                                  deleteProject(_id)
-                                  setAnchorEl(null)
-                                }}
-                              >
-                                Delete
-                              </MenuItem>
-                            </Menu> */}
+                              Delete
+                            </MenuItem>
+                          </Menu>
                         </>
                       </TableCell>
                     </TableRow>
