@@ -3,38 +3,19 @@ import {useEffect, useState} from 'react'
 import {Link as RouterLink, useLocation} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Avatar, Box, Button, Divider, Drawer, Hidden, List, ListItem, Typography} from '@material-ui/core'
-import {BarChart, Lock, Settings, User, Users} from 'react-feather'
 import theme from 'theme'
+import {Lock} from 'react-feather'
 import NavItem from './nav-item'
 import {Logout} from './logout-modal'
+import {sidbarItem} from '../constants/sidebar-item'
+
+const userlocal = window.localStorage.getItem('__user_data__')
+const uservalue = JSON.parse(userlocal)
 
 const user = {
-  name: 'Trupesh Chapaneri',
-  jobTitle: 'Developer',
+  name: uservalue?.email,
+  jobTitle: uservalue?.permissionLevel === 1 ? 'Admin' : 'noPermission',
 }
-
-const items = [
-  {
-    href: '/',
-    icon: BarChart,
-    title: 'Dashboard',
-  },
-  {
-    href: '/user',
-    icon: Users,
-    title: 'User',
-  },
-  {
-    href: '/my-account',
-    icon: User,
-    title: 'My Account',
-  },
-  {
-    href: '/settings',
-    icon: Settings,
-    title: 'Settings',
-  },
-]
 
 const DashboardSidebar = ({onMobileClose, openMobile}) => {
   const location = useLocation()
@@ -76,7 +57,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           }}
           to="/my-account"
         >
-          TC
+          {uservalue?.email ? uservalue.email.toString().charAt(0).toUpperCase() : 'A'}
         </Avatar>
         <Typography color="textPrimary" variant="h5">
           {user.name}
@@ -89,7 +70,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
       <Box sx={{p: 2}}>
         <List>
           <>
-            {items.map(item => (
+            {sidbarItem.map(item => (
               <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
             ))}
             <ListItem

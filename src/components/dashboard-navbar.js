@@ -4,10 +4,12 @@ import PropTypes from 'prop-types'
 import AddIcon from '@material-ui/icons/Add'
 import {useTheme} from '@material-ui/core/styles'
 import {useState} from 'react'
+import {useLocation} from 'react-router-dom'
 import {AddModal} from './add-modal'
 import {Logout} from './logout-modal'
 
 const DashboardNavbar = ({onMobileNavOpen}) => {
+  const {pathname} = useLocation()
   const [open, setOpen] = useState(false)
   const [openLogout, setOpenLogout] = useState(false)
   const theme = useTheme()
@@ -18,9 +20,11 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
       <Toolbar>
         <Typography variant="h5">SERP {!xsScreen && `(Search Engine Results Page)`}</Typography>
         <Box sx={{flexGrow: 1}} />
-        <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
-          Add Keyword
-        </Button>
+        {pathname === '/project' && (
+          <Button startIcon={<AddIcon />} color="inherit" onClick={() => setOpen(true)}>
+            Add Keyword
+          </Button>
+        )}
 
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen}>

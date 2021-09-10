@@ -1,25 +1,28 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
-import {Home} from 'pages/home'
-import {User} from 'pages/user'
+import {PorjectList} from 'pages/project-list'
 import {DocumentTitle} from 'util/document-title'
+import {Dashbord} from 'pages/dashbord'
 import {AppLayout} from './layouts/app-layout'
-import {MyAccount} from './pages/my-account'
 
 function AppRoutespath() {
   return (
     <Switch>
       <Route exact path="/">
         <DocumentTitle title="Dashboard" />
-        <Home />
+        <Dashbord />
       </Route>
-      <Route path="/user">
+      <Route exact path="/project">
+        <DocumentTitle title="Project" />
+        <PorjectList />
+      </Route>
+      {/* <Route path="/user">
         <DocumentTitle title="User" />
         <User />
       </Route>
       <Route path="/my-account">
         <DocumentTitle title="My Account" />
         <MyAccount />
-      </Route>
+      </Route> */}
 
       <Redirect to="/" />
     </Switch>

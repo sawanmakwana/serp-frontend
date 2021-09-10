@@ -18,7 +18,7 @@ const user = {
   city: 'AH',
   country: 'IND',
   jobTitle: 'Developer',
-  name: 'Trupesh Chapaneri',
+  name: '_LOL_',
   timezone: 'Timezone',
 }
 

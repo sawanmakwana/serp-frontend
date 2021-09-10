@@ -40,7 +40,7 @@ const useToolbarStyles = makeStyles(() => ({
     justifyContent: 'space-between',
   },
 }))
-function Home() {
+function Project() {
   const classesTool = useToolbarStyles()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
@@ -59,10 +59,18 @@ function Home() {
     setPage(0)
   }
 
+  // async function fetchTable(page = 0, Sorting) {
+  //   const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getAllTasks?limit=${rowsPerPage}&page=${
+  //     page + 1
+  //   }${Sorting}`
+  //   const {data} = await axios.get(fetchURL)
+  //   return data
+  // }
+
   async function fetchTable(page = 0, Sorting) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getAllTasks?limit=${rowsPerPage}&page=${
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/projectList?page=${
       page + 1
-    }${Sorting}`
+    }&limit=${rowsPerPage}&projectName:asc`
     const {data} = await axios.get(fetchURL)
     return data
   }
@@ -138,7 +146,7 @@ function Home() {
         <Card>
           <Toolbar className={classesTool.root}>
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-              Total Keyword <span> ({data.data?.total})</span>
+              Main Project List <span> ({data.data?.total})</span>
             </Typography>
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
@@ -217,4 +225,4 @@ function Home() {
   )
 }
 
-export {Home}
+export {Project}
