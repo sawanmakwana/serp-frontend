@@ -5,13 +5,11 @@ import AddIcon from '@material-ui/icons/Add'
 import {useTheme} from '@material-ui/core/styles'
 import {useState} from 'react'
 import {useLocation} from 'react-router-dom'
-import {Logout} from './logout-modal'
 import {AddProjectListModal} from './add-project-list'
 
 const DashboardNavbar = ({onMobileNavOpen}) => {
   const {pathname} = useLocation()
   const [open, setOpen] = useState(false)
-  const [openLogout, setOpenLogout] = useState(false)
   const theme = useTheme()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
@@ -33,7 +31,6 @@ const DashboardNavbar = ({onMobileNavOpen}) => {
         </Hidden>
       </Toolbar>
       {open && <AddProjectListModal open={open} setOpen={setOpen} />}
-      {openLogout && <Logout openLogout={openLogout} setOpenLogout={setOpenLogout} />}
     </AppBar>
   )
 }
