@@ -1,5 +1,6 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {PorjectList} from 'pages/project-list'
+import {Project} from 'pages/project'
 import {DocumentTitle} from 'util/document-title'
 import {Dashbord} from 'pages/dashbord'
 import {AppLayout} from './layouts/app-layout'
@@ -14,6 +15,10 @@ function AppRoutespath() {
       <Route exact path="/project">
         <DocumentTitle title="Project" />
         <PorjectList />
+      </Route>
+      <Route exact path="/project/:id">
+        <DocumentTitle title="Project Inner" />
+        <Project />
       </Route>
       {/* <Route path="/user">
         <DocumentTitle title="User" />

@@ -18,10 +18,15 @@ import {
   Divider,
   CardContent,
   LinearProgress,
+  Button,
+  Menu,
+  MenuItem,
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
-import {useQuery} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {MoreVertical} from 'react-feather'
+import {useHistory} from 'react-router-dom'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -32,11 +37,14 @@ const useToolbarStyles = makeStyles(() => ({
 }))
 function PorjectList() {
   const classesTool = useToolbarStyles()
+  const history = useHistory()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [Sorting, setSorting] = useState('')
   const [projectSortingtype, setprojectSortingtype] = useState('asc')
+  const queryClient = useQueryClient()
+  const [anchorEl, setAnchorEl] = useState(null)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -62,6 +70,15 @@ function PorjectList() {
     {keepPreviousData: true}
   )
 
+  const {mutate: deleteProject} = useMutation(
+    mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('reposData')
+      },
+    }
+  )
+
   if (isLoading)
     return (
       <div className="spinner table">
@@ -85,7 +102,7 @@ function PorjectList() {
         <Divider />
         <CardContent style={{padding: '0'}}>
           <TableContainer>
-            <Table size="medium">
+            <Table size="medium" className="selectTable">
               <TableHead>
                 <TableRow>
                   <TableCell className="pl-4">#</TableCell>
@@ -103,16 +120,63 @@ function PorjectList() {
                   </TableCell>
 
                   <TableCell>URL</TableCell>
+                  <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data.data?.result?.map(({_id, projectName, domain}, index) => (
-                  <TableRow hover key={_id}>
+                  <TableRow hover key={_id} onClick={() => history.push(`/project/${_id}`)}>
                     <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                     <TableCell>{projectName}</TableCell>
                     <Tooltip TransitionComponent={Zoom} title={domain} placement="top">
                       <TableCell className="urlEcllips">{domain}</TableCell>
                     </Tooltip>
+                    <TableCell>
+                      <>
+                        <Button
+                          className="selectTablebtn"
+                          onClick={e => {
+                            setAnchorEl(e.currentTarget)
+                            e.stopPropagation()
+                          }}
+                        >
+                          <MoreVertical />
+                        </Button>
+                        <Menu
+                          anchorEl={anchorEl}
+                          keepMounted
+                          open={anchorEl}
+                          onClose={e => {
+                            setAnchorEl(null)
+                            e.stopPropagation()
+                          }}
+                          PaperProps={{
+                            style: {
+                              maxHeight: 220,
+                              width: 120,
+                            },
+                          }}
+                        >
+                          <MenuItem
+                            onClick={e => {
+                              setAnchorEl(null)
+                              e.stopPropagation()
+                            }}
+                          >
+                            Edite
+                          </MenuItem>
+                          <MenuItem
+                            onClick={e => {
+                              e.stopPropagation()
+                              deleteProject(_id)
+                              setAnchorEl(null)
+                            }}
+                          >
+                            Delete
+                          </MenuItem>
+                        </Menu>
+                      </>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

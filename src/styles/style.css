@@ -122,3 +122,19 @@
 .Toastify__toast--success {
     background: #5664D2 !important;
 }
+.selectTable .MuiTableBody-root tr {
+  cursor: pointer;
+}
+.selectTable .selectTablebtn {
+  min-width: 10px;
+}
+.selectTable .selectTablebtn:hover {
+  color: #5664D2;
+  background: transparent;
+}
+.selectTable .selectTablebtn svg{
+  width: 18px;
+}
+.selectTable .selectTablebtn .MuiButton-label {
+  justify-content: flex-start;
+}
