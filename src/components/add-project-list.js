@@ -65,10 +65,10 @@ function AddProjectListModal({open, setOpen, editId, setEditId}) {
   const queryClient = useQueryClient()
 
   const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
-    keywordData =>
+    mutatedData =>
       !editId
-        ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, keywordData)
-        : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, keywordData),
+        ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, mutatedData)
+        : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, mutatedData),
     {
       onSuccess: () => {
         setOpen(false)
