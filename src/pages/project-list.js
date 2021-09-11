@@ -22,6 +22,7 @@ import {
   Menu,
   MenuItem,
   Box,
+  useMediaQuery,
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
@@ -30,6 +31,7 @@ import {MoreVertical} from 'react-feather'
 import {useHistory} from 'react-router-dom'
 import {AddProjectListModal} from 'components/add-project-list'
 import {DeleteModal} from 'components/delete-modal'
+import {useTheme} from '@material-ui/core/styles'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -40,6 +42,8 @@ const useToolbarStyles = makeStyles(() => ({
 }))
 function PorjectList() {
   const classesTool = useToolbarStyles()
+  const theme = useTheme()
+  const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const history = useHistory()
   const queryClient = useQueryClient()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
@@ -110,7 +114,7 @@ function PorjectList() {
           Main Project <span> ({data.data?.total})</span>
         </Typography>
         <Box>
-          <Button style={{color: '#5664D2'}}>Export</Button>
+          {!xsScreen && <Button style={{color: '#5664D2'}}>Export</Button>}
           <Button className="ml-2" color="primary" variant="contained" onClick={() => setAddProjectModal(true)}>
             Add Project
           </Button>

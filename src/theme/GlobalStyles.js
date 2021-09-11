@@ -7,6 +7,11 @@ const useStyles = makeStyles(() =>
         boxSizing: 'border-box',
         margin: 0,
         padding: 0,
+        'scrollbar-width': 'thin',
+      },
+      '*::-webkit-scrollbar': {
+        width: '4px',
+        height: '4px',
       },
       html: {
         '-webkit-font-smoothing': 'antialiased',

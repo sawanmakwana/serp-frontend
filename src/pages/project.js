@@ -24,6 +24,7 @@ import {
   Button,
   TextField,
   MenuItem,
+  useMediaQuery,
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
@@ -38,6 +39,7 @@ import {green, indigo, orange, red} from '@material-ui/core/colors'
 import {useHistory, useParams} from 'react-router-dom'
 import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
+import {useTheme} from '@material-ui/core/styles'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -63,6 +65,8 @@ function Project() {
   const [domain, setDomain] = useState([])
   const [editId, setEditId] = useState(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const theme = useTheme()
+  const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   React.useEffect(() => {
     window.history.pushState(null, '', window.location.href)
@@ -235,7 +239,7 @@ function Project() {
           Sub Project <span> ({data.data?.total})</span>
         </Typography>
         <Box>
-          <Button style={{color: '#5664D2'}}>Export</Button>
+          {!xsScreen && <Button style={{color: '#5664D2'}}>Export</Button>}
           <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
             Add Sub Project
           </Button>
