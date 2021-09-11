@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import {NavLink as RouterLink, useLocation} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Button, ListItem} from '@material-ui/core'
@@ -6,7 +5,8 @@ import theme from 'theme'
 
 const NavItem = ({href, icon: Icon, title}) => {
   const location = useLocation()
-  const active = location.pathname === href
+  // const active = location.pathname === href
+  const active = location.pathname.includes(href)
 
   return (
     <ListItem

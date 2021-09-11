@@ -1,8 +1,8 @@
-import {BarChart, Lock, Settings, User, Users} from 'react-feather'
+import {BarChart, Users} from 'react-feather'
 
 export const sidbarItem = [
   {
-    href: '/',
+    href: '/dashboard',
     icon: BarChart,
     title: 'Dashboard',
   },

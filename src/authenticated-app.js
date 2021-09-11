@@ -3,13 +3,12 @@ import {PorjectList} from 'pages/project-list'
 import {Project} from 'pages/project'
 import {DocumentTitle} from 'util/document-title'
 import {Dashbord} from 'pages/dashbord'
-import {User} from 'pages/user'
 import {AppLayout} from './layouts/app-layout'
 
 function AppRoutespath() {
   return (
     <Switch>
-      <Route exact path="/">
+      <Route exact path="/dashboard">
         <DocumentTitle title="Dashboard" />
         <Dashbord />
       </Route>
@@ -30,7 +29,7 @@ function AppRoutespath() {
         <MyAccount />
       </Route> */}
 
-      <Redirect to="/" />
+      <Redirect to="/dashboard" />
     </Switch>
   )
 }
