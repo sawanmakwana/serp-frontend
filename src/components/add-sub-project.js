@@ -24,7 +24,6 @@ import {currencies, keywordFrequency} from '../constants/constants'
 import {SubProject} from '../validations/sub-project'
 
 function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
-  console.log(domain[0])
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -71,10 +70,10 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
     {
       onSuccess: () => {
         setOpen(false)
-        queryClient.invalidateQueries('reposData')
+        queryClient.invalidateQueries('singalProject')
       },
       onSettled: () => {
-        queryClient.invalidateQueries('reposData')
+        queryClient.invalidateQueries('singalProject')
       },
     }
   )
@@ -162,7 +161,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
             name="keyword"
             render={({onChange, value, onBlur}) => (
               <TextField
-                label="Keyword"
+                label="Enter Keyword"
                 multiline
                 disabled={isLoading}
                 rows={5}

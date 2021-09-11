@@ -151,7 +151,7 @@ function PorjectList() {
                   {data.data?.result?.length === 0 ? (
                     <TableRow hover>
                       <TableCell className="emptyTable" colSpan="4">
-                        No data
+                        No Project Available
                       </TableCell>
                     </TableRow>
                   ) : (

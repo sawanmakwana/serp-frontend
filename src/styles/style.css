@@ -70,6 +70,7 @@
 .emptyTable {
   text-align: center !important;
   opacity: 0.7;
+  cursor: auto;
 }
 .ml-2 {
   margin-left: 1rem !important;

@@ -27,7 +27,7 @@ import {
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
-import {useQuery} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
 import RemoveIcon from '@material-ui/icons/Remove'
@@ -36,6 +36,8 @@ import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
 import {green, indigo, orange, red} from '@material-ui/core/colors'
 import {useHistory, useParams} from 'react-router-dom'
+import {Trash2} from 'react-feather'
+import {DeleteModal} from 'components/delete-modal'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -46,6 +48,7 @@ const useToolbarStyles = makeStyles(() => ({
 }))
 function Project() {
   const classesTool = useToolbarStyles()
+  const queryClient = useQueryClient()
   const history = useHistory()
   const paramId = useParams()
   const DomainId = paramId.id
@@ -58,6 +61,8 @@ function Project() {
   const [addSubProjectModal, setSubAddProjectModal] = useState(false)
   const [listProject, setListProject] = useState([])
   const [domain, setDomain] = useState([])
+  const [editId, setEditId] = useState(null)
+  const [deleteModal, setDeleteModal] = useState(false)
 
   React.useEffect(() => {
     window.history.pushState(null, '', window.location.href)
@@ -103,6 +108,22 @@ function Project() {
     error: projectlistError,
     isFetching: projectlistIsFetching,
   } = useQuery(['DdList'], () => fetchprojectlistAPI())
+
+  const {
+    mutate: deleteProject,
+    isLoading: deleteIsloading,
+    isFetching: singalProjectlistIsFetching,
+    error: singalProjectlistError,
+  } = useMutation(
+    mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteSubProject/${mutateData}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('singalProject')
+        setDeleteModal(false)
+        setEditId(null)
+      },
+    }
+  )
 
   React.useEffect(() => {
     if (projectlistData) {
@@ -231,7 +252,7 @@ function Project() {
           <Divider />
           <CardContent style={{padding: '0'}}>
             <TableContainer>
-              <Table size="medium">
+              <Table size="medium" className="selectTable">
                 <TableHead>
                   <TableRow>
                     <TableCell className="pl-4">#</TableCell>
@@ -262,29 +283,50 @@ function Project() {
                     </TableCell>
                     <TableCell>Difference</TableCell>
                     <TableCell>URL</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {data.data?.result?.map(({_id, keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
-                    <TableRow hover key={_id}>
-                      <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
-                      <TableCell>{keyword}</TableCell>
-                      <TableCell>{prevRankAbsolute || '-'}</TableCell>
-                      <TableCell>{rankAbsolute || '-'}</TableCell>
-                      <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
-                        {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
-                        {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
+                  {data.data?.result?.length === 0 ? (
+                    <TableRow hover>
+                      <TableCell className="emptyTable" colSpan="7">
+                        No Sub Project Available
                       </TableCell>
-                      <Tooltip TransitionComponent={Zoom} title={url} placement="top">
-                        <TableCell className="urlEcllips">{url}</TableCell>
-                      </Tooltip>
                     </TableRow>
-                  ))}
+                  ) : (
+                    data.data?.result?.map(({_id, keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
+                      <TableRow hover key={_id}>
+                        <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
+                        <TableCell>{keyword}</TableCell>
+                        <TableCell>{prevRankAbsolute || '-'}</TableCell>
+                        <TableCell>{rankAbsolute || '-'}</TableCell>
+                        <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
+                          {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
+                          {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
+                        </TableCell>
+                        <Tooltip TransitionComponent={Zoom} title={url} placement="top">
+                          <TableCell className="urlEcllips">{url}</TableCell>
+                        </Tooltip>
+                        <TableCell>
+                          <Button
+                            className="selectTablebtn"
+                            onClick={e => {
+                              setEditId(_id)
+                              setDeleteModal(true)
+                              e.stopPropagation()
+                            }}
+                          >
+                            <Trash2 />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
-            {(isFetching || projectlistIsFetching) && <LinearProgress />}
+            {(isFetching || projectlistIsFetching || singalProjectlistIsFetching) && <LinearProgress />}
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
@@ -296,7 +338,7 @@ function Project() {
             />
           </CardContent>
         </Card>
-        {/* {deleteModal && (
+        {deleteModal && (
           <DeleteModal
             deleteProject={() => deleteProject(editId)}
             deleteModal={deleteModal}
@@ -306,11 +348,11 @@ function Project() {
               setEditId(null)
             }}
           />
-        )} */}
+        )}
         {addSubProjectModal && (
           <AddSubProjectListModal
-            // editId={editId}
-            // setEditId={setEditId}
+            editId={editId}
+            setEditId={setEditId}
             _projectId={DomainId}
             domain={domain}
             open={addSubProjectModal}
