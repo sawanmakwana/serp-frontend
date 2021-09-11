@@ -23,7 +23,7 @@ import axios from 'axios'
 import {currencies, keywordFrequency} from '../constants/constants'
 import {SubProject} from '../validations/sub-project'
 
-function AddSubProjectListModal({open, setOpen}) {
+function AddSubProjectListModal({open, setOpen, domain}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -80,7 +80,10 @@ function AddSubProjectListModal({open, setOpen}) {
   )
 
   const submitForm = submitdata => {
-    mutate({...submitdata, domain: submitdata.domain.replace('http://', '').replace('https://', '')})
+    mutate({
+      ...submitdata,
+      domain: submitdata.domain.replace('http://', '').replace('https://', ''),
+    })
   }
 
   const theme = useTheme()
@@ -179,7 +182,7 @@ function AddSubProjectListModal({open, setOpen}) {
           <Controller
             control={control}
             name="domain"
-            render={({value}) => <TextField variant="outlined" label="Enter domain" disabled value={value} />}
+            render={({value}) => <TextField variant="outlined" label="Domain" disabled value={domain[0].domain} />}
           />
         </form>
       </DialogContent>

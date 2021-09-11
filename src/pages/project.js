@@ -56,6 +56,7 @@ function Project() {
   const [weekSortingtype, setweekSortingtype] = useState('asc')
   const [addSubProjectModal, setSubAddProjectModal] = useState(false)
   const [listProject, setListProject] = useState([])
+  const [domain, setDomain] = useState([])
 
   React.useEffect(() => {
     window.history.pushState(null, '', window.location.href)
@@ -105,12 +106,14 @@ function Project() {
   React.useEffect(() => {
     if (projectlistData) {
       const {data: Listdata} = projectlistData
-      const listProject = Listdata.result.map(({projectName, _id}) => {
-        return {projectName, value: _id}
+      const listProject = Listdata.result.map(({projectName, _id, domain}) => {
+        return {projectName, value: _id, domain}
       })
       setListProject(listProject)
+      const domain = listProject.filter(list => paramId.id === list.value)
+      setDomain(domain)
     }
-  }, [projectlistData])
+  }, [projectlistData, paramId.id])
 
   if (isLoading || projectlistisLoading)
     return (
@@ -308,6 +311,7 @@ function Project() {
           <AddSubProjectListModal
             // editId={editId}
             // setEditId={setEditId}
+            domain={domain}
             open={addSubProjectModal}
             setOpen={setSubAddProjectModal}
           />
