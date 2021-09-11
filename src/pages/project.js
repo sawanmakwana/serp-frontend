@@ -21,6 +21,7 @@ import {
   Container,
   Grid,
   LinearProgress,
+  Button,
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
@@ -70,7 +71,7 @@ function Project() {
   async function fetchTable(page = 0, Sorting) {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/projectList?page=${
       page + 1
-    }&limit=${rowsPerPage}&projectName:asc`
+    }&limit=${rowsPerPage}${Sorting}`
     const {data} = await axios.get(fetchURL)
     return data
   }
@@ -120,6 +121,15 @@ function Project() {
     <>
       <Box
         sx={{
+          pb: 3,
+        }}
+      >
+        <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+          Analytics of Single Project
+        </Typography>
+      </Box>
+      <Box
+        sx={{
           backgroundColor: 'background.default',
           minHeight: '100%',
           pb: 3,
@@ -142,12 +152,30 @@ function Project() {
           </Grid>
         </Container>
       </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          pb: 3,
+        }}
+      >
+        <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+          Sub Project <span> ({data.data?.total})</span>
+        </Typography>
+        <Box>
+          <Button style={{color: '#5664D2'}}>Export</Button>
+          <Button className="ml-2" color="primary" variant="contained">
+            Add Sub Project
+          </Button>
+        </Box>
+      </Box>
       <Paper>
         <Card>
           <Toolbar className={classesTool.root}>
-            <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+            {/* <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Sub Project <span> ({data.data?.total})</span>
-            </Typography>
+            </Typography> */}
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
             </Typography>

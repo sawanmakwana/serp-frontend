@@ -1,5 +1,5 @@
 import React from 'react'
-import {Box, Container, Grid} from '@material-ui/core'
+import {Box, Container, Grid, Typography} from '@material-ui/core'
 
 import AnalyticCard from 'components/analytic-card'
 import {green, indigo, orange, red} from '@material-ui/core/colors'
@@ -7,11 +7,16 @@ import {green, indigo, orange, red} from '@material-ui/core/colors'
 function Dashbord() {
   return (
     <>
+      <Box>
+        <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+          Analytics of All Projects
+        </Typography>
+      </Box>
       <Box
         sx={{
           backgroundColor: 'background.default',
           minHeight: '100%',
-          pb: 3,
+          py: 3,
         }}
       >
         <Grid container spacing={3}>

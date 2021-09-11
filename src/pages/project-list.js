@@ -103,7 +103,7 @@ function PorjectList() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingBottom: 24,
+          pb: 3,
         }}
       >
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
