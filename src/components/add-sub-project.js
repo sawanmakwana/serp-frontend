@@ -60,7 +60,6 @@ function AddSubProjectListModal({open, setOpen, domain}) {
       locationCode: '',
       keywordFrequency: '',
       keyword: '',
-      domain: '',
     },
   })
 
@@ -80,9 +79,9 @@ function AddSubProjectListModal({open, setOpen, domain}) {
   )
 
   const submitForm = submitdata => {
-    console.log(submitdata)
     mutate({
       ...submitdata,
+      keyword: submitdata.keyword.split('\n'),
     })
   }
 
@@ -134,7 +133,6 @@ function AddSubProjectListModal({open, setOpen, domain}) {
               </TextField>
             )}
           />
-
           <Controller
             control={control}
             name="keywordFrequency"
@@ -156,7 +154,6 @@ function AddSubProjectListModal({open, setOpen, domain}) {
               </TextField>
             )}
           />
-
           <Controller
             control={control}
             name="keyword"
@@ -175,18 +172,12 @@ function AddSubProjectListModal({open, setOpen, domain}) {
                 value={value}
                 onChange={e => {
                   onChange(e.target.value)
-                  console.log(e.target.value.split('\n'))
                 }}
               />
             )}
           />
           <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
-
-          <Controller
-            control={control}
-            name="domain"
-            render={({value}) => <TextField variant="outlined" label="Domain" disabled value={domain[0].domain} />}
-          />
+          <TextField variant="outlined" label="Domain" disabled value={domain[0].domain} />
         </form>
       </DialogContent>
       {isLoading && <LinearProgress />}
@@ -210,7 +201,7 @@ function AddSubProjectListModal({open, setOpen, domain}) {
           color="primary"
           disabled={isLoading}
         >
-          {isLoading ? 'Loading...' : 'Add Keyword'}
+          {isLoading ? 'Loading...' : 'Add Sub Project'}
         </Button>
       </DialogActions>
     </Dialog>
