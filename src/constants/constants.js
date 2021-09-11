@@ -32,3 +32,18 @@ export const currencies = [
     label: 'Philippines',
   },
 ]
+
+export const keywordFrequency = [
+  {
+    value: 'fortnightly',
+    label: 'Fortnightly',
+  },
+  {
+    value: 'weekly',
+    label: 'Weekly',
+  },
+  {
+    value: 'monthly',
+    label: 'Monthly',
+  },
+]

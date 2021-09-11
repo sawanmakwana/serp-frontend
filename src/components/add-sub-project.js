@@ -20,7 +20,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient} from 'react-query'
 import axios from 'axios'
-import {currencies} from '../constants/constants'
+import {currencies, keywordFrequency} from '../constants/constants'
 import {SubProject} from '../validations/sub-project'
 
 function AddSubProjectListModal({open, setOpen}) {
@@ -58,6 +58,7 @@ function AddSubProjectListModal({open, setOpen}) {
     resolver: joiResolver(SubProject),
     defaultValues: {
       locationCode: '',
+      keywordFrequency: '',
       keyword: '',
       domain: '',
     },
@@ -97,7 +98,7 @@ function AddSubProjectListModal({open, setOpen}) {
       open={open}
     >
       <MuiDialogTitle disableTypography className={classes.root}>
-        <Typography variant="h6">Keyword for domain</Typography>
+        <Typography variant="h6">Add Sub Project</Typography>
 
         <IconButton
           style={{display: isLoading ? 'none' : ''}}
@@ -114,7 +115,7 @@ function AddSubProjectListModal({open, setOpen}) {
             name="locationCode"
             render={({onChange, onBlur}) => (
               <TextField
-                label="Select locationCode"
+                label="Select location code"
                 select
                 error={errors.locationCode}
                 variant="outlined"
@@ -123,6 +124,28 @@ function AddSubProjectListModal({open, setOpen}) {
                 helperText={errors.locationCode && errors.locationCode.message}
               >
                 {currencies.map(option => (
+                  <MenuItem key={option.value} value={option.value} onClick={e => onChange(option.value)}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="keywordFrequency"
+            render={({onChange, onBlur}) => (
+              <TextField
+                label="Select keywords checking frequency "
+                select
+                error={errors.keywordFrequency}
+                variant="outlined"
+                onBlur={onBlur}
+                disabled={isLoading}
+                helperText={errors.keywordFrequency && errors.keywordFrequency.message}
+              >
+                {keywordFrequency.map(option => (
                   <MenuItem key={option.value} value={option.value} onClick={e => onChange(option.value)}>
                     {option.label}
                   </MenuItem>
@@ -156,18 +179,7 @@ function AddSubProjectListModal({open, setOpen}) {
           <Controller
             control={control}
             name="domain"
-            render={({onChange, value, onBlur}) => (
-              <TextField
-                variant="outlined"
-                label="Enter domain"
-                disabled={isLoading}
-                onBlur={onBlur}
-                value={value}
-                error={errors.domain}
-                helperText={errors.domain && errors.domain.message}
-                onChange={e => onChange(e.target.value)}
-              />
-            )}
+            render={({value}) => <TextField variant="outlined" label="Enter domain" disabled value={value} />}
           />
         </form>
       </DialogContent>

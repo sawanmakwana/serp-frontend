@@ -25,13 +25,13 @@ import {
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
-
 import {useQuery} from 'react-query'
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
 import RemoveIcon from '@material-ui/icons/Remove'
 import CheckIcon from '@material-ui/icons/Check'
 import AnalyticCard from 'components/analytic-card'
+import {AddSubProjectListModal} from 'components/add-sub-project'
 import {green, indigo, orange, red} from '@material-ui/core/colors'
 
 const useToolbarStyles = makeStyles(() => ({
@@ -49,6 +49,7 @@ function Project() {
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
+  const [addSubProjectModal, setSubAddProjectModal] = useState(false)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -165,7 +166,7 @@ function Project() {
         </Typography>
         <Box>
           <Button style={{color: '#5664D2'}}>Export</Button>
-          <Button className="ml-2" color="primary" variant="contained">
+          <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
             Add Sub Project
           </Button>
         </Box>
@@ -173,9 +174,6 @@ function Project() {
       <Paper>
         <Card>
           <Toolbar className={classesTool.root}>
-            {/* <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-              Sub Project <span> ({data.data?.total})</span>
-            </Typography> */}
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
             </Typography>
@@ -248,6 +246,25 @@ function Project() {
             />
           </CardContent>
         </Card>
+        {/* {deleteModal && (
+          <DeleteModal
+            deleteProject={() => deleteProject(editId)}
+            deleteModal={deleteModal}
+            deleteIsloading={deleteIsloading}
+            onClose={() => {
+              setDeleteModal(false)
+              setEditId(null)
+            }}
+          />
+        )} */}
+        {addSubProjectModal && (
+          <AddSubProjectListModal
+            // editId={editId}
+            // setEditId={setEditId}
+            open={addSubProjectModal}
+            setOpen={setSubAddProjectModal}
+          />
+        )}
       </Paper>
     </>
   )

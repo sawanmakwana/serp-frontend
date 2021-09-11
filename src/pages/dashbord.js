@@ -1,5 +1,5 @@
 import React from 'react'
-import {Box, Container, Grid, Typography} from '@material-ui/core'
+import {Box, Grid, Typography} from '@material-ui/core'
 
 import AnalyticCard from 'components/analytic-card'
 import {green, indigo, orange, red} from '@material-ui/core/colors'
