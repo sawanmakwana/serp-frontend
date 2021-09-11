@@ -238,6 +238,7 @@ function PorjectList() {
             deleteProject={() => deleteProject(editId)}
             deleteModal={deleteModal}
             deleteIsloading={deleteIsloading}
+            modalFrom="Project"
             onClose={() => {
               setDeleteModal(false)
               setEditId(null)

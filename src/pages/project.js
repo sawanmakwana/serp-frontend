@@ -346,6 +346,7 @@ function Project() {
             deleteProject={() => deleteProject(editId)}
             deleteModal={deleteModal}
             deleteIsloading={deleteIsloading}
+            modalFrom="Sub Project"
             onClose={() => {
               setDeleteModal(false)
               setEditId(null)

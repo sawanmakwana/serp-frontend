@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 import theme from 'theme'
 
-function DeleteModal({deleteModal, onClose, deleteProject, deleteIsloading}) {
+function DeleteModal({deleteModal, onClose, deleteProject, deleteIsloading, modalFrom}) {
   const useStyles = makeStyles(theme => ({
     root: {
       backgroundColor: theme.palette.primary.main,
@@ -22,9 +22,9 @@ function DeleteModal({deleteModal, onClose, deleteProject, deleteIsloading}) {
 
   return (
     <Dialog className="logout-modal" open={deleteModal} maxWidth="xs" fullWidth onClose={onClose}>
-      <DialogTitle className={classes.root}>Delete Modal</DialogTitle>
+      <DialogTitle className={classes.root}>Delete {modalFrom}</DialogTitle>
       <DialogContent>
-        <DialogContentText>Are you sure you want to Delete?</DialogContentText>
+        <DialogContentText>Are you sure you want to Delete {modalFrom}?</DialogContentText>
       </DialogContent>
       {deleteIsloading && <LinearProgress />}
       <DialogActions>
