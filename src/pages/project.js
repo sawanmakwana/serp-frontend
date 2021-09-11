@@ -48,6 +48,7 @@ function Project() {
   const classesTool = useToolbarStyles()
   const history = useHistory()
   const paramId = useParams()
+  const DomainId = paramId.id
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
@@ -76,17 +77,17 @@ function Project() {
     setPage(0)
   }
 
-  async function fetchTable(page = 0, Sorting) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/projectList?page=${
-      page + 1
-    }&limit=${rowsPerPage}${Sorting}`
+  async function fetchTable(page = 0, Sorting, DomainId) {
+    const fetchURL = `${
+      process.env.REACT_APP_PLATFORM_ENDPOINT
+    }/getSubProjectsList/${DomainId}?limit=${rowsPerPage}?page=${page + 1}&${Sorting}`
     const {data} = await axios.get(fetchURL)
     return data
   }
 
   const {isLoading, error, data, isFetching} = useQuery(
-    ['reposData', page, rowsPerPage, Sorting],
-    () => fetchTable(page, Sorting),
+    ['singalProject', page, rowsPerPage, Sorting, DomainId],
+    () => fetchTable(page, Sorting, DomainId),
     {keepPreviousData: true}
   )
 
@@ -110,10 +111,10 @@ function Project() {
         return {projectName, value: _id, domain}
       })
       setListProject(listProject)
-      const domain = listProject?.filter(list => paramId.id === list.value)
+      const domain = listProject?.filter(list => DomainId === list.value)
       setDomain(domain)
     }
-  }, [projectlistData, paramId.id])
+  }, [projectlistData, DomainId])
 
   if (isLoading || projectlistisLoading)
     return (
@@ -168,7 +169,7 @@ function Project() {
           style={{minWidth: 200}}
           label="Select Project"
           select
-          defaultValue={paramId.id}
+          defaultValue={DomainId}
           disabled={isLoading}
         >
           {listProject?.map(({value, projectName}) => (
@@ -310,7 +311,7 @@ function Project() {
           <AddSubProjectListModal
             // editId={editId}
             // setEditId={setEditId}
-            _projectId={paramId.id}
+            _projectId={DomainId}
             domain={domain}
             open={addSubProjectModal}
             setOpen={setSubAddProjectModal}
