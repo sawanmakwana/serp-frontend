@@ -29,6 +29,7 @@ import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {MoreVertical} from 'react-feather'
 import {useHistory} from 'react-router-dom'
 import {AddProjectListModal} from 'components/add-project-list'
+import {DeleteModal} from 'components/delete-modal'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -49,6 +50,7 @@ function PorjectList() {
   const [anchorEl, setAnchorEl] = useState(null)
   const [addProjectModal, setAddProjectModal] = useState(false)
   const [editId, setEditId] = useState(null)
+  const [deleteModal, setDeleteModal] = useState(false)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -74,11 +76,13 @@ function PorjectList() {
     {keepPreviousData: true}
   )
 
-  const {mutate: deleteProject} = useMutation(
+  const {mutate: deleteProject, isLoading: deleteIsloading} = useMutation(
     mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('reposData')
+        setDeleteModal(false)
+        setEditId(null)
       },
     }
   )
@@ -103,18 +107,18 @@ function PorjectList() {
         }}
       >
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Main Project List <span> ({data.data?.total})</span>
+          Main Project <span> ({data.data?.total})</span>
         </Typography>
-        <Button color="primary" variant="contained" onClick={() => setAddProjectModal(true)}>
-          Add Project
-        </Button>
+        <Box>
+          <Button style={{color: '#5664D2'}}>Export</Button>
+          <Button className="ml-2" color="primary" variant="contained" onClick={() => setAddProjectModal(true)}>
+            Add Project
+          </Button>
+        </Box>
       </Box>
       <Paper style={{padding: '0'}}>
         <Card>
           <Toolbar className={classesTool.root}>
-            {/* <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-              Main Project List <span> ({data.data?.total})</span>
-            </Typography> */}
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
             </Typography>
@@ -144,63 +148,72 @@ function PorjectList() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.data?.result?.map(({_id, projectName, domain}, index) => (
-                    <TableRow hover key={_id} onClick={() => history.push(`/project/${_id}`)}>
-                      <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
-                      <TableCell>{projectName}</TableCell>
-                      <Tooltip TransitionComponent={Zoom} title={domain} placement="top">
-                        <TableCell className="urlEcllips">{domain}</TableCell>
-                      </Tooltip>
-                      <TableCell>
-                        <>
-                          <Button
-                            className="selectTablebtn"
-                            onClick={e => {
-                              setAnchorEl(e.currentTarget)
-                              e.stopPropagation()
-                              setEditId(_id)
-                            }}
-                          >
-                            <MoreVertical />
-                          </Button>
-                          <Menu
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={anchorEl}
-                            onClose={e => {
-                              setAnchorEl(null)
-                              e.stopPropagation()
-                            }}
-                            PaperProps={{
-                              style: {
-                                maxHeight: 220,
-                                width: 120,
-                              },
-                            }}
-                          >
-                            <MenuItem
-                              onClick={e => {
-                                setAnchorEl(null)
-                                setAddProjectModal(true)
-                                e.stopPropagation()
-                              }}
-                            >
-                              Edite
-                            </MenuItem>
-                            <MenuItem
-                              onClick={e => {
-                                e.stopPropagation()
-                                deleteProject(editId)
-                                setAnchorEl(null)
-                              }}
-                            >
-                              Delete
-                            </MenuItem>
-                          </Menu>
-                        </>
+                  {data.data?.result?.length === 0 ? (
+                    <TableRow hover>
+                      <TableCell className="emptyTable" colSpan="4">
+                        No data
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    data.data?.result?.map(({_id, projectName, domain}, index) => (
+                      <TableRow hover key={_id} onClick={() => history.push(`/project/${_id}`)}>
+                        <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
+                        <TableCell>{projectName}</TableCell>
+                        <Tooltip TransitionComponent={Zoom} title={domain} placement="top">
+                          <TableCell className="urlEcllips">{domain}</TableCell>
+                        </Tooltip>
+                        <TableCell>
+                          <>
+                            <Button
+                              className="selectTablebtn"
+                              onClick={e => {
+                                setAnchorEl(e.currentTarget)
+                                setEditId(_id)
+                                e.stopPropagation()
+                              }}
+                            >
+                              <MoreVertical />
+                            </Button>
+                            <Menu
+                              anchorEl={anchorEl}
+                              keepMounted
+                              open={anchorEl}
+                              onClose={e => {
+                                setAnchorEl(null)
+                                setEditId(null)
+                                e.stopPropagation()
+                              }}
+                              PaperProps={{
+                                style: {
+                                  maxHeight: 220,
+                                  width: 120,
+                                },
+                              }}
+                            >
+                              <MenuItem
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  setAddProjectModal(true)
+                                  setAnchorEl(null)
+                                }}
+                              >
+                                Edite
+                              </MenuItem>
+                              <MenuItem
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  setDeleteModal(true)
+                                  setAnchorEl(null)
+                                }}
+                              >
+                                Delete
+                              </MenuItem>
+                            </Menu>
+                          </>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -216,6 +229,17 @@ function PorjectList() {
             />
           </CardContent>
         </Card>
+        {deleteModal && (
+          <DeleteModal
+            deleteProject={() => deleteProject(editId)}
+            deleteModal={deleteModal}
+            deleteIsloading={deleteIsloading}
+            onClose={() => {
+              setDeleteModal(false)
+              setEditId(null)
+            }}
+          />
+        )}
         {addProjectModal && (
           <AddProjectListModal
             editId={editId}

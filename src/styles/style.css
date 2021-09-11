@@ -67,6 +67,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.emptyTable {
+  text-align: center !important;
+  opacity: 0.7;
+}
 .ml-2 {
   margin-left: 1rem !important;
 }

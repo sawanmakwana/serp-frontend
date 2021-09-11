@@ -146,7 +146,7 @@ function Project() {
         <Card>
           <Toolbar className={classesTool.root}>
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-              Main Project List <span> ({data.data?.total})</span>
+              Sub Project <span> ({data.data?.total})</span>
             </Typography>
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>

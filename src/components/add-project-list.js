@@ -68,10 +68,11 @@ function AddProjectListModal({open, setOpen, editId, setEditId}) {
     keywordData =>
       !editId
         ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, keywordData)
-        : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject`, keywordData),
+        : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, keywordData),
     {
       onSuccess: () => {
         setOpen(false)
+        setEditId(null)
         queryClient.invalidateQueries('reposData')
       },
       onSettled: () => {
