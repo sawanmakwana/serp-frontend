@@ -101,16 +101,16 @@ function Project() {
     data: projectlistData,
     error: projectlistError,
     isFetching: projectlistIsFetching,
-  } = useQuery(['reposData', page, rowsPerPage, Sorting], () => fetchprojectlistAPI(), {keepPreviousData: true})
+  } = useQuery(['DdList'], () => fetchprojectlistAPI())
 
   React.useEffect(() => {
     if (projectlistData) {
-      const {data: Listdata} = projectlistData
-      const listProject = Listdata.result.map(({projectName, _id, domain}) => {
+      const {data} = projectlistData
+      const listProject = data?.map(({projectName, _id, domain}) => {
         return {projectName, value: _id, domain}
       })
       setListProject(listProject)
-      const domain = listProject.filter(list => paramId.id === list.value)
+      const domain = listProject?.filter(list => paramId.id === list.value)
       setDomain(domain)
     }
   }, [projectlistData, paramId.id])
@@ -161,7 +161,7 @@ function Project() {
         }}
       >
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Analytics of {domain[0]?.projectName}
+          Analytics of {domain && domain[0] && domain[0]?.projectName}
         </Typography>
         <TextField
           onChange={e => history.push(e.target.value)}
@@ -171,7 +171,7 @@ function Project() {
           defaultValue={paramId.id}
           disabled={isLoading}
         >
-          {listProject.map(({value, projectName}) => (
+          {listProject?.map(({value, projectName}) => (
             <MenuItem key={value} value={value}>
               {projectName}
             </MenuItem>
@@ -310,6 +310,7 @@ function Project() {
           <AddSubProjectListModal
             // editId={editId}
             // setEditId={setEditId}
+            _projectId={paramId.id}
             domain={domain}
             open={addSubProjectModal}
             setOpen={setSubAddProjectModal}

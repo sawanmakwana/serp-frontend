@@ -23,7 +23,8 @@ import axios from 'axios'
 import {currencies, keywordFrequency} from '../constants/constants'
 import {SubProject} from '../validations/sub-project'
 
-function AddSubProjectListModal({open, setOpen, domain}) {
+function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
+  console.log(domain[0])
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -66,7 +67,7 @@ function AddSubProjectListModal({open, setOpen, domain}) {
   const queryClient = useQueryClient()
 
   const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
-    keywordData => axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/sendTask`, keywordData),
+    MutatedData => axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addSubProject`, MutatedData),
     {
       onSuccess: () => {
         setOpen(false)
@@ -82,6 +83,8 @@ function AddSubProjectListModal({open, setOpen, domain}) {
     mutate({
       ...submitdata,
       keyword: submitdata.keyword.split('\n'),
+      domain: domain[0].domain,
+      _projectId,
     })
   }
 

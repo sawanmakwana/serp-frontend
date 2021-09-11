@@ -4,7 +4,7 @@ export const SubProject = Joi.object({
   locationCode: Joi.string().required().messages({
     'string.empty': `Please select any one Loacation`,
   }),
-  keywordFrequency: Joi.string().required().messages({
+  keywordFrequency: Joi.number().required().messages({
     'string.empty': `Please select any one Loacation`,
   }),
   keyword: Joi.string().trim().required().messages({
