@@ -22,6 +22,8 @@ import {
   Grid,
   LinearProgress,
   Button,
+  TextField,
+  MenuItem,
 } from '@material-ui/core'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
@@ -33,6 +35,7 @@ import CheckIcon from '@material-ui/icons/Check'
 import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
 import {green, indigo, orange, red} from '@material-ui/core/colors'
+import {useHistory, useParams} from 'react-router-dom'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -43,6 +46,8 @@ const useToolbarStyles = makeStyles(() => ({
 }))
 function Project() {
   const classesTool = useToolbarStyles()
+  const history = useHistory()
+  const paramId = useParams()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
@@ -50,6 +55,15 @@ function Project() {
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
   const [addSubProjectModal, setSubAddProjectModal] = useState(false)
+  const [listProject, setListProject] = useState([])
+
+  React.useEffect(() => {
+    window.history.pushState(null, '', window.location.href)
+    window.onpopstate = () => {
+      history.push('/project')
+    }
+    return () => (window.onpopstate = () => {})
+  }, [history])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -60,14 +74,6 @@ function Project() {
     window.localStorage.setItem('Rowsperpage', event.target.value)
     setPage(0)
   }
-
-  // async function fetchTable(page = 0, Sorting) {
-  //   const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getAllTasks?limit=${rowsPerPage}&page=${
-  //     page + 1
-  //   }${Sorting}`
-  //   const {data} = await axios.get(fetchURL)
-  //   return data
-  // }
 
   async function fetchTable(page = 0, Sorting) {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/projectList?page=${
@@ -83,14 +89,37 @@ function Project() {
     {keepPreviousData: true}
   )
 
-  if (isLoading)
+  async function fetchprojectlistAPI() {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getProjectsListDrpDwn`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {
+    isLoading: projectlistisLoading,
+    data: projectlistData,
+    error: projectlistError,
+    isFetching: projectlistIsFetching,
+  } = useQuery(['reposData', page, rowsPerPage, Sorting], () => fetchprojectlistAPI(), {keepPreviousData: true})
+
+  React.useEffect(() => {
+    if (projectlistData) {
+      const {data: Listdata} = projectlistData
+      const listProject = Listdata.result.map(({projectName, _id}) => {
+        return {projectName, value: _id}
+      })
+      setListProject(listProject)
+    }
+  }, [projectlistData])
+
+  if (isLoading || projectlistisLoading)
     return (
       <div className="spinner table">
         <CircularProgress />
       </div>
     )
 
-  if (error) return `An error has occurred: ${error.message}`
+  if (error || projectlistError) return `An error has occurred: ${error.message || projectlistError.messages}`
 
   const getDifference = (prevRank, currentRank, type = '') => {
     let diff
@@ -122,12 +151,30 @@ function Project() {
     <>
       <Box
         sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           pb: 3,
         }}
       >
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           Analytics of Single Project
         </Typography>
+        <TextField
+          onChange={e => history.push(e.target.value)}
+          style={{minWidth: 200}}
+          label="Select Project"
+          select
+          variant="outlined"
+          defaultValue={paramId.id}
+          disabled={isLoading}
+        >
+          {listProject.map(({value, projectName}) => (
+            <MenuItem key={value} value={value}>
+              {projectName}
+            </MenuItem>
+          ))}
+        </TextField>
       </Box>
       <Box
         sx={{
@@ -234,7 +281,7 @@ function Project() {
                 </TableBody>
               </Table>
             </TableContainer>
-            {isFetching && <LinearProgress />}
+            {(isFetching || projectlistIsFetching) && <LinearProgress />}
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
