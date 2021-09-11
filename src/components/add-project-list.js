@@ -162,7 +162,7 @@ function AddProjectListModal({open, setOpen, editId, setEditId}) {
               <TextField
                 variant="outlined"
                 label="Enter domain"
-                disabled={isLoading}
+                disabled={editId}
                 onBlur={onBlur}
                 value={value}
                 error={errors.domain}

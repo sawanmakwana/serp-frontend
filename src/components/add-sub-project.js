@@ -80,9 +80,9 @@ function AddSubProjectListModal({open, setOpen, domain}) {
   )
 
   const submitForm = submitdata => {
+    console.log(submitdata)
     mutate({
       ...submitdata,
-      domain: submitdata.domain.replace('http://', '').replace('https://', ''),
     })
   }
 
@@ -173,7 +173,10 @@ function AddSubProjectListModal({open, setOpen, domain}) {
                 variant="outlined"
                 helperText={errors.keyword && errors.keyword.message}
                 value={value}
-                onChange={e => onChange(e.target.value)}
+                onChange={e => {
+                  onChange(e.target.value)
+                  console.log(e.target.value.split('\n'))
+                }}
               />
             )}
           />
