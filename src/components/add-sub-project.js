@@ -142,6 +142,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
               <TextField
                 label="Select keywords checking frequency "
                 select
+                onChange={e => onChange(e.target.value)}
                 error={errors.keywordFrequency}
                 variant="outlined"
                 onBlur={onBlur}
@@ -149,7 +150,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
                 helperText={errors.keywordFrequency && errors.keywordFrequency.message}
               >
                 {keywordFrequency.map(option => (
-                  <MenuItem key={option.value} value={option.value} onClick={e => onChange(option.value)}>
+                  <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
