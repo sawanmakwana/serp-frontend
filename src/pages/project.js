@@ -161,14 +161,13 @@ function Project() {
         }}
       >
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Analytics of Single Project
+          Analytics of {domain[0]?.projectName}
         </Typography>
         <TextField
           onChange={e => history.push(e.target.value)}
           style={{minWidth: 200}}
           label="Select Project"
           select
-          variant="outlined"
           defaultValue={paramId.id}
           disabled={isLoading}
         >
