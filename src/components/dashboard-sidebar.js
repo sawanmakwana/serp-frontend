@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useEffect, useState} from 'react'
-import {Link as RouterLink, useLocation} from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Avatar, Box, Button, Divider, Drawer, Hidden, List, ListItem, Typography} from '@material-ui/core'
 import theme from 'theme'
 import {Lock} from 'react-feather'
-import NavItem from './nav-item'
+import {NavItem} from './nav-item'
 import {Logout} from './logout-modal'
 import {sidbarItem} from '../constants/sidebar-item'
 
@@ -45,8 +45,9 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
         }}
       >
         <Avatar
-          component={RouterLink}
-          alt="Remy Sharp"
+          // component={RouterLink}
+          // to="/my-account"
+          alt="Lol"
           style={{
             cursor: 'pointer',
             width: 64,
@@ -55,7 +56,6 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
             background: 'rgb(101 118 255 / 28%)',
             color: 'rgb(86, 100, 210)',
           }}
-          to="/my-account"
         >
           {uservalue?.email.toString().charAt(0).toUpperCase()}
         </Avatar>

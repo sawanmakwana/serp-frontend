@@ -44,4 +44,4 @@ NavItem.propTypes = {
   title: PropTypes.string,
 }
 
-export default NavItem
+export {NavItem}
