@@ -111,7 +111,7 @@ function PorjectList() {
         }}
       >
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Main Project <span> ({data.data?.total})</span>
+          Projects <span> ({data.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && <Button style={{color: '#5664D2'}}>Export</Button>}

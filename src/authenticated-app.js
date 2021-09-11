@@ -17,7 +17,7 @@ function AppRoutespath() {
         <PorjectList />
       </Route>
       <Route exact path="/project/:id">
-        <DocumentTitle title="Project Inner" />
+        <DocumentTitle title="Sub Project" />
         <Project />
       </Route>
       {/* <Route path="/user">
