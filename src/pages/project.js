@@ -113,7 +113,6 @@ function Project() {
     mutate: deleteProject,
     isLoading: deleteIsloading,
     isFetching: singalProjectlistIsFetching,
-    error: singalProjectlistError,
   } = useMutation(
     mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteSubProject/${mutateData}`),
     {
