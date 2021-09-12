@@ -128,6 +128,22 @@ function Project() {
     }
   )
 
+  async function fetchApiSingalProject(DomainId) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/subProjectDashboard/${DomainId}`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {
+    // isLoading: analyticsSingalProjectisLoading,
+    data: singalAna,
+    isFetching: analyticsSingalProjectisFetching,
+  } = useQuery(['analyticsSingalProject', DomainId], () => fetchApiSingalProject(DomainId))
+  const analyticsData = singalAna?.data
+
+  // console.log(`${analyticsSingalProjectisFetching} Fatching`)
+  // console.log(`${analyticsSingalProjectisLoading} Loading`)
+
   React.useEffect(() => {
     if (projectlistData) {
       const {data} = projectlistData
@@ -213,16 +229,68 @@ function Project() {
         <Container maxWidth={false} style={{padding: 0}}>
           <Grid container spacing={3}>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard name="KEYWORD" value="$24,000" color={red} />
+              <AnalyticCard
+                name="Total Keywords"
+                analyticsDataFetching={analyticsSingalProjectisFetching}
+                value={analyticsData?.topSpot}
+                color={red}
+              />
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard name="KEYWORD" value="$24,000" color={green} />
+              <AnalyticCard
+                name="Top Spot"
+                analyticsDataFetching={analyticsSingalProjectisFetching}
+                value={analyticsData?.topSpot}
+                color={green}
+              />
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard name="KEYWORD" value="$24,000" color={orange} />
+              <AnalyticCard
+                name="Top Three"
+                analyticsDataFetching={analyticsSingalProjectisFetching}
+                value={analyticsData?.topThree}
+                color={orange}
+              />
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard name="KEYWORD" value="$24,000" color={indigo} />
+              <AnalyticCard
+                name="Eleven To Twenty"
+                analyticsDataFetching={analyticsSingalProjectisFetching}
+                value={analyticsData?.elevenToTwenty}
+                color={orange}
+              />
+            </Grid>
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <AnalyticCard
+                name="FiftyOne To Hundred"
+                analyticsDataFetching={analyticsSingalProjectisFetching}
+                value={analyticsData?.fiftyOneToHundred}
+                color={indigo}
+              />
+            </Grid>
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <AnalyticCard
+                name="Four To Ten"
+                analyticsDataFetching={analyticsSingalProjectisFetching}
+                value={analyticsData?.fourToTen}
+                color={red}
+              />
+            </Grid>
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <AnalyticCard
+                name="Out Of Top Hundred"
+                analyticsDataFetching={analyticsSingalProjectisFetching}
+                value={analyticsData?.outOfTopHundred}
+                color={red}
+              />
+            </Grid>
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <AnalyticCard
+                name="TwentyOne To Fifty"
+                analyticsDataFetching={analyticsSingalProjectisFetching}
+                value={analyticsData?.twentyOneToFifty}
+                color={red}
+              />
             </Grid>
           </Grid>
         </Container>

@@ -1,7 +1,7 @@
-import {Avatar, Card, CardContent, Grid, Typography} from '@material-ui/core'
+import {Avatar, Card, CardContent, CircularProgress, Grid, Typography} from '@material-ui/core'
 import InsertChartIcon from '@material-ui/icons/InsertChartOutlined'
 
-function AnalyticCard({name, value, color}) {
+function AnalyticCard({name, value, color, analyticsDataFetching}) {
   return (
     <Card style={{height: '100%'}}>
       <CardContent>
@@ -11,7 +11,7 @@ function AnalyticCard({name, value, color}) {
               {name}
             </Typography>
             <Typography color="textPrimary" variant="h3">
-              {value}
+              {analyticsDataFetching ? <CircularProgress style={{height: 23, width: 23}} /> : value}
             </Typography>
           </Grid>
           <Grid item>

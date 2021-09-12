@@ -12,9 +12,7 @@ async function fetchApi() {
 }
 
 function Dashbord() {
-  const {isLoading, error, data, isFetching} = useQuery(['analyticsDashboard'], () => fetchApi(), {
-    keepPreviousData: true,
-  })
+  const {isLoading, error, data, isFetching} = useQuery(['analyticsDashboard'], () => fetchApi())
   const analyticsData = data?.data
 
   return (
