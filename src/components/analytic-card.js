@@ -1,7 +1,5 @@
-import {Avatar, Box, Card, CardContent, Grid, Typography} from '@material-ui/core'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import {Avatar, Card, CardContent, Grid, Typography} from '@material-ui/core'
 import InsertChartIcon from '@material-ui/icons/InsertChartOutlined'
-import {red} from '@material-ui/core/colors'
 
 function AnalyticCard({name, value, color}) {
   return (
@@ -28,27 +26,6 @@ function AnalyticCard({name, value, color}) {
             </Avatar>
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            pt: 2,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ArrowDownwardIcon style={{color: red[900]}} />
-          <Typography
-            style={{
-              color: red[900],
-              marginRight: 8,
-            }}
-            variant="body2"
-          >
-            12%
-          </Typography>
-          <Typography color="textSecondary" variant="caption">
-            Since last month
-          </Typography>
-        </Box>
       </CardContent>
     </Card>
   )

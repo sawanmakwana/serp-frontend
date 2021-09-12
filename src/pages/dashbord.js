@@ -1,10 +1,22 @@
 import React from 'react'
 import {Box, Grid, Typography} from '@material-ui/core'
-
 import AnalyticCard from 'components/analytic-card'
 import {green, indigo, orange, red} from '@material-ui/core/colors'
+import axios from 'axios'
+import {useQuery} from 'react-query'
+
+async function fetchApi() {
+  const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/projectDashboard`
+  const {data} = await axios.get(fetchURL)
+  return data
+}
 
 function Dashbord() {
+  const {isLoading, error, data, isFetching} = useQuery(['analyticsDashboard'], () => fetchApi(), {
+    keepPreviousData: true,
+  })
+  const analyticsData = data?.data
+
   return (
     <>
       <Box>
@@ -21,28 +33,23 @@ function Dashbord() {
       >
         <Grid container spacing={3}>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="Top 2" value="$24,000" color={red} />
+            <AnalyticCard
+              name="Total Keywords"
+              value={analyticsData ? analyticsData?.totalKeywords : '-'}
+              color={red}
+            />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="Top 3" value="$24,000" color={green} />
+            <AnalyticCard name="Top Spot" value={analyticsData ? analyticsData?.topSpot : '-'} color={green} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="Top 5" value="$24,000" color={orange} />
+            <AnalyticCard name="Top Ten" value={analyticsData ? analyticsData?.topTen : '-'} color={orange} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="Top 10" value="$24,000" color={indigo} />
+            <AnalyticCard name="Top Thirty" value={analyticsData ? analyticsData?.topThirty : '-'} color={indigo} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="KEYWORD" value="$24,000" color={red} />
-          </Grid>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="KEYWORD" value="$24,000" color={green} />
-          </Grid>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="KEYWORD" value="$24,000" color={orange} />
-          </Grid>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="KEYWORD" value="$24,000" color={indigo} />
+            <AnalyticCard name="Top Hundred" value={analyticsData ? analyticsData?.topHundred : '-'} color={red} />
           </Grid>
         </Grid>
       </Box>
