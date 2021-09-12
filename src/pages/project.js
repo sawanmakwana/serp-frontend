@@ -94,7 +94,7 @@ function Project() {
     return data
   }
 
-  const {isLoading, error, data, isFetching} = useQuery(
+  const {isLoading, data, isFetching} = useQuery(
     ['singalProject', page, rowsPerPage, Sorting, DomainId],
     () => fetchTable(page, Sorting, DomainId),
     {keepPreviousData: true}
@@ -109,7 +109,6 @@ function Project() {
   const {
     isLoading: projectlistisLoading,
     data: projectlistData,
-    error: projectlistError,
     isFetching: projectlistIsFetching,
   } = useQuery(['DdList'], () => fetchprojectlistAPI())
 
@@ -163,8 +162,6 @@ function Project() {
         <CircularProgress />
       </div>
     )
-
-  if (error || projectlistError) return `An error has occurred: ${error.message || projectlistError.messages}`
 
   const getDifference = (prevRank, currentRank, type = '') => {
     let diff

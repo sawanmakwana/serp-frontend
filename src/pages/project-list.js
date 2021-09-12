@@ -74,7 +74,7 @@ function PorjectList() {
     return data
   }
 
-  const {isLoading, error, data, isFetching} = useQuery(
+  const {isLoading, data, isFetching} = useQuery(
     ['reposData', page, rowsPerPage, Sorting],
     () => fetchTable(page, Sorting),
     {keepPreviousData: true}
@@ -97,8 +97,6 @@ function PorjectList() {
         <CircularProgress />
       </div>
     )
-
-  if (error) return `An error has occurred: ${error.message}`
 
   return (
     <>
