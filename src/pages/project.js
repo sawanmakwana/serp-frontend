@@ -122,6 +122,7 @@ function Project() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('singalProject')
+        queryClient.invalidateQueries('analyticsSingalProject')
         setDeleteModal(false)
         setEditId(null)
       },

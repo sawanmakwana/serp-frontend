@@ -71,9 +71,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
       onSuccess: () => {
         setOpen(false)
         queryClient.invalidateQueries('singalProject')
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries('singalProject')
+        queryClient.invalidateQueries('analyticsSingalProject')
       },
     }
   )

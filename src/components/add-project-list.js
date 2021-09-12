@@ -75,9 +75,6 @@ function AddProjectListModal({open, setOpen, editId, setEditId}) {
         setEditId(null)
         queryClient.invalidateQueries('reposData')
       },
-      onSettled: () => {
-        queryClient.invalidateQueries('reposData')
-      },
     }
   )
 
