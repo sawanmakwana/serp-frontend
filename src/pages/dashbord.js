@@ -12,7 +12,7 @@ async function fetchApi() {
 }
 
 function Dashbord() {
-  const {isLoading, error, data, isFetching} = useQuery(['analyticsDashboard'], () => fetchApi())
+  const {data, isFetching} = useQuery(['analyticsDashboard'], () => fetchApi())
   const analyticsData = data?.data
 
   return (
@@ -33,21 +33,42 @@ function Dashbord() {
           <Grid item lg={3} sm={6} xl={3} xs={12}>
             <AnalyticCard
               name="Total Keywords"
-              value={analyticsData ? analyticsData?.totalKeywords : '-'}
+              analyticsDataFetching={isFetching}
+              value={analyticsData?.totalKeywords}
               color={red}
             />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="Top Spot" value={analyticsData ? analyticsData?.topSpot : '-'} color={green} />
+            <AnalyticCard
+              name="Top Spot"
+              analyticsDataFetching={isFetching}
+              value={analyticsData?.topSpot}
+              color={green}
+            />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="Top Ten" value={analyticsData ? analyticsData?.topTen : '-'} color={orange} />
+            <AnalyticCard
+              name="Top Ten"
+              analyticsDataFetching={isFetching}
+              value={analyticsData?.topTen}
+              color={orange}
+            />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="Top Thirty" value={analyticsData ? analyticsData?.topThirty : '-'} color={indigo} />
+            <AnalyticCard
+              name="Top Thirty"
+              analyticsDataFetching={isFetching}
+              value={analyticsData?.topThirty}
+              color={indigo}
+            />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <AnalyticCard name="Top Hundred" value={analyticsData ? analyticsData?.topHundred : '-'} color={red} />
+            <AnalyticCard
+              name="Top Hundred"
+              analyticsDataFetching={isFetching}
+              value={analyticsData?.topHundred}
+              color={red}
+            />
           </Grid>
         </Grid>
       </Box>

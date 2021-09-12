@@ -232,7 +232,7 @@ function Project() {
               <AnalyticCard
                 name="Total Keywords"
                 analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.topSpot}
+                value={analyticsData?.totalKeywords}
                 color={red}
               />
             </Grid>
