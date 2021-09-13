@@ -35,7 +35,7 @@ import RemoveIcon from '@material-ui/icons/Remove'
 import CheckIcon from '@material-ui/icons/Check'
 import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
-import {green, indigo, orange, red} from '@material-ui/core/colors'
+import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams} from 'react-router-dom'
 import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
@@ -233,70 +233,54 @@ function Project() {
       >
         <Container maxWidth={false} style={{padding: 0}}>
           <Grid container spacing={3}>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard
-                name="Total Keywords"
-                analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.totalKeywords}
-                color={red}
-              />
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard
-                name="Top Spot"
-                analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.topSpot}
-                color={green}
-              />
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard
-                name="Top Three"
-                analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.topThree}
-                color={orange}
-              />
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard
-                name="Eleven To Twenty"
-                analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.elevenToTwenty}
-                color={orange}
-              />
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard
-                name="FiftyOne To Hundred"
-                analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.fiftyOneToHundred}
-                color={indigo}
-              />
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard
-                name="Four To Ten"
-                analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.fourToTen}
-                color={red}
-              />
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard
-                name="Out Of Top Hundred"
-                analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.outOfTopHundred}
-                color={red}
-              />
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <AnalyticCard
-                name="TwentyOne To Fifty"
-                analyticsDataFetching={analyticsSingalProjectisFetching}
-                value={analyticsData?.twentyOneToFifty}
-                color={red}
-              />
-            </Grid>
+            <AnalyticCard
+              name="Total Keywords"
+              analyticsDataFetching={analyticsSingalProjectisFetching}
+              value={analyticsData?.totalKeywords}
+              color={red}
+            />
+            <AnalyticCard
+              name="Top Spot"
+              analyticsDataFetching={analyticsSingalProjectisFetching}
+              value={analyticsData?.topSpot}
+              color={green}
+            />
+            <AnalyticCard
+              name="Top Three"
+              analyticsDataFetching={analyticsSingalProjectisFetching}
+              value={analyticsData?.topThree}
+              color={orange}
+            />
+            <AnalyticCard
+              name="Eleven To Twenty"
+              analyticsDataFetching={analyticsSingalProjectisFetching}
+              value={analyticsData?.elevenToTwenty}
+              color={indigo}
+            />
+            <AnalyticCard
+              name="FiftyOne To Hundred"
+              analyticsDataFetching={analyticsSingalProjectisFetching}
+              value={analyticsData?.fiftyOneToHundred}
+              color={purple}
+            />
+            <AnalyticCard
+              name="Four To Ten"
+              analyticsDataFetching={analyticsSingalProjectisFetching}
+              value={analyticsData?.fourToTen}
+              color={pink}
+            />
+            <AnalyticCard
+              name="Out Of Top Hundred"
+              analyticsDataFetching={analyticsSingalProjectisFetching}
+              value={analyticsData?.outOfTopHundred}
+              color={teal}
+            />
+            <AnalyticCard
+              name="TwentyOne To Fifty"
+              analyticsDataFetching={analyticsSingalProjectisFetching}
+              value={analyticsData?.twentyOneToFifty}
+              color={lime}
+            />
           </Grid>
         </Container>
       </Box>
