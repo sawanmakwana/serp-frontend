@@ -138,7 +138,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
             name="keywordFrequency"
             render={({onChange, onBlur}) => (
               <TextField
-                label="Select keywords checking frequency "
+                label="Select keywords checking frequency"
                 select
                 onChange={e => onChange(e.target.value)}
                 error={errors.keywordFrequency}
