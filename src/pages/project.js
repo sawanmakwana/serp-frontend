@@ -189,6 +189,13 @@ function Project() {
     }
   }
 
+  const getKeywordFre = data => {
+    if (data === 0) return 'Weekly'
+    if (data === 1) return 'Fortnightly'
+    if (data === 2) return 'Monthly'
+    return 'keyword Frequency'
+  }
+
   return (
     <>
       <Box
@@ -337,6 +344,7 @@ function Project() {
                         Keyword
                       </TableSortLabel>
                     </TableCell>
+                    <TableCell>Frequency</TableCell>
                     <TableCell>Previous week</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
@@ -364,33 +372,36 @@ function Project() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    data.data?.result?.map(({_id, keyword, prevRankAbsolute, rankAbsolute, url}, index) => (
-                      <TableRow hover key={_id}>
-                        <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
-                        <TableCell>{keyword}</TableCell>
-                        <TableCell>{prevRankAbsolute || '-'}</TableCell>
-                        <TableCell>{rankAbsolute || '-'}</TableCell>
-                        <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
-                          {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
-                          {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
-                        </TableCell>
-                        <Tooltip TransitionComponent={Zoom} title={url} placement="top">
-                          <TableCell className="urlEcllips">{url}</TableCell>
-                        </Tooltip>
-                        <TableCell>
-                          <Button
-                            className="selectTablebtn"
-                            onClick={e => {
-                              setEditId(_id)
-                              setDeleteModal(true)
-                              e.stopPropagation()
-                            }}
-                          >
-                            <Trash2 />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
+                    data.data?.result?.map(
+                      ({_id, keyword, keywordCheckFrequency, prevRankAbsolute, rankAbsolute, url}, index) => (
+                        <TableRow hover key={_id}>
+                          <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
+                          <TableCell>{keyword}</TableCell>
+                          <TableCell>{getKeywordFre(keywordCheckFrequency)}</TableCell>
+                          <TableCell>{prevRankAbsolute || '-'}</TableCell>
+                          <TableCell>{rankAbsolute || '-'}</TableCell>
+                          <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
+                            {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
+                            {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
+                          </TableCell>
+                          <Tooltip TransitionComponent={Zoom} title={url} placement="top">
+                            <TableCell className="urlEcllips">{url}</TableCell>
+                          </Tooltip>
+                          <TableCell>
+                            <Button
+                              className="selectTablebtn"
+                              onClick={e => {
+                                setEditId(_id)
+                                setDeleteModal(true)
+                                e.stopPropagation()
+                              }}
+                            >
+                              <Trash2 />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )
                   )}
                 </TableBody>
               </Table>
