@@ -10,8 +10,8 @@ const useStyles = makeStyles(() =>
         'scrollbar-width': 'thin',
       },
       '*::-webkit-scrollbar': {
-        width: '4px',
-        height: '4px',
+        width: '5px',
+        height: '5px',
       },
       html: {
         '-webkit-font-smoothing': 'antialiased',

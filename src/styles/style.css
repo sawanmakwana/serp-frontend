@@ -1,32 +1,25 @@
-/* width */
-::-webkit-scrollbar {
-  width: 4px;
+@media screen and (min-width: 720px) {
+   ::-webkit-scrollbar {
+   width: 5px;
+ }
+ ::-webkit-scrollbar-track {
+   box-shadow: inset 0 0 5px grey; 
+ }
+ ::-webkit-scrollbar-thumb {
+   background: grey; 
+   border-radius: 8px;
+ }
+ ::-webkit-scrollbar-thumb:hover {
+   background: rgba(128, 128, 128, 0.486); 
+ }
 }
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
-  /* border-radius: 8px; */
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: grey; 
-  border-radius: 8px;
-}
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(128, 128, 128, 0.486); 
-}
+@media screen and (max-width: 719px) {
+  ::-webkit-scrollbar {
+  display: none;
+ }
+ }
 .MuiFormHelperText-contained {
   margin-left: 3px !important;
-}
-.hello {
-  width: 256px;
-}
-.hello2 {
-   width: 256px;
-   top: 64px;
-   height: calc(100% - 64px);
 }
 .keyword-modal .MuiTypography-h6 {
   font-size: 18px;
