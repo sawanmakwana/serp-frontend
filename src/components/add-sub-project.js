@@ -58,7 +58,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
     resolver: joiResolver(SubProject),
     defaultValues: {
       locationCode: '',
-      keywordFrequency: '',
+      keywordCheckFrequency: '',
       keyword: '',
     },
   })
@@ -135,17 +135,17 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
           />
           <Controller
             control={control}
-            name="keywordFrequency"
+            name="keywordCheckFrequency"
             render={({onChange, onBlur}) => (
               <TextField
                 label="Select keywords checking frequency"
                 select
                 onChange={e => onChange(e.target.value)}
-                error={errors.keywordFrequency}
+                error={errors.keywordCheckFrequency}
                 variant="outlined"
                 onBlur={onBlur}
                 disabled={isLoading}
-                helperText={errors.keywordFrequency && errors.keywordFrequency.message}
+                helperText={errors.keywordCheckFrequency && errors.keywordCheckFrequency.message}
               >
                 {keywordFrequency.map(option => (
                   <MenuItem key={option.value} value={option.value}>
