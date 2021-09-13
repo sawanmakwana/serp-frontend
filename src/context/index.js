@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {QueryClient, QueryClientProvider, MutationCache, QueryCache} from 'react-query'
@@ -9,18 +8,15 @@ import {AuthProvider} from './auth-context'
 
 const queryCache = new QueryCache({
   onError(error) {
-    console.log(error.response.data.message)
     toast.error(error.response.data.message)
   },
 })
 
 const mutationCache = new MutationCache({
   onError(error) {
-    console.log(error.response.data.message)
     toast.error(error.response.data.message)
   },
   onSuccess({data}) {
-    console.log(data.message)
     toast.success(data.message)
   },
 })
@@ -47,7 +43,7 @@ function AppProviders({children}) {
       <Router>
         <ToastContainer
           position="bottom-left"
-          autoClose={6000}
+          autoClose={5000}
           hideProgressBar
           newestOnTop
           closeOnClick
