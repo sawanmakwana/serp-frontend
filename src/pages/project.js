@@ -53,8 +53,7 @@ function Project() {
   const classesTool = useToolbarStyles()
   const queryClient = useQueryClient()
   const history = useHistory()
-  const paramId = useParams()
-  const DomainId = paramId.id
+  const {id: DomainId} = useParams()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
@@ -90,7 +89,7 @@ function Project() {
   async function fetchTable(page = 0, Sorting, DomainId) {
     const fetchURL = `${
       process.env.REACT_APP_PLATFORM_ENDPOINT
-    }/getSubProjectsList/${DomainId}?limit=${rowsPerPage}?page=${page + 1}&${Sorting}`
+    }/getSubProjectsList/${DomainId}?limit=${rowsPerPage}?page=${page + 1}${Sorting}`
     const {data} = await axios.get(fetchURL)
     return data
   }
@@ -143,15 +142,11 @@ function Project() {
     return data
   }
 
-  const {
-    // isLoading: analyticsSingalProjectisLoading,
-    data: singalAna,
-    isFetching: analyticsSingalProjectisFetching,
-  } = useQuery(['analyticsSingalProject', DomainId], () => fetchApiSingalProject(DomainId))
+  const {data: singalAna, isFetching: analyticsSingalProjectisFetching} = useQuery(
+    ['analyticsSingalProject', DomainId],
+    () => fetchApiSingalProject(DomainId)
+  )
   const analyticsData = singalAna?.data
-
-  // console.log(`${analyticsSingalProjectisFetching} Fatching`)
-  // console.log(`${analyticsSingalProjectisLoading} Loading`)
 
   React.useEffect(() => {
     if (projectlistData) {
