@@ -32,6 +32,7 @@ import {useHistory} from 'react-router-dom'
 import {AddProjectListModal} from 'components/add-project-list'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
+import {downloadResponseCSV} from 'AppUtill'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -80,6 +81,14 @@ function PorjectList() {
     {keepPreviousData: true}
   )
 
+  async function fetchCSV() {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToCsv`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectlist'], () => fetchCSV())
+
   const {mutate: deleteProject, isLoading: deleteIsloading} = useMutation(
     mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`),
     {
@@ -112,7 +121,17 @@ function PorjectList() {
           Projects <span> ({data.data?.total})</span>
         </Typography>
         <Box>
-          {!xsScreen && <Button style={{color: '#5664D2'}}>Export</Button>}
+          {!xsScreen && (
+            <Button
+              onClick={() => {
+                downloadResponseCSV(csvData, 'main_project')
+              }}
+              disabled={csvisLoading}
+              style={{color: '#5664D2'}}
+            >
+              Export
+            </Button>
+          )}
           <Button className="ml-2" color="primary" variant="contained" onClick={() => setAddProjectModal(true)}>
             Add Project
           </Button>
@@ -124,6 +143,17 @@ function PorjectList() {
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
             </Typography>
+            {xsScreen && (
+              <Button
+                onClick={() => {
+                  downloadResponseCSV(csvData, 'project_list')
+                }}
+                disabled={csvisLoading}
+                style={{color: '#5664D2'}}
+              >
+                Export
+              </Button>
+            )}
           </Toolbar>
           <Divider />
           <CardContent style={{padding: '0'}}>

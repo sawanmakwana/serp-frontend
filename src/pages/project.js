@@ -40,6 +40,7 @@ import {useHistory, useParams} from 'react-router-dom'
 import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
+import {downloadResponseCSV} from 'AppUtill'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -111,6 +112,14 @@ function Project() {
     data: projectlistData,
     isFetching: projectlistIsFetching,
   } = useQuery(['DdList'], () => fetchprojectlistAPI())
+
+  async function fetchCSV(DomainId) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToCsv/${DomainId}`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectSublist', DomainId], () => fetchCSV(DomainId))
 
   const {
     mutate: deleteProject,
@@ -296,7 +305,17 @@ function Project() {
           Sub Project <span> ({data.data?.total})</span>
         </Typography>
         <Box>
-          {!xsScreen && <Button style={{color: '#5664D2'}}>Export</Button>}
+          {!xsScreen && (
+            <Button
+              onClick={() => {
+                downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}'s_project_list`)
+              }}
+              disabled={csvisLoading}
+              style={{color: '#5664D2'}}
+            >
+              Export
+            </Button>
+          )}
           <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
             Add Sub Project
           </Button>
@@ -308,6 +327,17 @@ function Project() {
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
             </Typography>
+            {xsScreen && (
+              <Button
+                onClick={() => {
+                  downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}'s_project_list`)
+                }}
+                disabled={csvisLoading}
+                style={{color: '#5664D2'}}
+              >
+                Export
+              </Button>
+            )}
           </Toolbar>
           <Divider />
           <CardContent style={{padding: '0'}}>
