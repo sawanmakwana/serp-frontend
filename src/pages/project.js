@@ -308,7 +308,7 @@ function Project() {
           {!xsScreen && (
             <Button
               onClick={() => {
-                downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}'s_project_list`)
+                downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
               }}
               disabled={csvisLoading}
               style={{color: '#5664D2'}}
