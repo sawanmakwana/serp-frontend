@@ -107,6 +107,8 @@ function PorjectList() {
       </div>
     )
 
+  console.log(csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main)
+
   return (
     <>
       <Box
@@ -127,7 +129,9 @@ function PorjectList() {
                 downloadResponseCSV(csvData, 'main_project')
               }}
               disabled={csvisLoading}
-              style={{color: '#5664D2'}}
+              style={{
+                color: csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+              }}
             >
               Export
             </Button>
@@ -149,9 +153,11 @@ function PorjectList() {
                   downloadResponseCSV(csvData, 'project_list')
                 }}
                 disabled={csvisLoading}
-                style={{color: '#5664D2'}}
+                style={{
+                  color: csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                }}
               >
-                Export
+                Exports
               </Button>
             )}
           </Toolbar>

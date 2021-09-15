@@ -306,7 +306,9 @@ function Project() {
                 downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
               }}
               disabled={csvisLoading}
-              style={{color: '#5664D2'}}
+              style={{
+                color: csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+              }}
             >
               Export
             </Button>
@@ -328,7 +330,9 @@ function Project() {
                   downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}'s_project_list`)
                 }}
                 disabled={csvisLoading}
-                style={{color: '#5664D2'}}
+                style={{
+                  color: csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                }}
               >
                 Export
               </Button>
