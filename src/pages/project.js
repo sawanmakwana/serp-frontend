@@ -27,7 +27,6 @@ import {
   useMediaQuery,
 } from '@material-ui/core'
 import axios from 'axios'
-import {makeStyles} from '@material-ui/styles'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
@@ -38,15 +37,7 @@ import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency} from 'AppUtill'
 
-const useToolbarStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-}))
 function Project() {
-  const classesTool = useToolbarStyles()
   const queryClient = useQueryClient()
   const history = useHistory()
   const {id: DomainId} = useParams()
@@ -165,14 +156,7 @@ function Project() {
 
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          pb: 3,
-        }}
-      >
+      <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           Analytics of {domain && domain[0] && domain[0]?.projectName}
         </Typography>
@@ -251,14 +235,7 @@ function Project() {
           </Grid>
         </Container>
       </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          pb: 3,
-        }}
-      >
+      <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           Sub Project <span> ({data.data?.total})</span>
         </Typography>
@@ -283,7 +260,7 @@ function Project() {
       </Box>
       <Paper>
         <Card>
-          <Toolbar className={classesTool.root}>
+          <Toolbar className="d-flex ">
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
             </Typography>

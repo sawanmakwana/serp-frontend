@@ -25,7 +25,6 @@ import {
   useMediaQuery,
 } from '@material-ui/core'
 import axios from 'axios'
-import {makeStyles} from '@material-ui/styles'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {MoreVertical} from 'react-feather'
 import {useHistory} from 'react-router-dom'
@@ -34,15 +33,7 @@ import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV} from 'AppUtill'
 
-const useToolbarStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-}))
 function PorjectList() {
-  const classesTool = useToolbarStyles()
   const theme = useTheme()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const history = useHistory()
@@ -109,14 +100,7 @@ function PorjectList() {
 
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          pb: 3,
-        }}
-      >
+      <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           Projects <span> ({data.data?.total})</span>
         </Typography>
@@ -141,7 +125,7 @@ function PorjectList() {
       </Box>
       <Paper style={{padding: '0'}}>
         <Card>
-          <Toolbar className={classesTool.root}>
+          <Toolbar className="d-flex">
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
             </Typography>

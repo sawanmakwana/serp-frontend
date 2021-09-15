@@ -66,11 +66,19 @@
   opacity: 0.7;
   cursor: auto;
 }
+.d-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .ml-2 {
   margin-left: 1rem !important;
 }
 .pl-4 {
   padding-left: 25px !important;
+}
+.pb-3 {
+  padding-bottom: 24px !important;
 }
 .incRank {
   color: #18d120 !important;
