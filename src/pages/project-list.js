@@ -107,8 +107,6 @@ function PorjectList() {
       </div>
     )
 
-  console.log(csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main)
-
   return (
     <>
       <Box
