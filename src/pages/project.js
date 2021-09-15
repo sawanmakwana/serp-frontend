@@ -29,10 +29,6 @@ import {
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
-import CallMadeIcon from '@material-ui/icons/CallMade'
-import CallReceivedIcon from '@material-ui/icons/CallReceived'
-import RemoveIcon from '@material-ui/icons/Remove'
-import CheckIcon from '@material-ui/icons/Check'
 import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
 import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
@@ -40,7 +36,7 @@ import {useHistory, useParams} from 'react-router-dom'
 import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV} from 'AppUtill'
+import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency} from 'AppUtill'
 
 const useToolbarStyles = makeStyles(() => ({
   root: {
@@ -166,39 +162,6 @@ function Project() {
         <CircularProgress />
       </div>
     )
-
-  const getDifference = (prevRank, currentRank, type = '') => {
-    let diff
-    switch (type) {
-      case 'GET_NUM':
-        diff = currentRank - prevRank
-        return diff.toString().replace('-', '')
-
-      case 'GET_ClASS':
-        if (!prevRank) return 'noprevRank'
-        if (currentRank === prevRank) return 'sameRank'
-        if (currentRank > prevRank) return 'decRank'
-        if (currentRank < prevRank) return 'incRank'
-        break
-
-      case 'GET_ICON':
-        if (!prevRank) return <RemoveIcon />
-        if (currentRank === prevRank) return <CheckIcon />
-        if (currentRank > prevRank) return <CallReceivedIcon />
-        if (currentRank < prevRank) return <CallMadeIcon />
-        break
-
-      default:
-        break
-    }
-  }
-
-  const getKeywordFre = data => {
-    if (data === 0) return 'Weekly'
-    if (data === 1) return 'Fortnightly'
-    if (data === 2) return 'Monthly'
-    return 'keyword Frequency'
-  }
 
   return (
     <>
@@ -358,7 +321,9 @@ function Project() {
                       </TableSortLabel>
                     </TableCell>
                     <TableCell>Frequency</TableCell>
-                    <TableCell>Previous week</TableCell>
+                    <TableCell>Prev Date</TableCell>
+                    <TableCell>Next Date</TableCell>
+                    <TableCell>Previous Rank</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
                         active={Sorting.includes('rankAbsolute')}
@@ -368,7 +333,7 @@ function Project() {
                           setSorting(`&sort=rankAbsolute:${weekSortingtype}`)
                         }}
                       >
-                        Current week
+                        Current Rank
                       </TableSortLabel>
                     </TableCell>
                     <TableCell>Difference</TableCell>
@@ -386,11 +351,16 @@ function Project() {
                     </TableRow>
                   ) : (
                     data.data?.result?.map(
-                      ({_id, keyword, keywordCheckFrequency, prevRankAbsolute, rankAbsolute, url}, index) => (
+                      (
+                        {_id, keyword, keywordCheckFrequency, prevDate, nextDate, prevRankAbsolute, rankAbsolute, url},
+                        index
+                      ) => (
                         <TableRow hover key={_id}>
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                           <TableCell>{keyword}</TableCell>
-                          <TableCell>{getKeywordFre(keywordCheckFrequency)}</TableCell>
+                          <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell>
+                          <TableCell>{getFormetedData(prevDate)}</TableCell>
+                          <TableCell>{getFormetedData(nextDate)}</TableCell>
                           <TableCell>{prevRankAbsolute || '-'}</TableCell>
                           <TableCell>{rankAbsolute || '-'}</TableCell>
                           <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
