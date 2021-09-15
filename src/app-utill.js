@@ -1,6 +1,5 @@
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
-import RemoveIcon from '@material-ui/icons/Remove'
 import CheckIcon from '@material-ui/icons/Check'
 
 export const downloadResponseCSV = (data, name) => {
@@ -21,14 +20,14 @@ export const getDifference = (prevRank, currentRank, type = '') => {
       return diff.toString().replace('-', '')
 
     case 'GET_ClASS':
-      if (!prevRank) return 'noprevRank'
+      if (!prevRank) return 'incRank'
       if (currentRank === prevRank) return 'sameRank'
       if (currentRank > prevRank) return 'decRank'
       if (currentRank < prevRank) return 'incRank'
       break
 
     case 'GET_ICON':
-      if (!prevRank) return <RemoveIcon />
+      if (!prevRank) return <CallMadeIcon />
       if (currentRank === prevRank) return <CheckIcon />
       if (currentRank > prevRank) return <CallReceivedIcon />
       if (currentRank < prevRank) return <CallMadeIcon />
