@@ -35,7 +35,7 @@ import {useHistory, useParams} from 'react-router-dom'
 import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency} from 'AppUtill'
+import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency} from 'app-utill'
 
 function Project() {
   const queryClient = useQueryClient()
