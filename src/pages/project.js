@@ -286,7 +286,7 @@ function Project() {
           <Divider />
           <CardContent style={{padding: '0'}}>
             <TableContainer>
-              <Table size="medium" className="selectTable">
+              <Table size="medium" className="selectTable sublist">
                 <TableHead>
                   <TableRow>
                     <TableCell className="pl-4">#</TableCell>

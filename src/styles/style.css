@@ -132,6 +132,9 @@
 .selectTable .MuiTableBody-root tr {
   cursor: pointer;
 }
+.sublist .MuiTableBody-root tr {
+  cursor: auto !important;
+}
 .selectTable .selectTablebtn {
   min-width: 10px;
 }
