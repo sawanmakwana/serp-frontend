@@ -25,6 +25,7 @@ import {
   TextField,
   MenuItem,
   useMediaQuery,
+  IconButton,
 } from '@material-ui/core'
 import axios from 'axios'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
@@ -35,7 +36,8 @@ import {useHistory, useParams} from 'react-router-dom'
 import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency} from 'app-utill'
+import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency, getStatus} from 'app-utill'
+import {ArrowBack} from '@material-ui/icons'
 
 function Project() {
   const queryClient = useQueryClient()
@@ -158,6 +160,9 @@ function Project() {
     <>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+          <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.push('/project')}>
+            <ArrowBack />
+          </IconButton>
           Analytics of {domain && domain[0] && domain[0]?.projectName}
         </Typography>
         <TextField
@@ -300,7 +305,7 @@ function Project() {
                     <TableCell>Frequency</TableCell>
                     <TableCell>Prev Date</TableCell>
                     <TableCell>Next Date</TableCell>
-                    <TableCell>Previous Rank</TableCell>
+                    <TableCell>Prev Rank</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
                         active={Sorting.includes('rankAbsolute')}
@@ -313,8 +318,9 @@ function Project() {
                         Current Rank
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell>Difference</TableCell>
+                    <TableCell>Diff</TableCell>
                     <TableCell>URL</TableCell>
+                    <TableCell>Status</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -322,14 +328,26 @@ function Project() {
                 <TableBody>
                   {data.data?.result?.length === 0 ? (
                     <TableRow hover>
-                      <TableCell className="emptyTable" colSpan="7">
+                      <TableCell className="emptyTable" colSpan="11">
                         No Sub Project Available
                       </TableCell>
                     </TableRow>
                   ) : (
                     data.data?.result?.map(
                       (
-                        {_id, keyword, keywordCheckFrequency, prevDate, nextDate, prevRankAbsolute, rankAbsolute, url},
+                        {
+                          _id,
+                          keyword,
+                          keywordCheckFrequency,
+                          prevDate,
+                          nextDate,
+                          prevRankAbsolute,
+                          rankAbsolute,
+                          url,
+                          error,
+                          errorMessage,
+                          newInserted,
+                        },
                         index
                       ) => (
                         <TableRow hover key={_id}>
@@ -344,8 +362,15 @@ function Project() {
                             {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
                             {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
                           </TableCell>
-                          <Tooltip TransitionComponent={Zoom} title={url} placement="top">
-                            <TableCell className="urlEcllips">{url}</TableCell>
+                          <Tooltip TransitionComponent={Zoom} title={url || 'Not available'} placement="top">
+                            <TableCell className="urlEcllips">{url || '-'}</TableCell>
+                          </Tooltip>
+                          <Tooltip
+                            TransitionComponent={Zoom}
+                            title={getStatus(error, errorMessage, newInserted, 'GET_TOOLTIP')}
+                            placement="top"
+                          >
+                            <TableCell>{getStatus(error, errorMessage, newInserted, 'GET_VALUE')}</TableCell>
                           </Tooltip>
                           <TableCell>
                             <Button

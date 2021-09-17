@@ -1,3 +1,5 @@
+import {orange, red} from '@material-ui/core/colors'
+import {Cached, DoneAll, ErrorOutline} from '@material-ui/icons'
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
 import CheckIcon from '@material-ui/icons/Check'
@@ -51,4 +53,23 @@ export const getFormetedData = data => {
     return newDate
   }
   return '-'
+}
+
+export const getStatus = (error, errorMessage, newInserted, type = '') => {
+  switch (type) {
+    case 'GET_TOOLTIP':
+      if (newInserted) return 'Panding'
+      if (error) return errorMessage
+      if (!error) return 'Keyword successfully added'
+      break
+
+    case 'GET_VALUE':
+      if (newInserted) return <Cached style={{color: orange[500]}} />
+      if (error) return <ErrorOutline style={{color: red[500]}} />
+      if (!error) return <DoneAll color="primary" />
+      break
+
+    default:
+      break
+  }
 }
