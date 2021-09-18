@@ -23,6 +23,8 @@ import {
   Box,
   useMediaQuery,
 } from '@material-ui/core'
+// import {Fade} from '@material'
+
 import axios from 'axios'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {MoreVertical} from 'react-feather'
@@ -46,6 +48,8 @@ function PorjectList() {
   const [addProjectModal, setAddProjectModal] = useState(false)
   const [editId, setEditId] = useState(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const [anchorE2, setAnchorE2] = useState(null)
+  const open = Boolean(anchorE2)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -69,14 +73,6 @@ function PorjectList() {
     keepPreviousData: true,
   })
 
-  async function fetchCSV() {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToCsv`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
-
-  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectlist'], () => fetchCSV())
-
   const {mutate: deleteProject, isLoading: deleteIsloading} = useMutation(
     mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`),
     {
@@ -88,6 +84,24 @@ function PorjectList() {
     }
   )
 
+  async function fetchCSV() {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToCsv`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectlist'], () => fetchCSV())
+
+  async function fetchGooglesheet() {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToGoogleSheet`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(['exportProjectToGoogleSheet'], () =>
+    fetchGooglesheet()
+  )
+
   return (
     <>
       <Box className="d-flex pb-3">
@@ -96,17 +110,36 @@ function PorjectList() {
         </Typography>
         <Box>
           {!xsScreen && (
-            <Button
-              onClick={() => {
-                downloadResponseCSV(csvData, 'main_project')
-              }}
-              disabled={csvisLoading}
-              style={{
-                color: csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
-              }}
-            >
-              Export
-            </Button>
+            <>
+              <Button
+                style={{
+                  color: googlesheetisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                }}
+                disabled={googlesheetisLoading || csvisLoading}
+                onClick={e => setAnchorE2(e.currentTarget)}
+              >
+                Export
+              </Button>
+              <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                <MenuItem
+                  onClick={() => {
+                    downloadResponseCSV(csvData, 'main_project')
+                    setAnchorE2(null)
+                  }}
+                >
+                  Export CSV
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                    win.focus()
+                    setAnchorE2(null)
+                  }}
+                >
+                  Export Google Sheet
+                </MenuItem>
+              </Menu>
+            </>
           )}
           <Button className="ml-2" color="primary" variant="contained" onClick={() => setAddProjectModal(true)}>
             Add Project
@@ -120,17 +153,36 @@ function PorjectList() {
               Current page <span> ({page + 1})</span>
             </Typography>
             {xsScreen && (
-              <Button
-                onClick={() => {
-                  downloadResponseCSV(csvData, 'project_list')
-                }}
-                disabled={csvisLoading}
-                style={{
-                  color: csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
-                }}
-              >
-                Exports
-              </Button>
+              <>
+                <Button
+                  style={{
+                    color: googlesheetisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                  }}
+                  disabled={googlesheetisLoading || csvisLoading}
+                  onClick={e => setAnchorE2(e.currentTarget)}
+                >
+                  Export
+                </Button>
+                <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                  <MenuItem
+                    onClick={() => {
+                      downloadResponseCSV(csvData, 'main_project')
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export CSV
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                      win.focus()
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export Google Sheet
+                  </MenuItem>
+                </Menu>
+              </>
             )}
           </Toolbar>
           <Divider />
