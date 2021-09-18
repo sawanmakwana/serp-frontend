@@ -1,7 +1,6 @@
 import React from 'react'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {QueryClient, QueryClientProvider, MutationCache, QueryCache} from 'react-query'
-import {ReactQueryDevtools} from 'react-query/devtools'
 import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {AuthProvider} from './auth-context'
@@ -53,7 +52,7 @@ function AppProviders({children}) {
         />
         <AuthProvider>{children}</AuthProvider>
       </Router>
-      <ReactQueryDevtools position="bottom-left" initialIsOpen={false} />
+      {/* <ReactQueryDevtools position="bottom-left" initialIsOpen={false} /> */}
     </QueryClientProvider>
   )
 }
