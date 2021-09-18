@@ -12,7 +12,6 @@ import {
   Typography,
   Paper,
   Tooltip,
-  CircularProgress,
   TableSortLabel,
   Card,
   Divider,
@@ -53,6 +52,7 @@ function Project() {
   const [listProject, setListProject] = useState([])
   const [domain, setDomain] = useState([])
   const [editId, setEditId] = useState(null)
+
   const [deleteModal, setDeleteModal] = useState(false)
   const theme = useTheme()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -131,58 +131,59 @@ function Project() {
     return data
   }
 
-  const {data: singalAna, isFetching: analyticsSingalProjectisFetching} = useQuery(
-    ['analyticsSingalProject', DomainId],
-    () => fetchApiSingalProject(DomainId)
-  )
+  const {
+    data: singalAna,
+    isFetching: analyticsSingalProjectisFetching,
+    isLoading: anaLoading,
+  } = useQuery(['analyticsSingalProject', DomainId], () => fetchApiSingalProject(DomainId))
   const analyticsData = singalAna?.data
 
   const analyticCardList = [
     {
       name: 'Total Keywords',
-      analyticsDataFetching: analyticsSingalProjectisFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
       value: analyticsData?.totalKeywords,
       color: red,
     },
     {
       name: 'Top Spot',
-      analyticsDataFetching: analyticsSingalProjectisFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
       value: analyticsData?.topSpot,
       color: green,
     },
     {
       name: 'Top Three',
-      analyticsDataFetching: analyticsSingalProjectisFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
       value: analyticsData?.topThree,
       color: orange,
     },
     {
       name: 'Four To Ten',
-      analyticsDataFetching: analyticsSingalProjectisFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
       value: analyticsData?.fourToTen,
       color: indigo,
     },
     {
       name: 'Eleven To Twenty',
-      analyticsDataFetching: analyticsSingalProjectisFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
       value: analyticsData?.elevenToTwenty,
       color: purple,
     },
     {
       name: 'TwentyOne To Fifty',
-      analyticsDataFetching: analyticsSingalProjectisFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
       value: analyticsData?.twentyOneToFifty,
       color: pink,
     },
     {
       name: 'FiftyOne To Hundred',
-      analyticsDataFetching: analyticsSingalProjectisFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
       value: analyticsData?.fiftyOneToHundred,
       color: teal,
     },
     {
       name: 'Out Of Top Hundred',
-      analyticsDataFetching: analyticsSingalProjectisFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
       value: analyticsData?.outOfTopHundred,
       color: lime,
     },
@@ -199,13 +200,6 @@ function Project() {
       setDomain(domain)
     }
   }, [projectlistData, DomainId])
-
-  if (isLoading || projectlistisLoading)
-    return (
-      <div className="spinner table">
-        <CircularProgress />
-      </div>
-    )
 
   return (
     <>
@@ -256,7 +250,7 @@ function Project() {
       </Box>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Sub Project <span> ({data.data?.total})</span>
+          Sub Project <span> ({data?.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && (
@@ -340,14 +334,14 @@ function Project() {
                 </TableHead>
 
                 <TableBody>
-                  {data.data?.result?.length === 0 ? (
+                  {data?.data?.result?.length === 0 ? (
                     <TableRow hover>
                       <TableCell className="emptyTable" colSpan="11">
                         No Sub Project Available
                       </TableCell>
                     </TableRow>
                   ) : (
-                    data.data?.result?.map(
+                    data?.data?.result?.map(
                       (
                         {
                           _id,
@@ -409,7 +403,7 @@ function Project() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
-              count={data.data?.total}
+              count={data?.data?.total}
               page={page}
               onPageChange={handleChangePage}
               rowsPerPage={rowsPerPage}

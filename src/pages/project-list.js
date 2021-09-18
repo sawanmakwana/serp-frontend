@@ -12,7 +12,6 @@ import {
   Typography,
   Paper,
   Tooltip,
-  CircularProgress,
   TableSortLabel,
   Card,
   Divider,
@@ -66,11 +65,9 @@ function PorjectList() {
     return data
   }
 
-  const {isLoading, data, isFetching} = useQuery(
-    ['reposData', page, rowsPerPage, Sorting],
-    () => fetchTable(page, Sorting),
-    {keepPreviousData: true}
-  )
+  const {data, isFetching} = useQuery(['reposData', page, rowsPerPage, Sorting], () => fetchTable(page, Sorting), {
+    keepPreviousData: true,
+  })
 
   async function fetchCSV() {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToCsv`
@@ -91,18 +88,11 @@ function PorjectList() {
     }
   )
 
-  if (isLoading)
-    return (
-      <div className="spinner table">
-        <CircularProgress />
-      </div>
-    )
-
   return (
     <>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Projects <span> ({data.data?.total})</span>
+          Projects <span> ({data?.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && (
@@ -168,14 +158,14 @@ function PorjectList() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.data?.result?.length === 0 ? (
+                  {data?.data?.result?.length === 0 ? (
                     <TableRow hover>
                       <TableCell className="emptyTable" colSpan="4">
                         No Project Available
                       </TableCell>
                     </TableRow>
                   ) : (
-                    data.data?.result?.map(({_id, projectName, domain}, index) => (
+                    data?.data?.result?.map(({_id, projectName, domain}, index) => (
                       <TableRow hover key={_id} onClick={() => history.push(`/project/${_id}`)}>
                         <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                         <TableCell>{projectName}</TableCell>
@@ -241,7 +231,7 @@ function PorjectList() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
-              count={data.data?.total}
+              count={data?.data?.total}
               page={page}
               onPageChange={handleChangePage}
               rowsPerPage={rowsPerPage}
