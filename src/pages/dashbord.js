@@ -15,6 +15,39 @@ function Dashbord() {
   const {data, isFetching} = useQuery(['analyticsDashboard'], () => fetchApi())
   const analyticsData = data?.data
 
+  const analyticCardList = [
+    {
+      name: 'Total Keywords',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.totalKeywords,
+      color: red,
+    },
+    {
+      name: 'Top Spot',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.topSpot,
+      color: green,
+    },
+    {
+      name: 'Top Ten',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.topTen,
+      color: orange,
+    },
+    {
+      name: 'Four To Thirty',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.topThirty,
+      color: indigo,
+    },
+    {
+      name: 'Eleven To Hundred',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.topHundred,
+      color: teal,
+    },
+  ]
+
   return (
     <>
       <Box>
@@ -30,36 +63,17 @@ function Dashbord() {
         }}
       >
         <Grid container spacing={3}>
-          <AnalyticCard
-            name="Total Keywords"
-            analyticsDataFetching={isFetching}
-            value={analyticsData?.totalKeywords}
-            color={red}
-          />
-          <AnalyticCard
-            name="Top Spot"
-            analyticsDataFetching={isFetching}
-            value={analyticsData?.topSpot}
-            color={green}
-          />
-          <AnalyticCard
-            name="Top Ten"
-            analyticsDataFetching={isFetching}
-            value={analyticsData?.topTen}
-            color={orange}
-          />
-          <AnalyticCard
-            name="Top Thirty"
-            analyticsDataFetching={isFetching}
-            value={analyticsData?.topThirty}
-            color={indigo}
-          />
-          <AnalyticCard
-            name="Top Hundred"
-            analyticsDataFetching={isFetching}
-            value={analyticsData?.topHundred}
-            color={teal}
-          />
+          {analyticCardList.map(({name, analyticsDataFetching, value, color}, i) => {
+            return (
+              <AnalyticCard
+                key={i}
+                name={name}
+                analyticsDataFetching={analyticsDataFetching}
+                value={value}
+                color={color}
+              />
+            )
+          })}
         </Grid>
       </Box>
     </>

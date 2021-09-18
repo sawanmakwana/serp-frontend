@@ -137,6 +137,57 @@ function Project() {
   )
   const analyticsData = singalAna?.data
 
+  const analyticCardList = [
+    {
+      name: 'Total Keywords',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.totalKeywords,
+      color: red,
+    },
+    {
+      name: 'Top Spot',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.topSpot,
+      color: green,
+    },
+    {
+      name: 'Top Three',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.topThree,
+      color: orange,
+    },
+    {
+      name: 'Four To Ten',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.fourToTen,
+      color: indigo,
+    },
+    {
+      name: 'Eleven To Twenty',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.elevenToTwenty,
+      color: purple,
+    },
+    {
+      name: 'TwentyOne To Fifty',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.twentyOneToFifty,
+      color: pink,
+    },
+    {
+      name: 'FiftyOne To Hundred',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.fiftyOneToHundred,
+      color: teal,
+    },
+    {
+      name: 'Out Of Top Hundred',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.outOfTopHundred,
+      color: lime,
+    },
+  ]
+
   React.useEffect(() => {
     if (projectlistData) {
       const {data} = projectlistData
@@ -189,54 +240,17 @@ function Project() {
       >
         <Container maxWidth={false} style={{padding: 0}}>
           <Grid container spacing={3}>
-            <AnalyticCard
-              name="Total Keywords"
-              analyticsDataFetching={analyticsSingalProjectisFetching}
-              value={analyticsData?.totalKeywords}
-              color={red}
-            />
-            <AnalyticCard
-              name="Top Spot"
-              analyticsDataFetching={analyticsSingalProjectisFetching}
-              value={analyticsData?.topSpot}
-              color={green}
-            />
-            <AnalyticCard
-              name="Top Three"
-              analyticsDataFetching={analyticsSingalProjectisFetching}
-              value={analyticsData?.topThree}
-              color={orange}
-            />
-            <AnalyticCard
-              name="Eleven To Twenty"
-              analyticsDataFetching={analyticsSingalProjectisFetching}
-              value={analyticsData?.elevenToTwenty}
-              color={indigo}
-            />
-            <AnalyticCard
-              name="FiftyOne To Hundred"
-              analyticsDataFetching={analyticsSingalProjectisFetching}
-              value={analyticsData?.fiftyOneToHundred}
-              color={purple}
-            />
-            <AnalyticCard
-              name="Four To Ten"
-              analyticsDataFetching={analyticsSingalProjectisFetching}
-              value={analyticsData?.fourToTen}
-              color={pink}
-            />
-            <AnalyticCard
-              name="Out Of Top Hundred"
-              analyticsDataFetching={analyticsSingalProjectisFetching}
-              value={analyticsData?.outOfTopHundred}
-              color={teal}
-            />
-            <AnalyticCard
-              name="TwentyOne To Fifty"
-              analyticsDataFetching={analyticsSingalProjectisFetching}
-              value={analyticsData?.twentyOneToFifty}
-              color={lime}
-            />
+            {analyticCardList.map(({name, analyticsDataFetching, value, color}, i) => {
+              return (
+                <AnalyticCard
+                  key={i}
+                  name={name}
+                  analyticsDataFetching={analyticsDataFetching}
+                  value={value}
+                  color={color}
+                />
+              )
+            })}
           </Grid>
         </Container>
       </Box>
