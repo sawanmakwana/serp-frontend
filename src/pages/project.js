@@ -273,9 +273,11 @@ function Project() {
               <Button
                 style={{
                   color:
-                    googlesheetisLoading || csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                    googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
+                      ? theme.palette.text.secondary
+                      : theme.palette.primary.main,
                 }}
-                disabled={googlesheetisLoading || csvisLoading}
+                disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
                 onClick={e => setAnchorE2(e.currentTarget)}
               >
                 Export
@@ -317,9 +319,11 @@ function Project() {
                 <Button
                   style={{
                     color:
-                      googlesheetisLoading || csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                      googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
+                        ? theme.palette.text.secondary
+                        : theme.palette.primary.main,
                   }}
-                  disabled={googlesheetisLoading || csvisLoading}
+                  disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
                   onClick={e => setAnchorE2(e.currentTarget)}
                 >
                   Export
