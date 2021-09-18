@@ -212,7 +212,8 @@ function Project() {
         </Typography>
         <TextField
           onChange={e => history.push(e.target.value)}
-          style={{minWidth: 200}}
+          style={{minWidth: 230}}
+          className="ProjectDD"
           label="Select Project"
           select
           defaultValue={DomainId}
