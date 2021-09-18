@@ -5,7 +5,7 @@ function AnalyticCard({name, value, color, analyticsDataFetching}) {
   return (
     <Grid item lg={3} sm={6} xl={3} xs={12}>
       <Card style={{height: '100%'}}>
-        <CardContent>
+        <CardContent style={{paddingBottom: 18}}>
           <Grid container spacing={3} style={{justifyContent: 'space-between'}}>
             <Grid item>
               <Typography color="textSecondary" gutterBottom variant="h6">
