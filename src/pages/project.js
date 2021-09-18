@@ -25,6 +25,7 @@ import {
   MenuItem,
   useMediaQuery,
   IconButton,
+  Menu,
 } from '@material-ui/core'
 import axios from 'axios'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
@@ -52,6 +53,8 @@ function Project() {
   const [listProject, setListProject] = useState([])
   const [domain, setDomain] = useState([])
   const [editId, setEditId] = useState(null)
+  const [anchorE2, setAnchorE2] = useState(null)
+  const open = Boolean(anchorE2)
 
   const [deleteModal, setDeleteModal] = useState(false)
   const theme = useTheme()
@@ -108,6 +111,17 @@ function Project() {
   }
 
   const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectSublist', DomainId], () => fetchCSV(DomainId))
+
+  async function fetchGooglesheet(DomainId) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToGoogleSheet/${DomainId}`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
+    ['exportSubProjectToGoogleSheet', DomainId],
+    () => fetchGooglesheet(DomainId)
+  )
 
   const {
     mutate: deleteProject,
@@ -255,17 +269,37 @@ function Project() {
         </Typography>
         <Box>
           {!xsScreen && (
-            <Button
-              onClick={() => {
-                downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
-              }}
-              disabled={csvisLoading}
-              style={{
-                color: csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
-              }}
-            >
-              Export
-            </Button>
+            <>
+              <Button
+                style={{
+                  color:
+                    googlesheetisLoading || csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                }}
+                disabled={googlesheetisLoading || csvisLoading}
+                onClick={e => setAnchorE2(e.currentTarget)}
+              >
+                Export
+              </Button>
+              <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                <MenuItem
+                  onClick={() => {
+                    downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                    setAnchorE2(null)
+                  }}
+                >
+                  Export CSV
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                    win.focus()
+                    setAnchorE2(null)
+                  }}
+                >
+                  Export Google Sheet
+                </MenuItem>
+              </Menu>
+            </>
           )}
           <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
             Add Sub Project
@@ -279,17 +313,37 @@ function Project() {
               Current page <span> ({page + 1})</span>
             </Typography>
             {xsScreen && (
-              <Button
-                onClick={() => {
-                  downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}'s_project_list`)
-                }}
-                disabled={csvisLoading}
-                style={{
-                  color: csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
-                }}
-              >
-                Export
-              </Button>
+              <>
+                <Button
+                  style={{
+                    color:
+                      googlesheetisLoading || csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                  }}
+                  disabled={googlesheetisLoading || csvisLoading}
+                  onClick={e => setAnchorE2(e.currentTarget)}
+                >
+                  Export
+                </Button>
+                <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                  <MenuItem
+                    onClick={() => {
+                      downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export CSV
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                      win.focus()
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export Google Sheet
+                  </MenuItem>
+                </Menu>
+              </>
             )}
           </Toolbar>
           <Divider />

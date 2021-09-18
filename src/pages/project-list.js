@@ -113,7 +113,8 @@ function PorjectList() {
             <>
               <Button
                 style={{
-                  color: googlesheetisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                  color:
+                    googlesheetisLoading || csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
                 }}
                 disabled={googlesheetisLoading || csvisLoading}
                 onClick={e => setAnchorE2(e.currentTarget)}
@@ -156,7 +157,8 @@ function PorjectList() {
               <>
                 <Button
                   style={{
-                    color: googlesheetisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
+                    color:
+                      googlesheetisLoading || csvisLoading ? theme.palette.text.secondary : theme.palette.primary.main,
                   }}
                   disabled={googlesheetisLoading || csvisLoading}
                   onClick={e => setAnchorE2(e.currentTarget)}
