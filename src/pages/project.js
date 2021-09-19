@@ -72,7 +72,7 @@ function Project() {
   async function fetchTable(page = 0, Sorting, DomainId) {
     const fetchURL = `${
       process.env.REACT_APP_PLATFORM_ENDPOINT
-    }/getSubProjectsList/${DomainId}?limit=${rowsPerPage}?page=${page + 1}${Sorting}`
+    }/getSubProjectsList/${DomainId}?limit=${rowsPerPage}&page=${page + 1}${Sorting}`
     const {data} = await axios.get(fetchURL)
     return data
   }

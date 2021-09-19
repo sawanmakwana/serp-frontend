@@ -60,7 +60,7 @@ function KeywordList() {
   }
 
   async function fetchTable(page = 0, Sorting, KeywordId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getKeywords/${KeywordId}?limit=${rowsPerPage}?page=${
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getKeywords/${KeywordId}?limit=${rowsPerPage}&page=${
       page + 1
     }${Sorting}`
     const {data} = await axios.get(fetchURL)
