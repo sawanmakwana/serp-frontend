@@ -89,11 +89,7 @@ function Project() {
     return data
   }
 
-  const {
-    isLoading: projectlistisLoading,
-    data: projectlistData,
-    isFetching: projectlistIsFetching,
-  } = useQuery(['DdList'], () => fetchprojectlistAPI())
+  const {data: projectlistData, isFetching: projectlistIsFetching} = useQuery(['DdList'], () => fetchprojectlistAPI())
 
   async function fetchCSV(DomainId) {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToCsv/${DomainId}`
