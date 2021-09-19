@@ -24,6 +24,8 @@ import {
   useMediaQuery,
   IconButton,
   Menu,
+  Zoom,
+  Tooltip,
 } from '@material-ui/core'
 import axios from 'axios'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
@@ -35,7 +37,7 @@ import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getFormetedData, getKeywordFrequency} from 'util/app-utill'
-import {ArrowBack} from '@material-ui/icons'
+import {ArrowBack, Cached} from '@material-ui/icons'
 
 function Project() {
   const queryClient = useQueryClient()
@@ -378,11 +380,20 @@ function Project() {
                         <TableRow
                           hover
                           key={_id}
-                          style={{cursor: newInserted && 'not-allowed'}}
+                          style={{
+                            cursor: newInserted && 'not-allowed',
+                          }}
                           onClick={!newInserted ? () => history.push(`/project/${DomainId}/keyword/${_id}`) : null}
                         >
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
-                          <TableCell>{keyword}</TableCell>
+                          <TableCell className="keywordCell">
+                            {keyword}
+                            {newInserted && (
+                              <Tooltip TransitionComponent={Zoom} title="Keyword pending" placement="top">
+                                <Cached style={{color: orange[500]}} />
+                              </Tooltip>
+                            )}
+                          </TableCell>
                           <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell>
                           <TableCell>{getFormetedData(prevDate)}</TableCell>
                           <TableCell>{getFormetedData(nextDate)}</TableCell>

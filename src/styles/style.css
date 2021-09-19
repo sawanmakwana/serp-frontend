@@ -160,3 +160,12 @@
 .selectTable .selectTablebtn .MuiButton-label {
   justify-content: flex-start;
 }
+.keywordCell {
+  max-width: 400px;
+  word-break: break-all;
+}
+.keywordCell svg {
+  vertical-align: middle;
+  padding-left: 10px;
+  font-size: 33px;
+}
