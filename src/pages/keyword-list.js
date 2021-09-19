@@ -114,43 +114,43 @@ function KeywordList() {
       color: red,
     },
     {
-      name: 'Top Spot',
+      name: 'Top 1',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.topSpot,
       color: green,
     },
     {
-      name: 'Top Three',
+      name: 'Top 3',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.topThree,
       color: orange,
     },
     {
-      name: 'Four To Ten',
+      name: '4-10',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.fourToTen,
       color: indigo,
     },
     {
-      name: 'Eleven To Twenty',
+      name: '11-20',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.elevenToTwenty,
       color: purple,
     },
     {
-      name: 'TwentyOne To Fifty',
+      name: '21-50',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.twentyOneToFifty,
       color: pink,
     },
     {
-      name: 'FiftyOne To Hundred',
+      name: '50-100',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.fiftyOneToHundred,
       color: teal,
     },
     {
-      name: 'Out Of Top Hundred',
+      name: '100+',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.outOfTopHundred,
       color: lime,
@@ -164,7 +164,7 @@ function KeywordList() {
           <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.goBack()}>
             <ArrowBack />
           </IconButton>
-          Analytics of Keyword list
+          Analytics of Keyword List
         </Typography>
       </Box>
       <Box
@@ -192,7 +192,7 @@ function KeywordList() {
       </Box>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Keyword list <span> ({data?.data?.total})</span>
+          Keyword List <span> ({data?.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && (
