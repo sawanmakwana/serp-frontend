@@ -162,7 +162,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
             name="keyword"
             render={({onChange, value, onBlur}) => (
               <TextField
-                label="Enter Keyword"
+                label="Enter keyword"
                 multiline
                 disabled={isLoading}
                 rows={5}

@@ -143,7 +143,7 @@ function AddProjectListModal({open, setOpen, editId, setEditId}) {
             name="projectName"
             render={({onChange, value, onBlur}) => (
               <TextField
-                label="Project Name"
+                label="Project name"
                 disabled={isLoading}
                 onBlur={onBlur}
                 error={errors.projectName}

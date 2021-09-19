@@ -33,18 +33,18 @@
   margin-left: 3px !important;
 }
 .keyword-modal .MuiTypography-h6 {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.8;
 }
 .logout-modal .MuiTypography-h6 {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.1;
 }
 .logout-modal .MuiDialogContent-root {
   padding: 18px 24px !important;
 }
-.keyword-modal .MuiDialogActions-root {
-  padding: 14px;
+.MuiDialogActions-root {
+  padding: 14px !important;
 }
 .helperText {
  margin-top: -6px !important;
