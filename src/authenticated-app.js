@@ -3,6 +3,7 @@ import {PorjectList} from 'pages/project-list'
 import {Project} from 'pages/project'
 import {DocumentTitle} from 'util/document-title'
 import {Dashbord} from 'pages/dashbord'
+import {KeywordList} from 'pages/keyword-list'
 import {AppLayout} from './layouts/app-layout'
 
 function AppRoutespath() {
@@ -19,6 +20,10 @@ function AppRoutespath() {
       <Route exact path="/project/:id">
         <DocumentTitle title="Sub Project" />
         <Project />
+      </Route>
+      <Route exact path="/project/:id/keyword/:id">
+        <DocumentTitle title="Project Keyword" />
+        <KeywordList />
       </Route>
       {/* <Route path="/user">
         <DocumentTitle title="User" />

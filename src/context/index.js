@@ -3,6 +3,7 @@ import {BrowserRouter as Router} from 'react-router-dom'
 import {QueryClient, QueryClientProvider, MutationCache, QueryCache} from 'react-query'
 import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import {ReactQueryDevtools} from 'react-query/devtools'
 import {AuthProvider} from './auth-context'
 
 const queryCache = new QueryCache({
@@ -52,7 +53,7 @@ function AppProviders({children}) {
         />
         <AuthProvider>{children}</AuthProvider>
       </Router>
-      {/* <ReactQueryDevtools position="bottom-left" initialIsOpen={false} /> */}
+      <ReactQueryDevtools position="bottom-left" initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

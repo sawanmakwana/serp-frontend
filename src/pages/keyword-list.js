@@ -7,9 +7,11 @@ import {
   Table,
   TableBody,
   TableCell,
+  Zoom,
   Toolbar,
   Typography,
   Paper,
+  Tooltip,
   TableSortLabel,
   Card,
   Divider,
@@ -19,41 +21,31 @@ import {
   Grid,
   LinearProgress,
   Button,
-  TextField,
   MenuItem,
   useMediaQuery,
   IconButton,
   Menu,
 } from '@material-ui/core'
 import axios from 'axios'
-import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {useQuery} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
-import {AddSubProjectListModal} from 'components/add-sub-project'
 import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams} from 'react-router-dom'
-import {Trash2} from 'react-feather'
-import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getFormetedData, getKeywordFrequency} from 'app-utill'
+import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency, getStatus} from 'app-utill'
 import {ArrowBack} from '@material-ui/icons'
 
-function Project() {
-  const queryClient = useQueryClient()
+function KeywordList() {
   const history = useHistory()
-  const {id: DomainId} = useParams()
+  const {id: KeywordId} = useParams()
   const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
-  const [addSubProjectModal, setSubAddProjectModal] = useState(false)
-  const [listProject, setListProject] = useState([])
-  const [domain, setDomain] = useState([])
-  const [editId, setEditId] = useState(null)
+  const [weekSortingtype, setweekSortingtype] = useState('asc')
   const [anchorE2, setAnchorE2] = useState(null)
   const open = Boolean(anchorE2)
-
-  const [deleteModal, setDeleteModal] = useState(false)
   const theme = useTheme()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
@@ -67,69 +59,43 @@ function Project() {
     setPage(0)
   }
 
-  async function fetchTable(page = 0, Sorting, DomainId) {
-    const fetchURL = `${
-      process.env.REACT_APP_PLATFORM_ENDPOINT
-    }/getSubProjectsList/${DomainId}?limit=${rowsPerPage}?page=${page + 1}${Sorting}`
+  async function fetchTable(page = 0, Sorting, KeywordId) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getKeywords/${KeywordId}?limit=${rowsPerPage}?page=${
+      page + 1
+    }${Sorting}`
     const {data} = await axios.get(fetchURL)
     return data
   }
 
   const {isLoading, data, isFetching} = useQuery(
-    ['singalProject', page, rowsPerPage, Sorting, DomainId],
-    () => fetchTable(page, Sorting, DomainId),
+    ['keyWordList', page, rowsPerPage, Sorting, KeywordId],
+    () => fetchTable(page, Sorting, KeywordId),
     {keepPreviousData: true}
   )
 
-  async function fetchprojectlistAPI() {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getProjectsListDrpDwn`
+  async function fetchCSV(KeywordId) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportKeywordsToCsv/${KeywordId}`
     const {data} = await axios.get(fetchURL)
     return data
   }
 
-  const {
-    isLoading: projectlistisLoading,
-    data: projectlistData,
-    isFetching: projectlistIsFetching,
-  } = useQuery(['DdList'], () => fetchprojectlistAPI())
+  const {data: csvData, isLoading: csvisLoading} = useQuery(['exportKeywordsToCsv', KeywordId], () =>
+    fetchCSV(KeywordId)
+  )
 
-  async function fetchCSV(DomainId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToCsv/${DomainId}`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
-
-  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectSublist', DomainId], () => fetchCSV(DomainId))
-
-  async function fetchGooglesheet(DomainId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToGoogleSheet/${DomainId}`
+  async function fetchGooglesheet(KeywordId) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportKeywordsToGoogleSheet/${KeywordId}`
     const {data} = await axios.get(fetchURL)
     return data
   }
 
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
-    ['exportSubProjectToGoogleSheet', DomainId],
-    () => fetchGooglesheet(DomainId)
+    ['exportKeywordsToGoogleSheet', KeywordId],
+    () => fetchGooglesheet(KeywordId)
   )
 
-  const {
-    mutate: deleteProject,
-    isLoading: deleteIsloading,
-    isFetching: singalProjectlistIsFetching,
-  } = useMutation(
-    mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteSubProject/${mutateData}`),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('singalProject')
-        queryClient.invalidateQueries('analyticsSingalProject')
-        setDeleteModal(false)
-        setEditId(null)
-      },
-    }
-  )
-
-  async function fetchApiSingalProject(DomainId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/subProjectDashboard/${DomainId}`
+  async function fetchApiSingalProject(KeywordId) {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/subProjectDashboard/${KeywordId}`
     const {data} = await axios.get(fetchURL)
     return data
   }
@@ -138,96 +104,69 @@ function Project() {
     data: singalAna,
     isFetching: analyticsSingalProjectisFetching,
     isLoading: anaLoading,
-  } = useQuery(['analyticsSingalProject', DomainId], () => fetchApiSingalProject(DomainId))
+  } = useQuery(['analyticsSingalProject', KeywordId], () => fetchApiSingalProject(KeywordId))
   const analyticsData = singalAna?.data
 
   const analyticCardList = [
     {
       name: 'Total Keywords',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
       value: analyticsData?.totalKeywords,
       color: red,
     },
     {
       name: 'Top Spot',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
       value: analyticsData?.topSpot,
       color: green,
     },
     {
       name: 'Top Three',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
       value: analyticsData?.topThree,
       color: orange,
     },
     {
       name: 'Four To Ten',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
       value: analyticsData?.fourToTen,
       color: indigo,
     },
     {
       name: 'Eleven To Twenty',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
       value: analyticsData?.elevenToTwenty,
       color: purple,
     },
     {
       name: 'TwentyOne To Fifty',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
       value: analyticsData?.twentyOneToFifty,
       color: pink,
     },
     {
       name: 'FiftyOne To Hundred',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
       value: analyticsData?.fiftyOneToHundred,
       color: teal,
     },
     {
       name: 'Out Of Top Hundred',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
       value: analyticsData?.outOfTopHundred,
       color: lime,
     },
   ]
 
-  React.useEffect(() => {
-    if (projectlistData) {
-      const {data} = projectlistData
-      const listProject = data?.map(({projectName, _id, domain}) => {
-        return {projectName, value: _id, domain}
-      })
-      setListProject(listProject)
-      const domain = listProject?.filter(list => DomainId === list.value)
-      setDomain(domain)
-    }
-  }, [projectlistData, DomainId])
-
   return (
     <>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.push('/project')}>
+          <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.goBack()}>
             <ArrowBack />
           </IconButton>
-          Analytics of {domain && domain[0] && domain[0]?.projectName}
+          Analytics of Keyword list
         </Typography>
-        <TextField
-          onChange={e => history.push(e.target.value)}
-          style={{minWidth: 230}}
-          className="ProjectDD"
-          label="Select Project"
-          select
-          defaultValue={DomainId}
-          disabled={isLoading}
-        >
-          {listProject?.map(({value, projectName}) => (
-            <MenuItem key={value} value={value}>
-              {projectName}
-            </MenuItem>
-          ))}
-        </TextField>
       </Box>
       <Box
         sx={{
@@ -254,7 +193,7 @@ function Project() {
       </Box>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Sub Project <span> ({data?.data?.total})</span>
+          Keyword list <span> ({data?.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && (
@@ -274,7 +213,7 @@ function Project() {
               <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
                 <MenuItem
                   onClick={() => {
-                    downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                    downloadResponseCSV(csvData, `keyword_list`)
                     setAnchorE2(null)
                   }}
                 >
@@ -292,9 +231,6 @@ function Project() {
               </Menu>
             </>
           )}
-          <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
-            Add Sub Project
-          </Button>
         </Box>
       </Box>
       <Paper>
@@ -320,7 +256,7 @@ function Project() {
                 <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
                   <MenuItem
                     onClick={() => {
-                      downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                      downloadResponseCSV(csvData, `keyword_list`)
                       setAnchorE2(null)
                     }}
                   >
@@ -342,7 +278,7 @@ function Project() {
           <Divider />
           <CardContent style={{padding: '0'}}>
             <TableContainer>
-              <Table size="medium" className="selectTable">
+              <Table size="medium" className="selectTable sublist">
                 <TableHead>
                   <TableRow>
                     <TableCell className="pl-4">#</TableCell>
@@ -361,7 +297,22 @@ function Project() {
                     <TableCell>Frequency</TableCell>
                     <TableCell>Prev Date</TableCell>
                     <TableCell>Next Date</TableCell>
-                    <TableCell>Action</TableCell>
+                    <TableCell>Prev Rank</TableCell>
+                    <TableCell sortDirection={false}>
+                      <TableSortLabel
+                        active={Sorting.includes('rankAbsolute')}
+                        direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=rankAbsolute:${weekSortingtype}`)
+                        }}
+                      >
+                        Current Rank
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell>Diff</TableCell>
+                    <TableCell>URL</TableCell>
+                    <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -369,35 +320,49 @@ function Project() {
                   {data?.data?.result?.length === 0 ? (
                     <TableRow hover>
                       <TableCell className="emptyTable" colSpan="11">
-                        No Sub Project Available
+                        No Keyword Available
                       </TableCell>
                     </TableRow>
                   ) : (
                     data?.data?.result?.map(
-                      ({_id, keyword, keywordCheckFrequency, prevDate, nextDate, newInserted}, index) => (
-                        <TableRow
-                          hover
-                          key={_id}
-                          style={{cursor: newInserted && 'not-allowed'}}
-                          onClick={!newInserted ? () => history.push(`/project/${DomainId}/keyword/${_id}`) : null}
-                        >
+                      (
+                        {
+                          _id,
+                          keyword,
+                          keywordCheckFrequency,
+                          prevDate,
+                          nextDate,
+                          prevRankAbsolute,
+                          rankAbsolute,
+                          url,
+                          error,
+                          errorMessage,
+                          newInserted,
+                        },
+                        index
+                      ) => (
+                        <TableRow hover key={_id}>
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                           <TableCell>{keyword}</TableCell>
                           <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell>
                           <TableCell>{getFormetedData(prevDate)}</TableCell>
                           <TableCell>{getFormetedData(nextDate)}</TableCell>
-                          <TableCell>
-                            <Button
-                              className="selectTablebtn"
-                              onClick={e => {
-                                setEditId(_id)
-                                setDeleteModal(true)
-                                e.stopPropagation()
-                              }}
-                            >
-                              <Trash2 />
-                            </Button>
+                          <TableCell>{prevRankAbsolute || '-'}</TableCell>
+                          <TableCell>{rankAbsolute || '-'}</TableCell>
+                          <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
+                            {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
+                            {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
                           </TableCell>
+                          <Tooltip TransitionComponent={Zoom} title={url || 'Not available'} placement="top">
+                            <TableCell className="urlEcllips">{url || '-'}</TableCell>
+                          </Tooltip>
+                          <Tooltip
+                            TransitionComponent={Zoom}
+                            title={getStatus(error, errorMessage, newInserted, 'GET_TOOLTIP')}
+                            placement="top"
+                          >
+                            <TableCell>{getStatus(error, errorMessage, newInserted, 'GET_VALUE')}</TableCell>
+                          </Tooltip>
                         </TableRow>
                       )
                     )
@@ -405,7 +370,7 @@ function Project() {
                 </TableBody>
               </Table>
             </TableContainer>
-            {(isFetching || projectlistIsFetching || singalProjectlistIsFetching) && <LinearProgress />}
+            {isFetching && <LinearProgress />}
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
@@ -417,31 +382,9 @@ function Project() {
             />
           </CardContent>
         </Card>
-        {deleteModal && (
-          <DeleteModal
-            deleteProject={() => deleteProject(editId)}
-            deleteModal={deleteModal}
-            deleteIsloading={deleteIsloading}
-            modalFrom="Sub Project"
-            onClose={() => {
-              setDeleteModal(false)
-              setEditId(null)
-            }}
-          />
-        )}
-        {addSubProjectModal && (
-          <AddSubProjectListModal
-            editId={editId}
-            setEditId={setEditId}
-            _projectId={DomainId}
-            domain={domain}
-            open={addSubProjectModal}
-            setOpen={setSubAddProjectModal}
-          />
-        )}
       </Paper>
     </>
   )
 }
 
-export {Project}
+export {KeywordList}
