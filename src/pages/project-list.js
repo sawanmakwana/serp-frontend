@@ -38,7 +38,7 @@ function PorjectList() {
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const history = useHistory()
   const queryClient = useQueryClient()
-  const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
+  const getRows = JSON.parse(window.localStorage.getItem('projectlistRow'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [Sorting, setSorting] = useState('')
@@ -56,7 +56,7 @@ function PorjectList() {
 
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value))
-    window.localStorage.setItem('Rowsperpage', event.target.value)
+    window.localStorage.setItem('projectlistRow', event.target.value)
     setPage(0)
   }
 

@@ -43,7 +43,7 @@ function Project() {
   const queryClient = useQueryClient()
   const history = useHistory()
   const {id: DomainId} = useParams()
-  const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
+  const getRows = JSON.parse(window.localStorage.getItem('subprojectlistRow'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [Sorting, setSorting] = useState('')
@@ -65,7 +65,7 @@ function Project() {
 
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value))
-    window.localStorage.setItem('Rowsperpage', event.target.value)
+    window.localStorage.setItem('subprojectlistRow', event.target.value)
     setPage(0)
   }
 

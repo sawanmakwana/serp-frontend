@@ -38,7 +38,7 @@ import {ArrowBack} from '@material-ui/icons'
 function KeywordList() {
   const history = useHistory()
   const {id: KeywordId} = useParams()
-  const getRows = JSON.parse(window.localStorage.getItem('Rowsperpage'))
+  const getRows = JSON.parse(window.localStorage.getItem('keywordlistRow'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [Sorting, setSorting] = useState('')
@@ -55,7 +55,7 @@ function KeywordList() {
 
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value))
-    window.localStorage.setItem('Rowsperpage', event.target.value)
+    window.localStorage.setItem('keywordlistRow', event.target.value)
     setPage(0)
   }
 
