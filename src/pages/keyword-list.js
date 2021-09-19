@@ -94,65 +94,64 @@ function KeywordList() {
     () => fetchGooglesheet(KeywordId)
   )
 
-  async function fetchApiSingalProject(KeywordId) {
+  async function fetchApiKeyword(KeywordId) {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/keywordDashboard/${KeywordId}`
     const {data} = await axios.get(fetchURL)
     return data
   }
 
-  const {
-    data: keywordAnalytics,
-    isFetching: analyticsSingalProjectisFetching,
-    isLoading: anaLoading,
-  } = useQuery(['analyticskeywordDashboard', KeywordId], () => fetchApiSingalProject(KeywordId))
+  const {data: keywordAnalytics, isFetching: analyticsKeywordisFetching} = useQuery(
+    ['analyticskeywordDashboard', KeywordId],
+    () => fetchApiKeyword(KeywordId)
+  )
   const analyticsData = keywordAnalytics?.data
 
   const analyticCardList = [
     {
       name: 'Total Keywords',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.totalKeywords,
       color: red,
     },
     {
       name: 'Top Spot',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.topSpot,
       color: green,
     },
     {
       name: 'Top Three',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.topThree,
       color: orange,
     },
     {
       name: 'Four To Ten',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.fourToTen,
       color: indigo,
     },
     {
       name: 'Eleven To Twenty',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.elevenToTwenty,
       color: purple,
     },
     {
       name: 'TwentyOne To Fifty',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.twentyOneToFifty,
       color: pink,
     },
     {
       name: 'FiftyOne To Hundred',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.fiftyOneToHundred,
       color: teal,
     },
     {
       name: 'Out Of Top Hundred',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.outOfTopHundred,
       color: lime,
     },

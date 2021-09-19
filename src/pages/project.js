@@ -136,59 +136,58 @@ function Project() {
     return data
   }
 
-  const {
-    data: singalAna,
-    isFetching: analyticsSingalProjectisFetching,
-    isLoading: anaLoading,
-  } = useQuery(['analyticsSingalProject', DomainId], () => fetchApiSingalProject(DomainId))
+  const {data: singalAna, isFetching: analyticsSingalProjectisFetching} = useQuery(
+    ['analyticsSingalProject', DomainId],
+    () => fetchApiSingalProject(DomainId)
+  )
   const analyticsData = singalAna?.data
 
   const analyticCardList = [
     {
       name: 'Total Keywords',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.totalKeywords,
       color: red,
     },
     {
       name: 'Top Spot',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.topSpot,
       color: green,
     },
     {
       name: 'Top Three',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.topThree,
       color: orange,
     },
     {
       name: 'Four To Ten',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.fourToTen,
       color: indigo,
     },
     {
       name: 'Eleven To Twenty',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.elevenToTwenty,
       color: purple,
     },
     {
       name: 'TwentyOne To Fifty',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.twentyOneToFifty,
       color: pink,
     },
     {
       name: 'FiftyOne To Hundred',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.fiftyOneToHundred,
       color: teal,
     },
     {
       name: 'Out Of Top Hundred',
-      analyticsDataFetching: analyticsSingalProjectisFetching || anaLoading || projectlistisLoading,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.outOfTopHundred,
       color: lime,
     },
