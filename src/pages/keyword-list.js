@@ -310,7 +310,7 @@ function KeywordList() {
                         Current Rank
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell>Diff</TableCell>
+                    <TableCell style={{minWidth: 80}}>Diff</TableCell>
                     <TableCell>URL</TableCell>
                     <TableCell>Status</TableCell>
                   </TableRow>
