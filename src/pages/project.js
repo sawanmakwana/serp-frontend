@@ -384,7 +384,7 @@ function Project() {
                         >
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                           <TableCell className="keywordCell">
-                            {keyword.replace(',', ', ')}
+                            {keyword}
                             {newInserted && (
                               <Tooltip TransitionComponent={Zoom} title="Keyword pending" placement="top">
                                 <Cached style={{color: orange[500]}} />
