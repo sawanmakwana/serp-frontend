@@ -67,7 +67,7 @@ function KeywordList() {
     return data
   }
 
-  const {isLoading, data, isFetching} = useQuery(
+  const {data, isFetching} = useQuery(
     ['keyWordList', page, rowsPerPage, Sorting, KeywordId],
     () => fetchTable(page, Sorting, KeywordId),
     {keepPreviousData: true}
@@ -95,17 +95,17 @@ function KeywordList() {
   )
 
   async function fetchApiSingalProject(KeywordId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/subProjectDashboard/${KeywordId}`
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/keywordDashboard/${KeywordId}`
     const {data} = await axios.get(fetchURL)
     return data
   }
 
   const {
-    data: singalAna,
+    data: keywordAnalytics,
     isFetching: analyticsSingalProjectisFetching,
     isLoading: anaLoading,
-  } = useQuery(['analyticsSingalProject', KeywordId], () => fetchApiSingalProject(KeywordId))
-  const analyticsData = singalAna?.data
+  } = useQuery(['analyticskeywordDashboard', KeywordId], () => fetchApiSingalProject(KeywordId))
+  const analyticsData = keywordAnalytics?.data
 
   const analyticCardList = [
     {
