@@ -32,7 +32,7 @@ import AnalyticCard from 'components/analytic-card'
 import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency, getStatus} from 'app-utill'
+import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency, getStatus} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
 
 function KeywordList() {

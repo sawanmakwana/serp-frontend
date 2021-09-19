@@ -34,7 +34,7 @@ import {useHistory, useParams} from 'react-router-dom'
 import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getFormetedData, getKeywordFrequency} from 'app-utill'
+import {downloadResponseCSV, getFormetedData, getKeywordFrequency} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
 
 function Project() {
