@@ -72,6 +72,8 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
         setOpen(false)
         queryClient.invalidateQueries('singalProject')
         queryClient.invalidateQueries('analyticsSingalProject')
+        queryClient.invalidateQueries('csvProjectSublist')
+        queryClient.invalidateQueries('exportSubProjectToGoogleSheet')
       },
     }
   )

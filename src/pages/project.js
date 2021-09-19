@@ -120,6 +120,8 @@ function Project() {
       onSuccess: () => {
         queryClient.invalidateQueries('singalProject')
         queryClient.invalidateQueries('analyticsSingalProject')
+        queryClient.invalidateQueries('csvProjectSublist')
+        queryClient.invalidateQueries('exportSubProjectToGoogleSheet')
         setDeleteModal(false)
         setEditId(null)
       },
@@ -382,7 +384,7 @@ function Project() {
                         >
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                           <TableCell className="keywordCell">
-                            {keyword}
+                            {keyword.replace(',', ', ')}
                             {newInserted && (
                               <Tooltip TransitionComponent={Zoom} title="Keyword pending" placement="top">
                                 <Cached style={{color: orange[500]}} />

@@ -23,7 +23,6 @@ import {
   Box,
   useMediaQuery,
 } from '@material-ui/core'
-
 import axios from 'axios'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {MoreVertical} from 'react-feather'
@@ -77,6 +76,8 @@ function PorjectList() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('reposData')
+        queryClient.invalidateQueries('csvProjectlist')
+        queryClient.invalidateQueries('exportProjectToGoogleSheet')
         setDeleteModal(false)
         setEditId(null)
       },
@@ -264,7 +265,7 @@ function PorjectList() {
                                   setAnchorEl(null)
                                 }}
                               >
-                                Edite
+                                Edit
                               </MenuItem>
                               <MenuItem
                                 onClick={e => {

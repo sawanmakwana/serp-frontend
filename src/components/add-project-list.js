@@ -71,9 +71,11 @@ function AddProjectListModal({open, setOpen, editId, setEditId}) {
         : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, mutatedData),
     {
       onSuccess: () => {
+        queryClient.invalidateQueries('reposData')
+        queryClient.invalidateQueries('csvProjectlist')
+        queryClient.invalidateQueries('exportProjectToGoogleSheet')
         setOpen(false)
         setEditId(null)
-        queryClient.invalidateQueries('reposData')
       },
     }
   )
