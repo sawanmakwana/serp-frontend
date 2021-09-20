@@ -30,13 +30,14 @@ import axios from 'axios'
 import {useQuery} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
 import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
-import {useHistory, useParams} from 'react-router-dom'
+import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency, getStatus} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
 
 function KeywordList() {
   const history = useHistory()
+  const {state} = useLocation()
   const {id: KeywordId} = useParams()
   const getRows = JSON.parse(window.localStorage.getItem('keywordlistRow'))
   const [page, setPage] = useState(0)
@@ -164,7 +165,7 @@ function KeywordList() {
           <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.goBack()}>
             <ArrowBack />
           </IconButton>
-          Analytics of Keyword List
+          Analytics of {state.keywordName}
         </Typography>
       </Box>
       <Box

@@ -1,8 +1,10 @@
+/* eslint-disable eqeqeq */
 import {orange, red} from '@material-ui/core/colors'
 import {Cached, DoneAll, ErrorOutline} from '@material-ui/icons'
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
 import CheckIcon from '@material-ui/icons/Check'
+import {currencies} from 'constants/constants'
 
 export const downloadResponseCSV = (data, name) => {
   const url = window.URL.createObjectURL(new Blob([data]))
@@ -40,19 +42,27 @@ export const getDifference = (prevRank, currentRank, type = '') => {
   }
 }
 
-export const getKeywordFrequency = data => {
-  if (data === 0) return 'Weekly'
-  if (data === 1) return 'Fortnightly'
-  if (data === 2) return 'Monthly'
-  return 'keyword Frequency'
-}
-
 export const getFormetedData = data => {
   if (data) {
     const newDate = new Date(data).toLocaleDateString()
     return newDate
   }
   return '-'
+}
+
+export const getLoaction = loactionCode => {
+  const obj = currencies.find(item => item.value == loactionCode)
+  if (obj) {
+    return obj.label
+  }
+  return 'Location does not exist'
+}
+
+export const getKeywordFrequency = data => {
+  if (data === 0) return 'Weekly'
+  if (data === 1) return 'Fortnightly'
+  if (data === 2) return 'Monthly'
+  return 'keyword Frequency'
 }
 
 export const getStatus = (error, errorMessage, newInserted, type = '') => {

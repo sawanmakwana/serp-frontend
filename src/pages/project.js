@@ -36,7 +36,7 @@ import {useHistory, useParams} from 'react-router-dom'
 import {Trash2} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getFormetedData, getKeywordFrequency} from 'util/app-utill'
+import {downloadResponseCSV, getFormetedData, getKeywordFrequency, getLoaction} from 'util/app-utill'
 import {ArrowBack, Cached} from '@material-ui/icons'
 
 function Project() {
@@ -373,18 +373,30 @@ function Project() {
                     </TableRow>
                   ) : (
                     data?.data?.result?.map(
-                      ({_id, keyword, keywordCheckFrequency, prevDate, nextDate, newInserted}, index) => (
+                      ({_id, locationCode, keywordCheckFrequency, prevDate, nextDate, newInserted}, index) => (
                         <TableRow
                           hover
                           key={_id}
                           style={{
                             cursor: newInserted && 'not-allowed',
                           }}
-                          onClick={!newInserted ? () => history.push(`/project/${DomainId}/keyword/${_id}`) : null}
+                          onClick={
+                            !newInserted
+                              ? () =>
+                                  history.push({
+                                    pathname: `/project/${DomainId}/keyword/${_id}`,
+                                    state: {
+                                      keywordName: `${domain && domain[0] && domain[0]?.projectName}-${getLoaction(
+                                        locationCode
+                                      )}`,
+                                    },
+                                  })
+                              : null
+                          }
                         >
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                           <TableCell className="keywordCell">
-                            {keyword}
+                            {`${domain && domain[0] && domain[0]?.projectName}-${getLoaction(locationCode)}`}
                             {newInserted && (
                               <Tooltip TransitionComponent={Zoom} title="Keyword pending" placement="top">
                                 <Cached style={{color: orange[500]}} />
