@@ -162,7 +162,11 @@ function KeywordList() {
     <>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.goBack()}>
+          <IconButton
+            className="backbtn"
+            style={{color: theme.palette.text.secondary}}
+            onClick={() => history.goBack()}
+          >
             <ArrowBack />
           </IconButton>
           Keyword: {state.keywordName}

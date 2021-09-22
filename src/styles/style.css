@@ -169,3 +169,10 @@
   padding-left: 10px;
   font-size: 33px;
 }
+.tableHeader .backbtn{
+  padding: 7px !important;
+  margin-right: 2px;
+}
+.tableHeader svg{
+  font-size: 21px !important;
+}

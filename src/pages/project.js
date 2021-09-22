@@ -208,7 +208,11 @@ function Project() {
     <>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.push('/project')}>
+          <IconButton
+            className="backbtn"
+            style={{color: theme.palette.text.secondary}}
+            onClick={() => history.push('/project')}
+          >
             <ArrowBack />
           </IconButton>
           Sub Project: {domain && domain[0] && domain[0]?.projectName}
