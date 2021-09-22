@@ -86,6 +86,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
     {
       onSuccess: () => {
         setOpen(false)
+        setEditId(null)
         queryClient.invalidateQueries('singalProject')
         queryClient.invalidateQueries('analyticsSingalProject')
         queryClient.invalidateQueries('csvProjectSublist')
