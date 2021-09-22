@@ -92,25 +92,6 @@ function AddProjectListModal({open, setOpen, editId, setEditId, data}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editId, reset])
 
-  // async function fetchApi(editId) {
-  //   const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/viewProject/${editId}`
-  //   const {data} = await axios.get(fetchURL)
-  //   return data
-  // }
-
-  // const {data: singleCustomerData, isSuccess: isSingleCustomerSuccess} = useQuery({
-  //   queryKey: ['customer', editId],
-  //   queryFn: () => fetchApi(editId),
-  //   onSuccess: ({data}) => {
-  //     const {domain, projectName} = data
-  //     reset({
-  //       domain,
-  //       projectName,
-  //     })
-  //   },
-  //   enabled: Boolean(editId),
-  // })
-
   const submitForm = submitdata => {
     mutate({
       ...submitdata,
