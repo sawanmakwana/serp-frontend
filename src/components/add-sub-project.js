@@ -23,7 +23,7 @@ import axios from 'axios'
 import {currencies, keywordFrequency} from '../constants/constants'
 import {SubProject} from '../validations/sub-project'
 
-function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
+function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId, setEditId}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -49,7 +49,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
   const classes = useStyles()
   const classesFrom = useStylesForm()
 
-  const {handleSubmit, errors, control} = useForm({
+  const {handleSubmit, errors, control, reset} = useForm({
     mode: 'onTouched',
     shouldFocusError: true,
     reValidateMode: 'onChange',
@@ -62,6 +62,19 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
       keyword: '',
     },
   })
+
+  React.useEffect(() => {
+    if (editId) {
+      const Edata = data?.data?.result?.filter(list => editId === list._id)
+      const {locationCode, keywordCheckFrequency} = Edata[0]
+      reset({
+        locationCode,
+        keywordCheckFrequency,
+        keyword: '',
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId, reset])
 
   const queryClient = useQueryClient()
 
@@ -98,16 +111,22 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
       className="keyword-modal"
       disableBackdropClick
       disableEscapeKeyDown
-      onClose={() => setOpen(false)}
+      onClose={() => {
+        setOpen(false)
+        setEditId(null)
+      }}
       open={open}
     >
       <MuiDialogTitle disableTypography className={classes.root}>
-        <Typography variant="h6">Add Sub Project</Typography>
+        <Typography variant="h6">{editId ? 'Update Sub Project' : 'Add Sub Project'}</Typography>
 
         <IconButton
           style={{display: isLoading ? 'none' : ''}}
           className={classes.closeButton}
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false)
+            setEditId(null)
+          }}
         >
           <CloseIcon />
         </IconButton>
@@ -117,18 +136,20 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
           <Controller
             control={control}
             name="locationCode"
-            render={({onChange, onBlur}) => (
+            render={({onChange, onBlur, value}) => (
               <TextField
                 label="Select location code"
                 select
                 error={errors.locationCode}
                 variant="outlined"
                 onBlur={onBlur}
-                disabled={isLoading}
+                value={value}
+                onChange={e => onChange(e.target.value)}
+                disabled={isLoading || editId}
                 helperText={errors.locationCode && errors.locationCode.message}
               >
                 {currencies.map(option => (
-                  <MenuItem key={option.value} value={option.value} onClick={e => onChange(option.value)}>
+                  <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
@@ -138,15 +159,16 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
           <Controller
             control={control}
             name="keywordCheckFrequency"
-            render={({onChange, onBlur}) => (
+            render={({onChange, onBlur, value}) => (
               <TextField
                 label="Select keywords checking frequency"
                 select
-                onChange={e => onChange(e.target.value)}
                 error={errors.keywordCheckFrequency}
                 variant="outlined"
                 onBlur={onBlur}
-                disabled={isLoading}
+                value={value}
+                onChange={e => onChange(e.target.value)}
+                disabled={isLoading || editId}
                 helperText={errors.keywordCheckFrequency && errors.keywordCheckFrequency.message}
               >
                 {keywordFrequency.map(option => (
@@ -190,7 +212,10 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
             display: isLoading ? 'none' : '',
             color: theme.palette.text.secondary,
           }}
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false)
+            setEditId(null)
+          }}
         >
           Cancel
         </Button>
@@ -204,7 +229,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId}) {
           color="primary"
           disabled={isLoading}
         >
-          {isLoading ? 'Loading...' : 'Add Sub Project'}
+          {isLoading ? 'Loading...' : `${editId ? 'Update Sub Project' : 'Add Sub Project'}`}
         </Button>
       </DialogActions>
     </Dialog>

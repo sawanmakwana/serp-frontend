@@ -33,7 +33,7 @@ import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
 import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams} from 'react-router-dom'
-import {Trash2} from 'react-feather'
+import {MoreVertical} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getFormetedData, getKeywordFrequency, getLoaction} from 'util/app-utill'
@@ -52,6 +52,7 @@ function Project() {
   const [listProject, setListProject] = useState([])
   const [domain, setDomain] = useState([])
   const [editId, setEditId] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
   const [anchorE2, setAnchorE2] = useState(null)
   const open = Boolean(anchorE2)
 
@@ -407,16 +408,53 @@ function Project() {
                           <TableCell>{getFormetedData(prevDate)}</TableCell>
                           <TableCell>{getFormetedData(nextDate)}</TableCell>
                           <TableCell>
-                            <Button
-                              className="selectTablebtn"
-                              onClick={e => {
-                                setEditId(_id)
-                                setDeleteModal(true)
-                                e.stopPropagation()
-                              }}
-                            >
-                              <Trash2 />
-                            </Button>
+                            <>
+                              <Button
+                                className="selectTablebtn"
+                                onClick={e => {
+                                  setAnchorEl(e.currentTarget)
+                                  setEditId(_id)
+                                  e.stopPropagation()
+                                }}
+                              >
+                                <MoreVertical />
+                              </Button>
+                              <Menu
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={anchorEl}
+                                onClose={e => {
+                                  setAnchorEl(null)
+                                  setEditId(null)
+                                  e.stopPropagation()
+                                }}
+                                PaperProps={{
+                                  style: {
+                                    maxHeight: 220,
+                                    width: 120,
+                                  },
+                                }}
+                              >
+                                <MenuItem
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    setSubAddProjectModal(true)
+                                    setAnchorEl(null)
+                                  }}
+                                >
+                                  Edit
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    setDeleteModal(true)
+                                    setAnchorEl(null)
+                                  }}
+                                >
+                                  Delete
+                                </MenuItem>
+                              </Menu>
+                            </>
                           </TableCell>
                         </TableRow>
                       )
@@ -452,6 +490,7 @@ function Project() {
         {addSubProjectModal && (
           <AddSubProjectListModal
             editId={editId}
+            data={data}
             setEditId={setEditId}
             _projectId={DomainId}
             domain={domain}

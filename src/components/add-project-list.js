@@ -23,7 +23,7 @@ import axios from 'axios'
 import {currencies} from '../constants/constants'
 import {ProjectList} from '../validations/project'
 
-function AddProjectListModal({open, setOpen, editId, setEditId}) {
+function AddProjectListModal({open, setOpen, editId, setEditId, data}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -80,24 +80,36 @@ function AddProjectListModal({open, setOpen, editId, setEditId}) {
     }
   )
 
-  async function fetchApi(editId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/viewProject/${editId}`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
-
-  const {data: singleCustomerData, isSuccess: isSingleCustomerSuccess} = useQuery({
-    queryKey: ['customer', editId],
-    queryFn: () => fetchApi(editId),
-    onSuccess: ({data}) => {
-      const {domain, projectName} = data
+  React.useEffect(() => {
+    if (editId) {
+      const Edata = data.data.result?.filter(list => editId === list._id)
+      const {domain, projectName} = Edata[0]
       reset({
         domain,
         projectName,
       })
-    },
-    enabled: Boolean(editId),
-  })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId, reset])
+
+  // async function fetchApi(editId) {
+  //   const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/viewProject/${editId}`
+  //   const {data} = await axios.get(fetchURL)
+  //   return data
+  // }
+
+  // const {data: singleCustomerData, isSuccess: isSingleCustomerSuccess} = useQuery({
+  //   queryKey: ['customer', editId],
+  //   queryFn: () => fetchApi(editId),
+  //   onSuccess: ({data}) => {
+  //     const {domain, projectName} = data
+  //     reset({
+  //       domain,
+  //       projectName,
+  //     })
+  //   },
+  //   enabled: Boolean(editId),
+  // })
 
   const submitForm = submitdata => {
     mutate({

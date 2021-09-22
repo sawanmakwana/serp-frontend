@@ -193,7 +193,7 @@ function KeywordList() {
       </Box>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Keyword List <span> ({data?.data?.total})</span>
+          {state.keywordName} <span> ({data?.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && (

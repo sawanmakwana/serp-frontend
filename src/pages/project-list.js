@@ -311,6 +311,7 @@ function PorjectList() {
         )}
         {addProjectModal && (
           <AddProjectListModal
+            data={data}
             editId={editId}
             setEditId={setEditId}
             open={addProjectModal}
