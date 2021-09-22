@@ -9,5 +9,15 @@ export const SubProject = Joi.object({
   }),
   keyword: Joi.string().trim().required().messages({
     'string.empty': `Keyword cannot be an empty field`,
+    'any.required': `Keyword cannot be an empty field`,
+  }),
+})
+
+export const editSubProject = Joi.object({
+  locationCode: Joi.allow(),
+  keywordCheckFrequency: Joi.allow(),
+  keyword: Joi.string().trim().required().messages({
+    'string.empty': `Keyword cannot be an empty field`,
+    'any.required': `Keyword cannot be an empty field`,
   }),
 })

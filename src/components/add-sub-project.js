@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from 'react'
 import {
   Button,
@@ -21,7 +20,7 @@ import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient} from 'react-query'
 import axios from 'axios'
 import {currencies, keywordFrequency} from '../constants/constants'
-import {SubProject} from '../validations/sub-project'
+import {editSubProject, SubProject} from '../validations/sub-project'
 
 function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId, setEditId}) {
   const useStyles = makeStyles(theme => ({
@@ -48,6 +47,8 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
   }))
   const classes = useStyles()
   const classesFrom = useStylesForm()
+  const theme = useTheme()
+  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   const {handleSubmit, errors, control, reset} = useForm({
     mode: 'onTouched',
@@ -55,7 +56,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
     reValidateMode: 'onChange',
     submitFocusError: true,
     shouldUnregister: false,
-    resolver: joiResolver(SubProject),
+    resolver: editId ? joiResolver(editSubProject) : joiResolver(SubProject),
     defaultValues: {
       locationCode: '',
       keywordCheckFrequency: '',
@@ -70,7 +71,6 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
       reset({
         locationCode,
         keywordCheckFrequency,
-        keyword: '',
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,8 +78,11 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
 
   const queryClient = useQueryClient()
 
-  const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
-    MutatedData => axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addSubProject`, MutatedData),
+  const {isLoading, mutate} = useMutation(
+    MutatedData =>
+      !editId
+        ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addSubProject`, MutatedData)
+        : axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editSubProject/${editId}`, MutatedData),
     {
       onSuccess: () => {
         setOpen(false)
@@ -92,16 +95,20 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
   )
 
   const submitForm = submitdata => {
-    mutate({
-      ...submitdata,
-      keyword: submitdata.keyword.split('\n'),
-      domain: domain[0].domain,
-      _projectId,
-    })
+    if (editId) {
+      mutate({
+        keyword: submitdata.keyword.split('\n'),
+      })
+    }
+    if (!editId) {
+      mutate({
+        ...submitdata,
+        keyword: submitdata.keyword.split('\n'),
+        domain: domain[0].domain,
+        _projectId,
+      })
+    }
   }
-
-  const theme = useTheme()
-  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   return (
     <Dialog
