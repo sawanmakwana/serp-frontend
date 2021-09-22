@@ -165,7 +165,7 @@ function KeywordList() {
           <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.goBack()}>
             <ArrowBack />
           </IconButton>
-          Analytics of {state.keywordName}
+          Keyword: {state.keywordName}
         </Typography>
       </Box>
       <Box
@@ -193,7 +193,7 @@ function KeywordList() {
       </Box>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          {state.keywordName} <span> ({data?.data?.total})</span>
+          Keyword List <span> ({data?.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && (

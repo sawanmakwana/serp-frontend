@@ -211,7 +211,7 @@ function Project() {
           <IconButton style={{color: theme.palette.text.secondary}} onClick={() => history.push('/project')}>
             <ArrowBack />
           </IconButton>
-          Analytics of {domain && domain[0] && domain[0]?.projectName}
+          Sub Project: {domain && domain[0] && domain[0]?.projectName}
         </Typography>
         <TextField
           onChange={e => history.push(e.target.value)}

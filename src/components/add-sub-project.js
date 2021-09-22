@@ -147,6 +147,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
               <TextField
                 label="Select location code"
                 select
+                required
                 error={errors.locationCode}
                 variant="outlined"
                 onBlur={onBlur}
@@ -170,6 +171,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
               <TextField
                 label="Select keywords checking frequency"
                 select
+                required
                 error={errors.keywordCheckFrequency}
                 variant="outlined"
                 onBlur={onBlur}
@@ -193,6 +195,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
               <TextField
                 label="Enter keyword"
                 multiline
+                required
                 disabled={isLoading}
                 rows={5}
                 margin="dense"
@@ -209,7 +212,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
             )}
           />
           <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
-          <TextField variant="outlined" label="Domain" disabled value={domain[0].domain} />
+          <TextField required variant="outlined" label="Enter Domain" disabled value={domain[0].domain} />
         </form>
       </DialogContent>
       {isLoading && <LinearProgress />}
