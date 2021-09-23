@@ -304,11 +304,11 @@ function KeywordList() {
                     <TableCell>Prev Rank</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
-                        active={Sorting.includes('rankAbsolute')}
+                        active={Sorting.includes('rankGroup')}
                         direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
                         onClick={() => {
                           setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
-                          setSorting(`&sort=rankAbsolute:${weekSortingtype}`)
+                          setSorting(`&sort=rankGroup:${weekSortingtype}`)
                         }}
                       >
                         Current Rank
@@ -336,8 +336,8 @@ function KeywordList() {
                           keywordCheckFrequency,
                           prevDate,
                           nextDate,
-                          prevRankAbsolute,
-                          rankAbsolute,
+                          prevRankGroup,
+                          rankGroup,
                           url,
                           error,
                           errorMessage,
@@ -351,11 +351,11 @@ function KeywordList() {
                           <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell>
                           <TableCell>{getFormetedData(prevDate)}</TableCell>
                           <TableCell>{getFormetedData(nextDate)}</TableCell>
-                          <TableCell>{prevRankAbsolute || '-'}</TableCell>
-                          <TableCell>{rankAbsolute || '-'}</TableCell>
-                          <TableCell className={getDifference(prevRankAbsolute, rankAbsolute, 'GET_ClASS')}>
-                            {getDifference(prevRankAbsolute, rankAbsolute, 'GET_NUM')}
-                            {getDifference(prevRankAbsolute, rankAbsolute, 'GET_ICON')}
+                          <TableCell>{prevRankGroup || '-'}</TableCell>
+                          <TableCell>{rankGroup || '-'}</TableCell>
+                          <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
+                            {getDifference(prevRankGroup, rankGroup, 'GET_NUM')}
+                            {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
                           </TableCell>
                           <Tooltip TransitionComponent={Zoom} title={url || 'Not available'} placement="top">
                             <TableCell className="urlEcllips">{url || '-'}</TableCell>
