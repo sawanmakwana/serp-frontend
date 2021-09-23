@@ -106,7 +106,7 @@ function PorjectList() {
     <>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Projects <span> ({data?.data?.total})</span>
+          Projects List <span> ({data?.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && (
@@ -207,7 +207,7 @@ function PorjectList() {
                           setSorting(`&sort=projectName:${projectSortingtype}`)
                         }}
                       >
-                        Project Name
+                        Project
                       </TableSortLabel>
                     </TableCell>
 
