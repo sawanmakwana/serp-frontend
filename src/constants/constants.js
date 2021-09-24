@@ -36,14 +36,18 @@ export const currencies = [
 export const keywordFrequency = [
   {
     value: 0,
-    label: 'Weekly',
+    label: 'Daily',
   },
   {
     value: 1,
-    label: 'Fortnightly',
+    label: 'Weekly',
   },
   {
     value: 2,
+    label: 'Fortnightly',
+  },
+  {
+    value: 3,
     label: 'Monthly',
   },
 ]

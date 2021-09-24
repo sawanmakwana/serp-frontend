@@ -59,7 +59,8 @@ export const getLoaction = loactionCode => {
 }
 
 export const getKeywordFrequency = data => {
-  if (data === 0) return 'Weekly'
+  if (data === 0) return 'Daily'
+  if (data === 1) return 'Weekly'
   if (data === 1) return 'Fortnightly'
   if (data === 2) return 'Monthly'
   return 'keyword Frequency'
