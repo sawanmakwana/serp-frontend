@@ -4,7 +4,7 @@ import {Cached, DoneAll, ErrorOutline} from '@material-ui/icons'
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
 import CheckIcon from '@material-ui/icons/Check'
-import {currencies} from 'constants/constants'
+import {currencies, keywordFrequency} from 'constants/constants'
 
 export const downloadResponseCSV = (data, name) => {
   const url = window.URL.createObjectURL(new Blob([data]))
@@ -58,12 +58,12 @@ export const getLoaction = loactionCode => {
   return 'Location does not exist'
 }
 
-export const getKeywordFrequency = data => {
-  if (data === 0) return 'Daily'
-  if (data === 1) return 'Weekly'
-  if (data === 1) return 'Fortnightly'
-  if (data === 2) return 'Monthly'
-  return 'keyword Frequency'
+export const getKeywordFrequency = frequencyValue => {
+  const obj = keywordFrequency.find(item => item.value == frequencyValue)
+  if (obj) {
+    return obj.label
+  }
+  return 'keyword does not exist'
 }
 
 export const getStatus = (error, errorMessage, newInserted, type = '') => {
