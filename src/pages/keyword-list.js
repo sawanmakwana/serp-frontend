@@ -33,14 +33,7 @@ import AnalyticCard from 'components/analytic-card'
 import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
-import {
-  downloadResponseCSV,
-  getDifference,
-  getFormetedData,
-  getKeywordFrequency,
-  getStatus,
-  getLoaction,
-} from 'util/app-utill'
+import {downloadResponseCSV, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
 
 function KeywordList() {
@@ -58,6 +51,9 @@ function KeywordList() {
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
+  // const [diffSortingtype, setdiffSortingtype] = useState('asc')
+  // const [urlSortingtype, seturlSortingtype] = useState('asc')
+
   const [anchorE2, setAnchorE2] = useState(null)
   const open = Boolean(anchorE2)
 
@@ -205,13 +201,13 @@ function KeywordList() {
     },
     {
       name: 'Improved Count',
-      analyticsDataFetching: isFetching,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.improvedCount,
       color: pink,
     },
     {
       name: 'Declined Count',
-      analyticsDataFetching: isFetching,
+      analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.declinedCount,
       color: lime,
     },
@@ -376,7 +372,7 @@ function KeywordList() {
                         Keyword
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell>Frequency</TableCell>
+                    {/* <TableCell>Frequency</TableCell> */}
                     <TableCell>Prev Date</TableCell>
                     <TableCell>Next Date</TableCell>
                     <TableCell>Prev Rank</TableCell>
@@ -393,19 +389,30 @@ function KeywordList() {
                       </TableSortLabel>
                     </TableCell>
                     <TableCell style={{minWidth: 80}}>
-                      <TableSortLabel
-                        active={Sorting.includes('rankGroup')}
-                        direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
+                      Diff
+                      {/* <TableSortLabel
+                        active={Sorting.includes('diff')}
+                        direction={diffSortingtype === 'asc' ? 'desc' : 'asc'}
                         onClick={() => {
-                          setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
-                          setSorting(`&sort=rankGroup:${weekSortingtype}`)
+                          setdiffSortingtype(diffSortingtype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=diff:${diffSortingtype}`)
                         }}
-                      >
-                        Diff
-                      </TableSortLabel>
+                      > */}
+                      {/* </TableSortLabel> */}
                     </TableCell>
-                    <TableCell>URL</TableCell>
-                    <TableCell>Status</TableCell>
+                    <TableCell>
+                      URL
+                      {/* <TableSortLabel
+                        active={Sorting.includes('url')}
+                        direction={urlSortingtype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          seturlSortingtype(urlSortingtype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=url:${urlSortingtype}`)
+                        }}
+                      > */}
+                      {/* </TableSortLabel> */}
+                    </TableCell>
+                    {/* <TableCell>Status</TableCell> */}
                   </TableRow>
                 </TableHead>
 
@@ -422,22 +429,22 @@ function KeywordList() {
                         {
                           _id,
                           keyword,
-                          keywordCheckFrequency,
+                          // keywordCheckFrequency,
                           prevDate,
                           nextDate,
                           prevRankGroup,
                           rankGroup,
                           url,
-                          error,
-                          errorMessage,
-                          newInserted,
+                          // error,
+                          // errorMessage,
+                          // newInserted,
                         },
                         index
                       ) => (
                         <TableRow hover key={_id}>
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                           <TableCell>{keyword}</TableCell>
-                          <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell>
+                          {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
                           <TableCell>{getFormetedData(prevDate)}</TableCell>
                           <TableCell>{getFormetedData(nextDate)}</TableCell>
                           <TableCell>{prevRankGroup || '-'}</TableCell>
@@ -449,13 +456,13 @@ function KeywordList() {
                           <Tooltip TransitionComponent={Zoom} title={url || 'Not available'} placement="top">
                             <TableCell className="urlEcllips">{url || '-'}</TableCell>
                           </Tooltip>
-                          <Tooltip
+                          {/* <Tooltip
                             TransitionComponent={Zoom}
                             title={getStatus(error, errorMessage, newInserted, 'GET_TOOLTIP')}
                             placement="top"
                           >
                             <TableCell>{getStatus(error, errorMessage, newInserted, 'GET_VALUE')}</TableCell>
-                          </Tooltip>
+                          </Tooltip> */}
                         </TableRow>
                       )
                     )

@@ -196,13 +196,13 @@ function Project() {
     },
     {
       name: 'Improved Count',
-      analyticsDataFetching: isFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.improvedCount,
       color: pink,
     },
     {
       name: 'Declined Count',
-      analyticsDataFetching: isFetching,
+      analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.declinedCount,
       color: lime,
     },

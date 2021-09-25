@@ -66,8 +66,8 @@
   height: 90vh;
 }
 .urlEcllips {
-  max-width: 350px;
-  min-width: 350px;
+  max-width: 330px;
+  min-width: 330px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
