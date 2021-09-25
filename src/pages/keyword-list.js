@@ -220,7 +220,7 @@ function KeywordList() {
           >
             <ArrowBack />
           </IconButton>
-          Keyword: {state?.keywordName || getkeywordName} -{state?.keywordlocation || getkeywordLocation}
+          Keyword: {state?.keywordName || getkeywordName} - {state?.keywordlocation || getkeywordLocation}
         </Typography>
         <TextField
           select

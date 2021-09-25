@@ -219,7 +219,7 @@ function Project() {
           >
             <ArrowBack />
           </IconButton>
-          Sub Project: {domain && domain[0] && domain[0]?.projectName}
+          Sub Project: {projectlistIsLoading ? '-' : domain && domain[0] && domain[0]?.projectName}
         </Typography>
         <TextField
           select
@@ -262,7 +262,7 @@ function Project() {
       </Box>
       <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Sub Project <span> ({data?.data?.total})</span>
+          Sub Project <span> ({isLoading ? '0' : data?.data?.total})</span>
         </Typography>
         <Box>
           {!xsScreen && (
@@ -406,7 +406,7 @@ function Project() {
                         >
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                           <TableCell className="keywordCell">
-                            {`${domain && domain[0] && domain[0]?.projectName}-${getLoaction(locationCode)}`}
+                            {`${domain && domain[0] && domain[0]?.projectName} - ${getLoaction(locationCode)}`}
                             {newInserted && (
                               <Tooltip TransitionComponent={Zoom} title="Keyword pending" placement="top">
                                 <Cached style={{color: orange[500]}} />
