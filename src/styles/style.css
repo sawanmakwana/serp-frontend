@@ -29,6 +29,12 @@
    margin-top: 10px !important;
  }
  }
+ @media (min-width: 1280px){
+.MuiGrid-grid-lg-3 {
+  flex-grow: 0;
+  max-width: 20% !important;
+  flex-basis: 20% !important;
+}}
 .MuiFormHelperText-contained {
   margin-left: 3px !important;
 }
@@ -66,8 +72,8 @@
   height: 90vh;
 }
 .urlEcllips {
-  max-width: 330px;
-  min-width: 330px;
+  max-width: 350px;
+  min-width: 350px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -176,9 +182,3 @@
 .tableHeader svg{
   font-size: 21px !important;
 }
-@media (min-width: 1280px){
-.MuiGrid-grid-lg-3 {
-    flex-grow: 0;
-    max-width: 20% !important;
-    flex-basis: 20% !important;
-}}
