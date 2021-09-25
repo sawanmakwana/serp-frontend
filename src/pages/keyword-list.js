@@ -25,6 +25,7 @@ import {
   useMediaQuery,
   IconButton,
   Menu,
+  TextField,
 } from '@material-ui/core'
 import axios from 'axios'
 import {useQuery} from 'react-query'
@@ -32,14 +33,27 @@ import AnalyticCard from 'components/analytic-card'
 import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getDifference, getFormetedData, getKeywordFrequency, getStatus} from 'util/app-utill'
+import {
+  downloadResponseCSV,
+  getDifference,
+  getFormetedData,
+  getKeywordFrequency,
+  getStatus,
+  getLoaction,
+} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
 
 function KeywordList() {
   const history = useHistory()
+  const theme = useTheme()
   const {state} = useLocation()
   const {id: KeywordId} = useParams()
+  const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const getRows = JSON.parse(window.localStorage.getItem('keywordlistRow'))
+  const getkeywordName = window.localStorage.getItem('keywordName')
+  const getkeywordLocation = window.localStorage.getItem('keywordLocation')
+  const getkeywordSubProjectid = window.localStorage.getItem('keywordSubProjectid')
+  const getkeywordRowtocall = window.localStorage.getItem('keywordRowtocall')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [Sorting, setSorting] = useState('')
@@ -47,8 +61,29 @@ function KeywordList() {
   const [weekSortingtype, setweekSortingtype] = useState('asc')
   const [anchorE2, setAnchorE2] = useState(null)
   const open = Boolean(anchorE2)
-  const theme = useTheme()
-  const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
+
+  React.useEffect(() => {
+    window.history.pushState(null, '', window.location.href)
+    window.onpopstate = () => {
+      history.push(`/project/${state?.subProjectId || getkeywordSubProjectid}`)
+    }
+    return () => (window.onpopstate = () => {})
+  }, [history, state?.subProjectId, getkeywordSubProjectid])
+
+  React.useEffect(() => {
+    if (state?.keywordName) {
+      window.localStorage.setItem('keywordName', state?.keywordName)
+    }
+    if (state?.keywordlocation) {
+      window.localStorage.setItem('keywordLocation', state?.keywordlocation)
+    }
+    if (state?.subProjectId) {
+      window.localStorage.setItem('keywordSubProjectid', state?.subProjectId)
+    }
+    if (state?.rowtoCall) {
+      window.localStorage.setItem('keywordRowtocall', state?.rowtoCall)
+    }
+  }, [state?.keywordName, state?.keywordlocation, state?.subProjectId, state?.rowtoCall])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -73,6 +108,22 @@ function KeywordList() {
     () => fetchTable(page, Sorting, KeywordId),
     {keepPreviousData: true}
   )
+
+  async function fetchDdkeyword() {
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getSubProjectsList/${
+      state?.subProjectId || getkeywordSubProjectid
+    }?limit=${state?.rowtoCall || getkeywordRowtocall}`
+    const {data} = await axios.get(fetchURL)
+    return data
+  }
+
+  const {
+    data: DdlistKeywordData,
+    isFetching: DdlistKeywordisFetching,
+    isLoading: DdlistKeywordisLoading,
+  } = useQuery(['DdlistKeyword'], () => fetchDdkeyword(), {
+    keepPreviousData: true,
+  })
 
   async function fetchCSV(KeywordId) {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportKeywordsToCsv/${KeywordId}`
@@ -169,8 +220,30 @@ function KeywordList() {
           >
             <ArrowBack />
           </IconButton>
-          Keyword: {state.keywordName}
+          Keyword: {state?.keywordName || getkeywordName} -{state?.keywordlocation || getkeywordLocation}
         </Typography>
+        <TextField
+          select
+          style={{minWidth: 250}}
+          className="ProjectDD"
+          label="Select Sub Project"
+          id="i1"
+          onChange={e =>
+            history.push(`/project/${state?.subProjectId || getkeywordSubProjectid}/keyword/${e.target.value}`)
+          }
+          defaultValue={KeywordId}
+          disabled={DdlistKeywordisLoading}
+        >
+          {DdlistKeywordData?.data?.result?.map(data => (
+            <MenuItem
+              key={data._id}
+              value={data._id}
+              onClick={() => window.localStorage.setItem('keywordLocation', getLoaction(data.locationCode))}
+            >
+              {state?.keywordName || getkeywordName} - {getLoaction(data.locationCode) || getkeywordLocation}
+            </MenuItem>
+          ))}
+        </TextField>
       </Box>
       <Box
         sx={{
@@ -374,7 +447,7 @@ function KeywordList() {
                 </TableBody>
               </Table>
             </TableContainer>
-            {isFetching && <LinearProgress />}
+            {isFetching && DdlistKeywordisFetching && <LinearProgress />}
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"

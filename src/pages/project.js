@@ -90,7 +90,11 @@ function Project() {
     return data
   }
 
-  const {data: projectlistData, isFetching: projectlistIsFetching} = useQuery(['DdList'], () => fetchprojectlistAPI())
+  const {
+    data: projectlistData,
+    isFetching: projectlistIsFetching,
+    isLoading: projectlistIsLoading,
+  } = useQuery(['DdList'], () => fetchprojectlistAPI())
 
   async function fetchCSV(DomainId) {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToCsv/${DomainId}`
@@ -218,13 +222,13 @@ function Project() {
           Sub Project: {domain && domain[0] && domain[0]?.projectName}
         </Typography>
         <TextField
-          onChange={e => history.push(e.target.value)}
-          style={{minWidth: 230}}
+          select
           className="ProjectDD"
           label="Select Project"
-          select
+          style={{minWidth: 250}}
+          onChange={e => history.push(e.target.value)}
           defaultValue={DomainId}
-          disabled={isLoading}
+          disabled={projectlistIsLoading}
         >
           {listProject?.map(({value, projectName}) => (
             <MenuItem key={value} value={value}>
@@ -391,9 +395,10 @@ function Project() {
                                   history.push({
                                     pathname: `/project/${DomainId}/keyword/${_id}`,
                                     state: {
-                                      keywordName: `${domain && domain[0] && domain[0]?.projectName}-${getLoaction(
-                                        locationCode
-                                      )}`,
+                                      keywordName: domain && domain[0] && domain[0]?.projectName,
+                                      keywordlocation: getLoaction(locationCode),
+                                      subProjectId: DomainId,
+                                      rowtoCall: data?.data?.total,
                                     },
                                   })
                               : null
