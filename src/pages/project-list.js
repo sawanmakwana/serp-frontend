@@ -39,7 +39,7 @@ function PorjectList() {
   const queryClient = useQueryClient()
   const getRows = JSON.parse(window.localStorage.getItem('projectlistRow'))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
   const [Sorting, setSorting] = useState('')
   const [projectSortingtype, setprojectSortingtype] = useState('asc')
   const [anchorEl, setAnchorEl] = useState(null)
@@ -287,7 +287,7 @@ function PorjectList() {
             </TableContainer>
             {isFetching && <LinearProgress />}
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
               component="div"
               count={data?.data?.total}
               page={page}

@@ -47,15 +47,14 @@ function KeywordList() {
   const history = useHistory()
   const theme = useTheme()
   const {state} = useLocation()
-  const {id: KeywordId} = useParams()
+  const {subProjectId: KeywordId, projectId} = useParams()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const getRows = JSON.parse(window.localStorage.getItem('keywordlistRow'))
   const getkeywordName = window.localStorage.getItem('keywordName')
   const getkeywordLocation = window.localStorage.getItem('keywordLocation')
-  const getkeywordSubProjectid = window.localStorage.getItem('keywordSubProjectid')
   const getkeywordRowtocall = window.localStorage.getItem('keywordRowtocall')
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
@@ -65,10 +64,10 @@ function KeywordList() {
   React.useEffect(() => {
     window.history.pushState(null, '', window.location.href)
     window.onpopstate = () => {
-      history.push(`/project/${state?.subProjectId || getkeywordSubProjectid}`)
+      history.push(`/project/${projectId}`)
     }
     return () => (window.onpopstate = () => {})
-  }, [history, state?.subProjectId, getkeywordSubProjectid])
+  }, [history, projectId])
 
   React.useEffect(() => {
     if (state?.keywordName) {
@@ -77,13 +76,10 @@ function KeywordList() {
     if (state?.keywordlocation) {
       window.localStorage.setItem('keywordLocation', state?.keywordlocation)
     }
-    if (state?.subProjectId) {
-      window.localStorage.setItem('keywordSubProjectid', state?.subProjectId)
-    }
     if (state?.rowtoCall) {
       window.localStorage.setItem('keywordRowtocall', state?.rowtoCall)
     }
-  }, [state?.keywordName, state?.keywordlocation, state?.subProjectId, state?.rowtoCall])
+  }, [state?.keywordName, state?.keywordlocation, state?.rowtoCall])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -110,9 +106,9 @@ function KeywordList() {
   )
 
   async function fetchDdkeyword() {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getSubProjectsList/${
-      state?.subProjectId || getkeywordSubProjectid
-    }?limit=${state?.rowtoCall || getkeywordRowtocall}`
+    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getSubProjectsList/${projectId}?limit=${
+      state?.rowtoCall || getkeywordRowtocall
+    }`
     const {data} = await axios.get(fetchURL)
     return data
   }
@@ -207,6 +203,18 @@ function KeywordList() {
       value: analyticsData?.outOfTopHundred,
       color: lime,
     },
+    {
+      name: 'Improved Count',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.improvedCount,
+      color: pink,
+    },
+    {
+      name: 'Declined Count',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.declinedCount,
+      color: lime,
+    },
   ]
 
   return (
@@ -227,10 +235,7 @@ function KeywordList() {
           style={{minWidth: 250}}
           className="ProjectDD"
           label="Select Sub Project"
-          id="i1"
-          onChange={e =>
-            history.push(`/project/${state?.subProjectId || getkeywordSubProjectid}/keyword/${e.target.value}`)
-          }
+          onChange={e => history.push(`/project/${projectId}/keyword/${e.target.value}`)}
           defaultValue={KeywordId}
           disabled={DdlistKeywordisLoading}
         >
@@ -387,7 +392,18 @@ function KeywordList() {
                         Current Rank
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell style={{minWidth: 80}}>Diff</TableCell>
+                    <TableCell style={{minWidth: 80}}>
+                      <TableSortLabel
+                        active={Sorting.includes('rankGroup')}
+                        direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=rankGroup:${weekSortingtype}`)
+                        }}
+                      >
+                        Diff
+                      </TableSortLabel>
+                    </TableCell>
                     <TableCell>URL</TableCell>
                     <TableCell>Status</TableCell>
                   </TableRow>
@@ -449,7 +465,7 @@ function KeywordList() {
             </TableContainer>
             {isFetching && DdlistKeywordisFetching && <LinearProgress />}
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
               component="div"
               count={data?.data?.total}
               page={page}

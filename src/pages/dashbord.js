@@ -1,7 +1,7 @@
 import React from 'react'
 import {Box, Grid, Typography} from '@material-ui/core'
 import AnalyticCard from 'components/analytic-card'
-import {green, indigo, orange, red, teal} from '@material-ui/core/colors'
+import {green, indigo, lime, orange, pink, red, teal} from '@material-ui/core/colors'
 import axios from 'axios'
 import {useQuery} from 'react-query'
 
@@ -45,6 +45,18 @@ function Dashbord() {
       analyticsDataFetching: isFetching,
       value: analyticsData?.topHundred,
       color: teal,
+    },
+    {
+      name: 'Improved Count',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.improvedCount,
+      color: pink,
+    },
+    {
+      name: 'Declined Count',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.declinedCount,
+      color: lime,
     },
   ]
 

@@ -42,10 +42,10 @@ import {ArrowBack, Cached} from '@material-ui/icons'
 function Project() {
   const queryClient = useQueryClient()
   const history = useHistory()
-  const {id: DomainId} = useParams()
+  const {projectId: DomainId} = useParams()
   const getRows = JSON.parse(window.localStorage.getItem('subprojectlistRow'))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [addSubProjectModal, setSubAddProjectModal] = useState(false)
@@ -192,6 +192,18 @@ function Project() {
       name: '100+',
       analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.outOfTopHundred,
+      color: lime,
+    },
+    {
+      name: 'Improved Count',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.improvedCount,
+      color: pink,
+    },
+    {
+      name: 'Declined Count',
+      analyticsDataFetching: isFetching,
+      value: analyticsData?.declinedCount,
       color: lime,
     },
   ]
@@ -386,22 +398,15 @@ function Project() {
                         <TableRow
                           hover
                           key={_id}
-                          style={{
-                            cursor: newInserted && 'not-allowed',
-                          }}
-                          onClick={
-                            !newInserted
-                              ? () =>
-                                  history.push({
-                                    pathname: `/project/${DomainId}/keyword/${_id}`,
-                                    state: {
-                                      keywordName: domain && domain[0] && domain[0]?.projectName,
-                                      keywordlocation: getLoaction(locationCode),
-                                      subProjectId: DomainId,
-                                      rowtoCall: data?.data?.total,
-                                    },
-                                  })
-                              : null
+                          onClick={() =>
+                            history.push({
+                              pathname: `/project/${DomainId}/keyword/${_id}`,
+                              state: {
+                                keywordName: domain && domain[0] && domain[0]?.projectName,
+                                keywordlocation: getLoaction(locationCode),
+                                rowtoCall: data?.data?.total,
+                              },
+                            })
                           }
                         >
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
@@ -474,7 +479,7 @@ function Project() {
             </TableContainer>
             {(isFetching || projectlistIsFetching || singalProjectlistIsFetching) && <LinearProgress />}
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
               component="div"
               count={data?.data?.total}
               page={page}

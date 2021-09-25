@@ -17,11 +17,11 @@ function AppRoutespath() {
         <DocumentTitle title="Project" />
         <PorjectList />
       </Route>
-      <Route exact path="/project/:id">
+      <Route exact path="/project/:projectId">
         <DocumentTitle title="Sub Project" />
         <Project />
       </Route>
-      <Route exact path="/project/:id/keyword/:id">
+      <Route exact path="/project/:projectId/keyword/:subProjectId">
         <DocumentTitle title="Project Keyword" />
         <KeywordList />
       </Route>

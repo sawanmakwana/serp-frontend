@@ -6,7 +6,7 @@ function AnalyticCard({name, value, color, analyticsDataFetching}) {
     <Grid item lg={3} sm={6} xl={3} xs={12}>
       <Card style={{height: '100%'}}>
         <CardContent style={{paddingBottom: 18}}>
-          <Grid container spacing={3} style={{justifyContent: 'space-between'}}>
+          <Grid container spacing={3} style={{justifyContent: 'space-between', alignItems: 'center'}}>
             <Grid item>
               <Typography color="textSecondary" gutterBottom variant="h6">
                 {name}
@@ -19,8 +19,8 @@ function AnalyticCard({name, value, color, analyticsDataFetching}) {
               <Avatar
                 style={{
                   backgroundColor: color[600],
-                  height: 56,
-                  width: 56,
+                  height: 46,
+                  width: 46,
                 }}
               >
                 <InsertChartIcon />
