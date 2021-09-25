@@ -51,7 +51,7 @@ function KeywordList() {
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
-  // const [diffSortingtype, setdiffSortingtype] = useState('asc')
+  const [diffSortingtype, setdiffSortingtype] = useState('asc')
   // const [urlSortingtype, seturlSortingtype] = useState('asc')
 
   const [anchorE2, setAnchorE2] = useState(null)
@@ -389,16 +389,16 @@ function KeywordList() {
                       </TableSortLabel>
                     </TableCell>
                     <TableCell style={{minWidth: 80}}>
-                      Diff
-                      {/* <TableSortLabel
+                      <TableSortLabel
                         active={Sorting.includes('diff')}
                         direction={diffSortingtype === 'asc' ? 'desc' : 'asc'}
                         onClick={() => {
                           setdiffSortingtype(diffSortingtype === 'asc' ? 'desc' : 'asc')
-                          setSorting(`&sort=diff:${diffSortingtype}`)
+                          setSorting(`&sort=difference:${diffSortingtype}`)
                         }}
-                      > */}
-                      {/* </TableSortLabel> */}
+                      >
+                        Diff
+                      </TableSortLabel>
                     </TableCell>
                     <TableCell>
                       URL
@@ -425,22 +425,7 @@ function KeywordList() {
                     </TableRow>
                   ) : (
                     data?.data?.result?.map(
-                      (
-                        {
-                          _id,
-                          keyword,
-                          // keywordCheckFrequency,
-                          prevDate,
-                          nextDate,
-                          prevRankGroup,
-                          rankGroup,
-                          url,
-                          // error,
-                          // errorMessage,
-                          // newInserted,
-                        },
-                        index
-                      ) => (
+                      ({_id, keyword, prevDate, nextDate, prevRankGroup, rankGroup, url, difference}, index) => (
                         <TableRow hover key={_id}>
                           <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                           <TableCell>{keyword}</TableCell>
@@ -450,7 +435,7 @@ function KeywordList() {
                           <TableCell>{prevRankGroup || '-'}</TableCell>
                           <TableCell>{rankGroup || '-'}</TableCell>
                           <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
-                            {getDifference(prevRankGroup, rankGroup, 'GET_NUM')}
+                            {difference.toString().replace('-', '')}
                             {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
                           </TableCell>
                           <Tooltip TransitionComponent={Zoom} title={url || 'Not available'} placement="top">

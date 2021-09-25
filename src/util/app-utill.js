@@ -1,6 +1,4 @@
 /* eslint-disable eqeqeq */
-import {orange, red} from '@material-ui/core/colors'
-import {Cached, DoneAll, ErrorOutline} from '@material-ui/icons'
 import CallMadeIcon from '@material-ui/icons/CallMade'
 import CallReceivedIcon from '@material-ui/icons/CallReceived'
 import CheckIcon from '@material-ui/icons/Check'
@@ -17,11 +15,11 @@ export const downloadResponseCSV = (data, name) => {
 }
 
 export const getDifference = (prevRank, currentRank, type = '') => {
-  let diff
+  // let diff
   switch (type) {
-    case 'GET_NUM':
-      diff = currentRank - prevRank
-      return diff.toString().replace('-', '')
+    // case 'GET_NUM':
+    //   diff = currentRank - prevRank
+    //   return diff.toString().replace('-', '')
 
     case 'GET_ClASS':
       if (!prevRank) return 'incRank'
@@ -66,21 +64,21 @@ export const getKeywordFrequency = frequencyValue => {
   return 'keyword does not exist'
 }
 
-export const getStatus = (error, errorMessage, newInserted, type = '') => {
-  switch (type) {
-    case 'GET_TOOLTIP':
-      if (newInserted) return 'Panding'
-      if (error) return errorMessage
-      if (!error) return 'Keyword successfully added'
-      break
+// export const getStatus = (error, errorMessage, newInserted, type = '') => {
+//   switch (type) {
+//     case 'GET_TOOLTIP':
+//       if (newInserted) return 'Panding'
+//       if (error) return errorMessage
+//       if (!error) return 'Keyword successfully added'
+//       break
 
-    case 'GET_VALUE':
-      if (newInserted) return <Cached style={{color: orange[500]}} />
-      if (error) return <ErrorOutline style={{color: red[500]}} />
-      if (!error) return <DoneAll color="primary" />
-      break
+//     case 'GET_VALUE':
+//       if (newInserted) return <Cached style={{color: orange[500]}} />
+//       if (error) return <ErrorOutline style={{color: red[500]}} />
+//       if (!error) return <DoneAll color="primary" />
+//       break
 
-    default:
-      break
-  }
-}
+//     default:
+//       break
+//   }
+// }
