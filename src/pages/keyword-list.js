@@ -390,7 +390,7 @@ function KeywordList() {
                     </TableCell>
                     <TableCell style={{minWidth: 80}}>
                       <TableSortLabel
-                        active={Sorting.includes('diff')}
+                        active={Sorting.includes('difference')}
                         direction={diffSortingtype === 'asc' ? 'desc' : 'asc'}
                         onClick={() => {
                           setdiffSortingtype(diffSortingtype === 'asc' ? 'desc' : 'asc')
