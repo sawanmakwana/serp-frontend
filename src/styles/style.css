@@ -176,3 +176,9 @@
 .tableHeader svg{
   font-size: 21px !important;
 }
+@media (min-width: 1280px){
+.MuiGrid-grid-lg-3 {
+    flex-grow: 0;
+    max-width: 20% !important;
+    flex-basis: 20% !important;
+}}

@@ -11,19 +11,19 @@ function AnalyticCard({name, value, color, analyticsDataFetching}) {
               <Typography color="textSecondary" gutterBottom variant="h6">
                 {name}
               </Typography>
-              <Typography color="textPrimary" variant="h3">
-                {analyticsDataFetching ? <CircularProgress style={{height: 23, width: 23}} /> : value}
+              <Typography color="textPrimary" variant="h4">
+                {analyticsDataFetching ? <CircularProgress style={{height: 19, width: 19}} /> : value}
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid style={{padding: '0 12px 0 0'}}>
               <Avatar
                 style={{
                   backgroundColor: color[600],
-                  height: 46,
-                  width: 46,
+                  height: 42,
+                  width: 42,
                 }}
               >
-                <InsertChartIcon />
+                <InsertChartIcon style={{padding: 2}} />
               </Avatar>
             </Grid>
           </Grid>

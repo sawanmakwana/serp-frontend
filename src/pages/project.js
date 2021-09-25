@@ -31,7 +31,7 @@ import axios from 'axios'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
-import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
+import {blueGrey, green, indigo, lightGreen, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams} from 'react-router-dom'
 import {MoreVertical} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
@@ -198,13 +198,13 @@ function Project() {
       name: 'Improved Count',
       analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.improvedCount,
-      color: pink,
+      color: lightGreen,
     },
     {
       name: 'Declined Count',
       analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.declinedCount,
-      color: lime,
+      color: blueGrey,
     },
   ]
 

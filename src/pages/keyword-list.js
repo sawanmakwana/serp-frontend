@@ -30,7 +30,7 @@ import {
 import axios from 'axios'
 import {useQuery} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
-import {green, indigo, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
+import {blueGrey, green, indigo, lightGreen, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
@@ -203,13 +203,13 @@ function KeywordList() {
       name: 'Improved Count',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.improvedCount,
-      color: pink,
+      color: lightGreen,
     },
     {
       name: 'Declined Count',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.declinedCount,
-      color: lime,
+      color: blueGrey,
     },
   ]
 
