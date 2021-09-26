@@ -435,7 +435,7 @@ function KeywordList() {
                           <TableCell>{prevRankGroup || '-'}</TableCell>
                           <TableCell>{rankGroup || '-'}</TableCell>
                           <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
-                            {difference.toString().replace('-', '')}
+                            {difference?.toString()?.replace('-', '')}
                             {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
                           </TableCell>
                           <Tooltip TransitionComponent={Zoom} title={url || 'Not available'} placement="top">
