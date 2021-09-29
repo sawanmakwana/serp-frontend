@@ -4,6 +4,8 @@ import {Project} from 'pages/project'
 import {DocumentTitle} from 'util/document-title'
 import {Dashbord} from 'pages/dashbord'
 import {KeywordList} from 'pages/keyword-list'
+import {User} from 'pages/user'
+import {MyAccount} from 'pages/my-account'
 import {AppLayout} from './layouts/app-layout'
 
 function AppRoutespath() {
@@ -25,14 +27,14 @@ function AppRoutespath() {
         <DocumentTitle title="Project Keyword" />
         <KeywordList />
       </Route>
-      {/* <Route path="/user">
+      <Route path="/user">
         <DocumentTitle title="User" />
         <User />
-      </Route> */}
-      {/* <Route path="/my-account">
+      </Route>
+      <Route path="/my-account">
         <DocumentTitle title="My Account" />
         <MyAccount />
-      </Route> */}
+      </Route>
 
       <Redirect to="/dashboard" />
     </Switch>

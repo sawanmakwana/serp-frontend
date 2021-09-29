@@ -438,7 +438,15 @@ function KeywordList() {
                             {difference?.toString()?.replace('-', '')}
                             {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
                           </TableCell>
-                          <Tooltip TransitionComponent={Zoom} title={url || 'Not available'} placement="top">
+                          <Tooltip
+                            onClick={() => {
+                              const win = window.open(url, '_blank')
+                              win.focus()
+                            }}
+                            TransitionComponent={Zoom}
+                            title={url || 'Not available'}
+                            placement="top"
+                          >
                             <TableCell className="urlEcllips">{url || '-'}</TableCell>
                           </Tooltip>
                           {/* <Tooltip

@@ -1,4 +1,4 @@
-import {BarChart, Users} from 'react-feather'
+import {BarChart, Settings, User, Users} from 'react-feather'
 
 export const sidbarItem = [
   {
@@ -11,19 +11,19 @@ export const sidbarItem = [
     icon: Users,
     title: 'Projects',
   },
-  // {
-  //   href: '/user',
-  //   icon: Users,
-  //   title: 'User',
-  // },
-  // {
-  //   href: '/my-account',
-  //   icon: User,
-  //   title: 'My Account',
-  // },
-  // {
-  //   href: '/settings',
-  //   icon: Settings,
-  //   title: 'Settings',
-  // },
+  {
+    href: '/user',
+    icon: Users,
+    title: 'User',
+  },
+  {
+    href: '/my-account',
+    icon: User,
+    title: 'My Account',
+  },
+  {
+    href: '/settings',
+    icon: Settings,
+    title: 'Settings',
+  },
 ]

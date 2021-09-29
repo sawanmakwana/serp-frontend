@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useEffect, useState} from 'react'
-import {useLocation} from 'react-router-dom'
+import {useLocation, Link as RouterLink} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Avatar, Box, Button, Divider, Drawer, Hidden, List, ListItem, Typography} from '@material-ui/core'
 import theme from 'theme'
@@ -45,8 +45,8 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
         }}
       >
         <Avatar
-          // component={RouterLink}
-          // to="/my-account"
+          component={RouterLink}
+          to="/my-account"
           alt="Lol"
           style={{
             cursor: 'pointer',
