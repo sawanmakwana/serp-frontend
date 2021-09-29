@@ -23,7 +23,6 @@ import {
   Box,
   useMediaQuery,
 } from '@material-ui/core'
-import axios from 'axios'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {MoreVertical} from 'react-feather'
 import {useHistory} from 'react-router-dom'
@@ -31,6 +30,7 @@ import {AddProjectListModal} from 'components/add-project-list'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV} from 'util/app-utill'
+import {useClient} from 'useClient'
 
 function PorjectList() {
   const theme = useTheme()
@@ -48,6 +48,7 @@ function PorjectList() {
   const [deleteModal, setDeleteModal] = useState(false)
   const [anchorE2, setAnchorE2] = useState(null)
   const open = Boolean(anchorE2)
+  const client = useClient()
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -63,16 +64,29 @@ function PorjectList() {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/projectList?page=${
       page + 1
     }&limit=${rowsPerPage}${Sorting}`
-    const {data} = await axios.get(fetchURL)
-    return data
+    client(fetchURL)
   }
 
   const {data, isFetching} = useQuery(['reposData', page, rowsPerPage, Sorting], () => fetchTable(page, Sorting), {
     keepPreviousData: true,
   })
 
+  // const {mutate: deleteProject, isLoading: deleteIsloading} = useMutation(
+  //   mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries('reposData')
+  //       queryClient.invalidateQueries('csvProjectlist')
+  //       queryClient.invalidateQueries('exportProjectToGoogleSheet')
+  //       setDeleteModal(false)
+  //       setEditId(null)
+  //     },
+  //   }
+  // )
+
   const {mutate: deleteProject, isLoading: deleteIsloading} = useMutation(
-    mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`),
+    mutateData =>
+      client(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`, {mutateData, method: 'delete'}),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('reposData')
@@ -86,22 +100,38 @@ function PorjectList() {
 
   async function fetchCSV() {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToCsv`
-    const {data} = await axios.get(fetchURL)
-    return data
+    client(fetchURL)
   }
 
   const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectlist'], () => fetchCSV())
 
   async function fetchGooglesheet() {
     const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToGoogleSheet`
-    const {data} = await axios.get(fetchURL)
-    return data
+    client(fetchURL)
   }
 
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(['exportProjectToGoogleSheet'], () =>
     fetchGooglesheet()
   )
 
+  // async function fetchGooglesheet() {
+  //   const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToGoogleSheet`
+
+  //   const config = {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `${getToken()}`,
+  //       'Content-Type': 'application/json',
+  //     },
+  //   }
+  //   const response = await fetch(fetchURL, config)
+  //   if (!response.ok) throw new Error(response.statusText)
+  //   return response.json()
+  // }
+
+  // const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(['exportProjectToGoogleSheet'], () =>
+  //   fetchGooglesheet()
+  // )
   return (
     <>
       <Box className="d-flex pb-3">
