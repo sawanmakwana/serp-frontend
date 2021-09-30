@@ -63,7 +63,6 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
   const classesFrom = useStylesForm()
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
-  // const [listAssignProject, setListAssignProject] = useState([])
 
   const {handleSubmit, errors, control, reset} = useForm({
     mode: 'onTouched',
@@ -80,7 +79,6 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
       assignProject: [],
     },
   })
-  // console.log(watch('assignProject'))
 
   React.useEffect(() => {
     if (editId) {
@@ -122,8 +120,6 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
   const {data: projectlistData, isLoading: projectlistIsLoading} = useQuery(['DdList'], () =>
     client(`getProjectsListDrpDwn`)
   )
-
-  // console.log(projectlistData?.data)
 
   const submitForm = submitdata => {
     // console.log(submitdata)
@@ -226,31 +222,6 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
               />
             )}
           />
-          {/* <Controller
-            control={control}
-            name="assignProject"
-            render={({onChange, onBlur, value}) => (
-              <TextField
-                label="Assign Project To User"
-                select
-                multiple
-                required
-                error={errors.assignProject}
-                variant="outlined"
-                onBlur={onBlur}
-                value={value}
-                onChange={e => onChange(e.target.value)}
-                disabled={isLoading}
-                helperText={errors.assignProject && errors.assignProject.message}
-              >
-                {listProject?.map(({value, projectName}) => (
-                  <MenuItem key={value} value={value}>
-                    {projectName}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-          /> */}
 
           <Controller
             control={control}
@@ -266,18 +237,17 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
                   input={<OutlinedInput label="Assign Project" />}
                   error={errors.assignProject}
                   disabled={isLoading}
-                  renderValue={selected => selected.join(', ')}
-                  // renderValue={selected =>
-                  //   projectlistData?.data?.map(user => {
-                  //     if (user._id === selected) return console.log(user.projectName)
-                  //   })
-                  // }
+                  renderValue={selected =>
+                    projectlistData?.data
+                      .filter(user => selected.includes(user._id))
+                      .map(data => data.projectName)
+                      .join(', ')
+                  }
                   MenuProps={MenuProps}
                   helperText={errors.assignProject && errors.assignProject.message}
                 >
                   {projectlistData?.data?.map(user => (
                     <MenuItem key={user._id} value={user._id}>
-                      {/* <Checkbox primary checked={user?.value?.includes()} /> */}
                       <ListItemText primary={user.projectName} />
                     </MenuItem>
                   ))}
