@@ -14,11 +14,14 @@ import {
   Typography,
   CardActions,
   LinearProgress,
+  CircularProgress,
 } from '@material-ui/core'
 import {Controller, useForm} from 'react-hook-form'
-import {useQuery} from 'react-query'
+import {useMutation, useQuery} from 'react-query'
 import {useClient} from 'useClient'
 import {getUserAccess} from 'util/app-utill'
+import {MyAcc} from 'validations/user-list'
+import {toast} from 'react-toastify'
 
 function MyAccount() {
   const userlocal = window.localStorage.getItem('__user_data__')
@@ -27,13 +30,19 @@ function MyAccount() {
 
   const {data, isFetching, isLoading} = useQuery(['myAccount'], () => client(`viewUserProfile/${uservalue?._id}`))
 
-  const {handleSubmit, errors, control, reset} = useForm({
+  const {
+    handleSubmit,
+    errors,
+    control,
+    reset,
+    formState: {isDirty},
+  } = useForm({
     mode: 'onTouched',
     shouldFocusError: true,
     reValidateMode: 'onChange',
     submitFocusError: true,
     shouldUnregister: false,
-    //  resolver: joiResolver(UserList),
+    resolver: joiResolver(MyAcc),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -49,8 +58,26 @@ function MyAccount() {
         lastName,
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, reset])
+
+  const {
+    mutate,
+    isLoading: editIsLoading,
+    isFetching: editIsFetching,
+  } = useMutation(
+    data =>
+      client(`editUser/${uservalue?._id}`, {
+        data,
+        method: 'put',
+      }),
+    {
+      onSuccess: () => {
+        toast.success('Profile Updated')
+      },
+    }
+  )
+
+  const submitForm = submitdata => mutate(submitdata)
 
   return (
     <Container maxWidth="lg" style={{padding: 0}}>
@@ -72,13 +99,25 @@ function MyAccount() {
                     marginBottom: 14,
                   }}
                 >
-                  {data?.data?.firstName.toString().charAt(0).toUpperCase()}
+                  {isLoading ? (
+                    <CircularProgress style={{height: 19, width: 19}} />
+                  ) : (
+                    data?.data?.firstName.toString().charAt(0).toUpperCase()
+                  )}
                 </Avatar>
                 <Typography color="textPrimary" gutterBottom variant="h3">
-                  {`${data?.data?.firstName}${' '}${data?.data?.lastName}`}
+                  {isLoading ? (
+                    <CircularProgress style={{height: 19, width: 19}} />
+                  ) : (
+                    `${data?.data?.firstName}${' '}${data?.data?.lastName}`
+                  )}
                 </Typography>
                 <Typography color="textSecondary" variant="body1">
-                  {getUserAccess(data?.data?.permissionLevel)}
+                  {isLoading ? (
+                    <CircularProgress style={{height: 19, width: 19}} />
+                  ) : (
+                    getUserAccess(data?.data?.permissionLevel)
+                  )}
                 </Typography>
               </Box>
             </CardContent>
@@ -91,11 +130,11 @@ function MyAccount() {
           </Card>
         </Grid>
         <Grid item lg={8} md={6} xs={12}>
-          <form>
-            <Card>
-              <CardHeader subheader="The information can be edited" title="Profile" />
-              <Divider />
-              <CardContent>
+          <Card>
+            <CardHeader subheader="The information can be edited" title="Profile" />
+            <Divider />
+            <CardContent>
+              <form>
                 <Grid container spacing={3}>
                   <Grid item md={6} xs={12}>
                     <Controller
@@ -106,7 +145,7 @@ function MyAccount() {
                           label="Enter First name"
                           required
                           fullWidth
-                          disabled={isLoading}
+                          disabled={editIsLoading}
                           onBlur={onBlur}
                           error={errors.firstName}
                           variant="outlined"
@@ -126,7 +165,7 @@ function MyAccount() {
                           label="Last name"
                           required
                           fullWidth
-                          disabled={isLoading}
+                          disabled={editIsLoading}
                           onBlur={onBlur}
                           error={errors.lastName}
                           variant="outlined"
@@ -138,7 +177,13 @@ function MyAccount() {
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth disabled label="Email" value={data?.data?.email} variant="outlined" />
+                    <TextField
+                      fullWidth
+                      disabled
+                      label="Email asdasdsadads"
+                      value={data?.data?.email}
+                      variant="outlined"
+                    />
                   </Grid>
                   <Grid item md={6} xs={12}>
                     <TextField
@@ -150,23 +195,27 @@ function MyAccount() {
                     />
                   </Grid>
                 </Grid>
-              </CardContent>
-              {isFetching && <LinearProgress />}
-
-              <Divider />
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  p: 2,
-                }}
+              </form>
+            </CardContent>
+            {(isFetching || editIsFetching || editIsLoading) && <LinearProgress />}
+            <Divider />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                p: 2,
+              }}
+            >
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handleSubmit(submitForm)}
+                disabled={editIsLoading || !isDirty}
               >
-                <Button color="primary" variant="contained">
-                  Save details
-                </Button>
-              </Box>
-            </Card>
-          </form>
+                Save details
+              </Button>
+            </Box>
+          </Card>
         </Grid>
       </Grid>
     </Container>

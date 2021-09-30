@@ -122,21 +122,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
   )
 
   const submitForm = submitdata => {
-    // console.log(submitdata)
     mutate(submitdata)
-    // if (editId) {
-    //   mutate({
-    //     keyword: submitdata.keyword.split('\n'),
-    //   })
-    // }
-    // if (!editId) {
-    //   mutate({
-    //     ...submitdata,
-    //     keyword: submitdata.keyword.split('\n'),
-    //     domain: domain[0].domain,
-    //     _projectId,
-    //   })
-    // }
   }
 
   return (

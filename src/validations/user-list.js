@@ -27,3 +27,16 @@ export const UserList = Joi.object({
     'number.base': `Please select any one Permission Level`,
   }),
 })
+
+export const MyAcc = Joi.object({
+  firstName: Joi.string().trim().min(3).max(15).required().messages({
+    'string.empty': `First name cannot be an empty field`,
+    'string.min': `First name must be longer than 5 character`,
+    'string.max': `First name can not be longer than 20 character`,
+  }),
+  lastName: Joi.string().trim().min(3).max(15).required().messages({
+    'string.empty': `Last name cannot be an empty field`,
+    'string.min': `Last name must be longer than 5 character`,
+    'string.max': `Last name can not be longer than 20 character`,
+  }),
+})
