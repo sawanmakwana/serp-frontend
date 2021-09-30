@@ -18,7 +18,7 @@ import {makeStyles, useTheme} from '@material-ui/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient} from 'react-query'
-import axios from 'axios'
+import {useClient} from 'useClient'
 import {currencies, keywordFrequency} from '../constants/constants'
 import {editSubProject, SubProject} from '../validations/sub-project'
 
@@ -46,6 +46,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
     },
   }))
   const classes = useStyles()
+  const client = useClient()
   const classesFrom = useStylesForm()
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -79,10 +80,16 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
   const queryClient = useQueryClient()
 
   const {isLoading, mutate} = useMutation(
-    MutatedData =>
+    data =>
       !editId
-        ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addSubProject`, MutatedData)
-        : axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editSubProject/${editId}`, MutatedData),
+        ? client(`addSubProject`, {
+            data,
+            method: 'post',
+          })
+        : client(`editSubProject/${editId}`, {
+            data,
+            method: 'post',
+          }),
     {
       onSuccess: () => {
         setOpen(false)
