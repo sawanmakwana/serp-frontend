@@ -112,7 +112,7 @@ function User() {
                   <Table size="medium" className="selectTable">
                     <TableHead>
                       <TableRow>
-                        <TableCell>#</TableCell>
+                        <TableCell className="pl-4">#</TableCell>
                         <TableCell>Name</TableCell>
                         <TableCell>Email</TableCell>
                         <TableCell>Permission</TableCell>
@@ -130,7 +130,7 @@ function User() {
                       ) : (
                         data?.data?.result?.map((user, index) => (
                           <TableRow hover key={user.id}>
-                            <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
+                            <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                             <TableCell>
                               <Box
                                 sx={{
