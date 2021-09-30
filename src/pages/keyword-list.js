@@ -27,7 +27,6 @@ import {
   Menu,
   TextField,
 } from '@material-ui/core'
-import axios from 'axios'
 import {useQuery} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
 import {blueGrey, green, indigo, lightGreen, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
@@ -35,10 +34,12 @@ import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
+import {useClient} from 'useClient'
 
 function KeywordList() {
   const history = useHistory()
   const theme = useTheme()
+  const client = useClient()
   const {state} = useLocation()
   const {subProjectId: KeywordId, projectId} = useParams()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -87,40 +88,23 @@ function KeywordList() {
     setPage(0)
   }
 
-  async function fetchTable(page = 0, Sorting, KeywordId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getKeywords/${KeywordId}?limit=${rowsPerPage}&page=${
-      page + 1
-    }${Sorting}`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
-
   const {data, isFetching} = useQuery(
     ['keyWordList', page, rowsPerPage, Sorting, KeywordId],
-    () => fetchTable(page, Sorting, KeywordId),
+    () => client(`getKeywords/${KeywordId}?limit=${rowsPerPage}&page=${page + 1}${Sorting}`),
     {keepPreviousData: true}
   )
-
-  async function fetchDdkeyword() {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getSubProjectsList/${projectId}?limit=${
-      state?.rowtoCall || getkeywordRowtocall
-    }`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
 
   const {
     data: DdlistKeywordData,
     isFetching: DdlistKeywordisFetching,
     isLoading: DdlistKeywordisLoading,
-  } = useQuery(['DdlistKeyword'], () => fetchDdkeyword(), {
-    keepPreviousData: true,
-  })
+  } = useQuery(['DdlistKeyword'], () =>
+    client(`getSubProjectsList/${projectId}?limit=${state?.rowtoCall || getkeywordRowtocall}`)
+  )
 
   async function fetchCSV(KeywordId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportKeywordsToCsv/${KeywordId}`
-    const {data} = await axios.get(fetchURL)
-    return data
+    const fetchURL = `exportKeywordsToCsv/${KeywordId}`
+    client(fetchURL)
   }
 
   const {data: csvData, isLoading: csvisLoading} = useQuery(['exportKeywordsToCsv', KeywordId], () =>
@@ -128,9 +112,8 @@ function KeywordList() {
   )
 
   async function fetchGooglesheet(KeywordId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportKeywordsToGoogleSheet/${KeywordId}`
-    const {data} = await axios.get(fetchURL)
-    return data
+    const fetchURL = `exportKeywordsToGoogleSheet/${KeywordId}`
+    client(fetchURL)
   }
 
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
@@ -138,15 +121,9 @@ function KeywordList() {
     () => fetchGooglesheet(KeywordId)
   )
 
-  async function fetchApiKeyword(KeywordId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/keywordDashboard/${KeywordId}`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
-
   const {data: keywordAnalytics, isFetching: analyticsKeywordisFetching} = useQuery(
     ['analyticskeywordDashboard', KeywordId],
-    () => fetchApiKeyword(KeywordId)
+    () => client(`/keywordDashboard/${KeywordId}`)
   )
   const analyticsData = keywordAnalytics?.data
 

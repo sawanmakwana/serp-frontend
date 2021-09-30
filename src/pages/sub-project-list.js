@@ -171,13 +171,13 @@ function SubProjectList() {
       color: lime,
     },
     {
-      name: 'Improved Count',
+      name: 'Improved',
       analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.improvedCount,
       color: lightGreen,
     },
     {
-      name: 'Declined Count',
+      name: 'Declined',
       analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.declinedCount,
       color: blueGrey,
