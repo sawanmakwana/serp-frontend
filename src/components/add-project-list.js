@@ -68,22 +68,15 @@ function AddProjectListModal({open, setOpen, editId, setEditId, data}) {
 
   const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
     data =>
-      client(`addProject`, {
-        data,
-        method: 'post',
-      }),
-    // !editId
-    //   ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, mutatedData)
-    //   : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, mutatedData),
-    // !editId
-    // ? client(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, {
-    //     method: 'post',
-    //     mutatedData,
-    //   })
-    //   : client(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, {
-    //       mutatedData,
-    //       method: 'put',
-    //     }),
+      !editId
+        ? client(`addProject`, {
+            data,
+            method: 'post',
+          })
+        : client(`editProject/${editId}`, {
+            data,
+            method: 'put',
+          }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('reposData')

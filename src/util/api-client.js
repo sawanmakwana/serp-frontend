@@ -23,7 +23,7 @@ async function client(endpoint, {apiURL = baseUrl, data, token, headers: customH
   }
 
   return fetch(`${apiURL}/${endpoint}`, config).then(async response => {
-    console.log(response)
+    // console.log(response)
     if (response.status === 401) {
       await logout()
       // console.log('loguot')
