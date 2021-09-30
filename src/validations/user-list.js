@@ -18,7 +18,7 @@ export const UserList = Joi.object({
       'string.empty': `Email cannot be an empty field`,
       'string.email': `Enter valid Email Id`,
     }),
-  assignProject: Joi.array().min(1).messages({
+  projectAccess: Joi.array().min(1).messages({
     'array.empty': `Assign Project cannot be an empty field`,
     'any.required': `Assign Project is a required field`,
     'array.min': `Assign Project should have a minimum length of 1`,

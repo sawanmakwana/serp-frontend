@@ -91,7 +91,7 @@ function User() {
             }}
           >
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-              Users (2)
+              Users <span> ({data?.data?.total})</span>
             </Typography>
             <Button color="primary" variant="contained" onClick={() => setAddUserModal(true)}>
               Add user
@@ -103,7 +103,7 @@ function User() {
             <Card>
               <Toolbar>
                 <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-                  Current page <span> (1)</span>
+                  Current page <span> ({page + 1})</span>
                 </Typography>
               </Toolbar>
               <Divider />
@@ -116,7 +116,6 @@ function User() {
                         <TableCell>Name</TableCell>
                         <TableCell>Email</TableCell>
                         <TableCell>Permission</TableCell>
-                        <TableCell>assignProject</TableCell>
                         <TableCell>Action</TableCell>
                       </TableRow>
                     </TableHead>
@@ -148,7 +147,6 @@ function User() {
                             </TableCell>
                             <TableCell>{user.email}</TableCell>
                             <TableCell>{user.permissionLevel}</TableCell>
-                            <TableCell>{user.assignProject}</TableCell>
                             <TableCell>
                               <>
                                 <Button

@@ -76,7 +76,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
       lastName: '',
       email: '',
       permissionLevel: '',
-      assignProject: [],
+      projectAccess: [],
     },
   })
 
@@ -104,9 +104,9 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
             data,
             method: 'post',
           })
-        : client(`editCreateUser/${editId}`, {
+        : client(`editUser/${editId}`, {
             data,
-            method: 'post',
+            method: 'put',
           }),
     {
       onSuccess: () => {
@@ -225,7 +225,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
 
           <Controller
             control={control}
-            name="assignProject"
+            name="projectAccess"
             render={({onChange, onBlur, value}) => (
               <FormControl className="multi-select">
                 <InputLabel style={{left: 15, top: -4}}>Assign Project</InputLabel>
@@ -235,7 +235,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
                   value={value}
                   onChange={e => onChange(e.target.value)}
                   input={<OutlinedInput label="Assign Project" />}
-                  error={errors.assignProject}
+                  error={errors.projectAccess}
                   disabled={isLoading}
                   renderValue={selected =>
                     projectlistData?.data
@@ -244,7 +244,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
                       .join(', ')
                   }
                   MenuProps={MenuProps}
-                  helperText={errors.assignProject && errors.assignProject.message}
+                  helperText={errors.projectAccess && errors.projectAccess.message}
                 >
                   {projectlistData?.data?.map(user => (
                     <MenuItem key={user._id} value={user._id}>
@@ -252,7 +252,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
                     </MenuItem>
                   ))}
                 </Select>
-                {errors.assignProject && <p className="p-error"> {errors.assignProject.message}</p>}
+                {errors.projectAccess && <p className="p-error"> {errors.projectAccess.message}</p>}
               </FormControl>
             )}
           />
