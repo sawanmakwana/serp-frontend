@@ -51,3 +51,14 @@ export const keywordFrequency = [
     label: 'Monthly',
   },
 ]
+
+export const permissionLevelOP = [
+  {
+    value: 2,
+    label: 'User',
+  },
+  {
+    value: 3,
+    label: 'client (Only can view)',
+  },
+]

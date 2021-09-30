@@ -17,10 +17,15 @@ import {
   Toolbar,
   Divider,
   LinearProgress,
+  Menu,
+  MenuItem,
 } from '@material-ui/core'
 import {useState} from 'react'
-import {useQuery, useQueryClient} from 'react-query'
+import {MoreVertical} from 'react-feather'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
+import {DeleteModal} from 'components/delete-modal'
+import {AddUser} from 'components/add-user'
 
 function User() {
   const queryClient = useQueryClient()
@@ -28,7 +33,12 @@ function User() {
 
   const [page, setPage] = useState(0)
   const getRows = JSON.parse(window.localStorage.getItem('userListRow'))
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [addUserModal, setAddUserModal] = useState(false)
+  const [editId, setEditId] = useState(null)
+  const [deleteModal, setDeleteModal] = useState(false)
+
   // const [Sorting, setSorting] = useState('')
 
   const handleChangePage = (event, newPage) => {
@@ -42,10 +52,25 @@ function User() {
   }
 
   const {data, isFetching} = useQuery(
-    ['reposData', page, rowsPerPage],
+    ['userList', page, rowsPerPage],
     () => client(`getUserList?limit=${rowsPerPage}&page=${page + 1}`),
     {
       keepPreviousData: true,
+    }
+  )
+
+  const {mutate: deleteUser, isLoading: deleteIsloading} = useMutation(
+    mutateData =>
+      client(`deleteUser/${mutateData}`, {
+        mutateData,
+        method: 'delete',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('userList')
+        setDeleteModal(false)
+        setEditId(null)
+      },
     }
   )
 
@@ -68,7 +93,7 @@ function User() {
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Users (2)
             </Typography>
-            <Button color="primary" variant="contained">
+            <Button color="primary" variant="contained" onClick={() => setAddUserModal(true)}>
               Add user
             </Button>
           </Box>
@@ -91,13 +116,14 @@ function User() {
                         <TableCell>Name</TableCell>
                         <TableCell>Email</TableCell>
                         <TableCell>Permission</TableCell>
-                        <TableCell>Registration date</TableCell>
+                        <TableCell>assignProject</TableCell>
+                        <TableCell>Action</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {data?.data?.result?.length === 0 ? (
                         <TableRow hover>
-                          <TableCell className="emptyTable" colSpan="4">
+                          <TableCell className="emptyTable" colSpan="6">
                             No Project Available
                           </TableCell>
                         </TableRow>
@@ -119,9 +145,57 @@ function User() {
                               </Box>
                             </TableCell>
                             <TableCell>{user.email}</TableCell>
-
                             <TableCell>{user.permissionLevel}</TableCell>
-                            <TableCell>11</TableCell>
+                            <TableCell>{user.assignProject}</TableCell>
+                            <TableCell>
+                              <>
+                                <Button
+                                  className="selectTablebtn"
+                                  onClick={e => {
+                                    setAnchorEl(e.currentTarget)
+                                    setEditId(user._id)
+                                    e.stopPropagation()
+                                  }}
+                                >
+                                  <MoreVertical />
+                                </Button>
+                                <Menu
+                                  anchorEl={anchorEl}
+                                  keepMounted
+                                  open={anchorEl}
+                                  onClose={e => {
+                                    setAnchorEl(null)
+                                    setEditId(null)
+                                    e.stopPropagation()
+                                  }}
+                                  PaperProps={{
+                                    style: {
+                                      maxHeight: 220,
+                                      width: 120,
+                                    },
+                                  }}
+                                >
+                                  <MenuItem
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      setAddUserModal(true)
+                                      setAnchorEl(null)
+                                    }}
+                                  >
+                                    Edit
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      setDeleteModal(true)
+                                      setAnchorEl(null)
+                                    }}
+                                  >
+                                    Delete
+                                  </MenuItem>
+                                </Menu>
+                              </>
+                            </TableCell>
                           </TableRow>
                         ))
                       )}
@@ -140,6 +214,28 @@ function User() {
                 />
               </CardContent>
             </Card>
+            {deleteModal && (
+              <DeleteModal
+                deleteProject={() => deleteUser(editId)}
+                deleteModal={deleteModal}
+                deleteIsloading={deleteIsloading}
+                modalFrom="User"
+                onClose={() => {
+                  setDeleteModal(false)
+                  setEditId(null)
+                }}
+              />
+            )}
+
+            {addUserModal && (
+              <AddUser
+                data={data}
+                editId={editId}
+                setEditId={setEditId}
+                open={addUserModal}
+                setOpen={setAddUserModal}
+              />
+            )}
           </Paper>
         </Box>
       </Container>
