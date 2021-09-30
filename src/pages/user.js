@@ -11,6 +11,11 @@ import {
   TableRow,
   Typography,
   Avatar,
+  TableContainer,
+  CardContent,
+  Paper,
+  Toolbar,
+  Divider,
 } from '@material-ui/core'
 
 const customers = [
@@ -56,49 +61,57 @@ function User() {
           </Box>
         </Box>
         <Box sx={{pt: 3}}>
-          <Card>
-            <Box>
-              {/* <Box sx={{minWidth: 1050}}> */}
-              {/* <PerfectScrollbar> */}
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>#</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Phone</TableCell>
-                    <TableCell>Registration date</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {customers.map(customer => (
-                    <TableRow hover key={customer.id}>
-                      <TableCell>{customer.id}</TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            alignItems: 'center',
-                            display: 'flex',
-                          }}
-                        >
-                          <Avatar style={{marginRight: 16}}>T</Avatar>
-                          <Typography color="textPrimary" variant="body1">
-                            {customer.name}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell>{customer.email}</TableCell>
+          <Paper>
+            <Card>
+              <Toolbar>
+                <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+                  Current page <span> (1)</span>
+                </Typography>
+              </Toolbar>
+              <Divider />
+              <CardContent style={{padding: '0'}}>
+                <TableContainer>
+                  <Table size="medium" className="selectTable">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>#</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Phone</TableCell>
+                        <TableCell>Registration date</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {customers.map(customer => (
+                        <TableRow hover key={customer.id}>
+                          <TableCell>{customer.id}</TableCell>
+                          <TableCell>
+                            <Box
+                              sx={{
+                                alignItems: 'center',
+                                display: 'flex',
+                              }}
+                            >
+                              <Avatar style={{marginRight: 16}}>T</Avatar>
+                              <Typography color="textPrimary" variant="body1">
+                                {customer.name}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell>{customer.email}</TableCell>
 
-                      <TableCell>{customer.phone}</TableCell>
-                      <TableCell>11</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {/* </PerfectScrollbar> */}
-            </Box>
-            <TablePagination component="div" count={customers.length} rowsPerPageOptions={[5, 10, 25]} />
-          </Card>
+                          <TableCell>{customer.phone}</TableCell>
+                          <TableCell>11</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+
+                <TablePagination component="div" count={customers.length} rowsPerPageOptions={[5, 10, 25]} />
+              </CardContent>
+            </Card>
+          </Paper>
         </Box>
       </Container>
     </Box>
