@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import {Avatar, Box, Button, Divider, Drawer, Hidden, List, ListItem, Typography} from '@material-ui/core'
 import theme from 'theme'
 import {Lock} from 'react-feather'
+import {getUserAccess} from 'util/app-utill'
 import {NavItem} from './nav-item'
 import {Logout} from './logout-modal'
 import {sidbarItem} from '../constants/sidebar-item'
@@ -14,7 +15,7 @@ const uservalue = JSON.parse(userlocal)
 
 const user = {
   name: uservalue?.email,
-  jobTitle: uservalue?.permissionLevel === 1 ? 'Admin' : '-',
+  jobTitle: getUserAccess(uservalue?.permissionLevel),
 }
 
 const DashboardSidebar = ({onMobileClose, openMobile}) => {
