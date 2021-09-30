@@ -16,26 +16,39 @@ import {
   Paper,
   Toolbar,
   Divider,
+  LinearProgress,
 } from '@material-ui/core'
-
-const customers = [
-  {
-    id: 1,
-    createdAt: 1555016400000,
-    email: 'trupesh789@gmail.com',
-    name: 'Trupesh Chapaneri',
-    phone: '123123123',
-  },
-  {
-    id: 2,
-    createdAt: 1555016400000,
-    email: 'trupesh789@gmail.com',
-    name: 'Trupesh Chapaneri',
-    phone: '123123123',
-  },
-]
+import {useState} from 'react'
+import {useQuery, useQueryClient} from 'react-query'
+import {useClient} from 'useClient'
 
 function User() {
+  const queryClient = useQueryClient()
+  const client = useClient()
+
+  const [page, setPage] = useState(0)
+  const getRows = JSON.parse(window.localStorage.getItem('userListRow'))
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
+  // const [Sorting, setSorting] = useState('')
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value))
+    window.localStorage.setItem('userListRow', event.target.value)
+    setPage(0)
+  }
+
+  const {data, isFetching} = useQuery(
+    ['reposData', page, rowsPerPage],
+    () => client(`getUserList?limit=${rowsPerPage}&page=${page + 1}`),
+    {
+      keepPreviousData: true,
+    }
+  )
+
   return (
     <Box
       sx={{
@@ -77,38 +90,54 @@ function User() {
                         <TableCell>#</TableCell>
                         <TableCell>Name</TableCell>
                         <TableCell>Email</TableCell>
-                        <TableCell>Phone</TableCell>
+                        <TableCell>Permission</TableCell>
                         <TableCell>Registration date</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {customers.map(customer => (
-                        <TableRow hover key={customer.id}>
-                          <TableCell>{customer.id}</TableCell>
-                          <TableCell>
-                            <Box
-                              sx={{
-                                alignItems: 'center',
-                                display: 'flex',
-                              }}
-                            >
-                              <Avatar style={{marginRight: 16}}>T</Avatar>
-                              <Typography color="textPrimary" variant="body1">
-                                {customer.name}
-                              </Typography>
-                            </Box>
+                      {data?.data?.result?.length === 0 ? (
+                        <TableRow hover>
+                          <TableCell className="emptyTable" colSpan="4">
+                            No Project Available
                           </TableCell>
-                          <TableCell>{customer.email}</TableCell>
-
-                          <TableCell>{customer.phone}</TableCell>
-                          <TableCell>11</TableCell>
                         </TableRow>
-                      ))}
+                      ) : (
+                        data?.data?.result?.map((user, index) => (
+                          <TableRow hover key={user.id}>
+                            <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
+                            <TableCell>
+                              <Box
+                                sx={{
+                                  alignItems: 'center',
+                                  display: 'flex',
+                                }}
+                              >
+                                <Avatar style={{marginRight: 16}}>T</Avatar>
+                                <Typography color="textPrimary" variant="body1">
+                                  {`${user.firstName}${' '}${user.lastName}`}
+                                </Typography>
+                              </Box>
+                            </TableCell>
+                            <TableCell>{user.email}</TableCell>
+
+                            <TableCell>{user.permissionLevel}</TableCell>
+                            <TableCell>11</TableCell>
+                          </TableRow>
+                        ))
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>
-
-                <TablePagination component="div" count={customers.length} rowsPerPageOptions={[5, 10, 25]} />
+                {isFetching && <LinearProgress />}
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 50, 100, 500]}
+                  component="div"
+                  count={data?.data?.total}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
               </CardContent>
             </Card>
           </Paper>
