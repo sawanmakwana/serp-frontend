@@ -9,4 +9,8 @@ function getUser() {
   return window.localStorage.getItem(userKey)
 }
 
-export {localStorageKey, userKey, getToken, getUser}
+function logout() {
+  window.localStorage.clear()
+}
+
+export {localStorageKey, userKey, getToken, getUser, logout}

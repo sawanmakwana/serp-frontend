@@ -1,8 +1,8 @@
-// import {logout} from 'auth/auth-utils'
+import {logout} from 'auth/auth-utils'
 
-// const baseUrl = `${process.env.REACT_APP_PLATFORM_ENDPOINT}`
+const baseUrl = `${process.env.REACT_APP_PLATFORM_ENDPOINT}`
 
-async function client(endpoint, {apiURL, data, token, headers: customHeaders, ...customConfig} = {}) {
+async function client(endpoint, {apiURL = baseUrl, data, token, headers: customHeaders, ...customConfig} = {}) {
   const headers = {}
   if (token) {
     headers.Authorization = `Bearer ${token}`
@@ -22,10 +22,11 @@ async function client(endpoint, {apiURL, data, token, headers: customHeaders, ..
     config.body = JSON.stringify(data)
   }
 
-  console.log(config)
-  return fetch(`${endpoint}`, config).then(async response => {
+  return fetch(`${apiURL}/${endpoint}`, config).then(async response => {
+    console.log(response)
     if (response.status === 401) {
-      // await logout()
+      await logout()
+      // console.log('loguot')
       // refresh the page for them
       window.location.assign(window.location)
       // eslint-disable-next-line prefer-promise-reject-errors
@@ -33,7 +34,8 @@ async function client(endpoint, {apiURL, data, token, headers: customHeaders, ..
     }
     const responseData = await response.json()
     if (response.ok) {
-      return responseData.payload
+      // console.log(responseData)
+      return responseData
     }
     return Promise.reject(responseData)
   })

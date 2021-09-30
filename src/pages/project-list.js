@@ -60,33 +60,16 @@ function PorjectList() {
     setPage(0)
   }
 
-  async function fetchTable(page = 0, Sorting) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/projectList?page=${
-      page + 1
-    }&limit=${rowsPerPage}${Sorting}`
-    client(fetchURL)
-  }
-
-  const {data, isFetching} = useQuery(['reposData', page, rowsPerPage, Sorting], () => fetchTable(page, Sorting), {
-    keepPreviousData: true,
-  })
-
-  // const {mutate: deleteProject, isLoading: deleteIsloading} = useMutation(
-  //   mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`),
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries('reposData')
-  //       queryClient.invalidateQueries('csvProjectlist')
-  //       queryClient.invalidateQueries('exportProjectToGoogleSheet')
-  //       setDeleteModal(false)
-  //       setEditId(null)
-  //     },
-  //   }
-  // )
+  const {data, isFetching} = useQuery(
+    ['reposData', page, rowsPerPage, Sorting],
+    () => client(`projectList?page=${page + 1}&limit=${rowsPerPage}${Sorting}`),
+    {
+      keepPreviousData: true,
+    }
+  )
 
   const {mutate: deleteProject, isLoading: deleteIsloading} = useMutation(
-    mutateData =>
-      client(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteProject/${mutateData}`, {mutateData, method: 'delete'}),
+    mutateData => client(`deleteProject/${mutateData}`, {mutateData, method: 'delete'}),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('reposData')
@@ -99,14 +82,14 @@ function PorjectList() {
   )
 
   async function fetchCSV() {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToCsv`
+    const fetchURL = `exportProjectToCsv`
     client(fetchURL)
   }
 
   const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectlist'], () => fetchCSV())
 
   async function fetchGooglesheet() {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToGoogleSheet`
+    const fetchURL = `exportProjectToGoogleSheet`
     client(fetchURL)
   }
 

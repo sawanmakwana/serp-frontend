@@ -20,6 +20,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
+import {useClient} from 'useClient'
 import {currencies} from '../constants/constants'
 import {ProjectList} from '../validations/project'
 
@@ -46,6 +47,7 @@ function AddProjectListModal({open, setOpen, editId, setEditId, data}) {
       },
     },
   }))
+  const client = useClient()
   const classes = useStyles()
   const classesFrom = useStylesForm()
 
@@ -65,10 +67,23 @@ function AddProjectListModal({open, setOpen, editId, setEditId, data}) {
   const queryClient = useQueryClient()
 
   const {isLoading, isError, error, isSuccess, mutate, ...rest} = useMutation(
-    mutatedData =>
-      !editId
-        ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, mutatedData)
-        : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, mutatedData),
+    data =>
+      client(`addProject`, {
+        data,
+        method: 'post',
+      }),
+    // !editId
+    //   ? axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, mutatedData)
+    //   : axios.put(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, mutatedData),
+    // !editId
+    // ? client(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/addProject`, {
+    //     method: 'post',
+    //     mutatedData,
+    //   })
+    //   : client(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/editProject/${editId}`, {
+    //       mutatedData,
+    //       method: 'put',
+    //     }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('reposData')
