@@ -27,7 +27,6 @@ import {
   Zoom,
   Tooltip,
 } from '@material-ui/core'
-import axios from 'axios'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
@@ -38,9 +37,11 @@ import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getFormetedData, getKeywordFrequency, getLoaction} from 'util/app-utill'
 import {ArrowBack, Cached} from '@material-ui/icons'
+import {useClient} from 'useClient'
 
-function Project() {
+function SubProjectList() {
   const queryClient = useQueryClient()
+  const client = useClient()
   const history = useHistory()
   const {projectId: DomainId} = useParams()
   const getRows = JSON.parse(window.localStorage.getItem('subprojectlistRow'))
@@ -70,44 +71,28 @@ function Project() {
     setPage(0)
   }
 
-  async function fetchTable(page = 0, Sorting, DomainId) {
-    const fetchURL = `${
-      process.env.REACT_APP_PLATFORM_ENDPOINT
-    }/getSubProjectsList/${DomainId}?limit=${rowsPerPage}&page=${page + 1}${Sorting}`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
-
   const {isLoading, data, isFetching} = useQuery(
     ['singalProject', page, rowsPerPage, Sorting, DomainId],
-    () => fetchTable(page, Sorting, DomainId),
+    () => client(`getSubProjectsList/${DomainId}?limit=${rowsPerPage}&page=${page + 1}${Sorting}`),
     {keepPreviousData: true}
   )
-
-  async function fetchprojectlistAPI() {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/getProjectsListDrpDwn`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
 
   const {
     data: projectlistData,
     isFetching: projectlistIsFetching,
     isLoading: projectlistIsLoading,
-  } = useQuery(['DdList'], () => fetchprojectlistAPI())
+  } = useQuery(['DdList'], () => client(`getProjectsListDrpDwn`))
 
   async function fetchCSV(DomainId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToCsv/${DomainId}`
-    const {data} = await axios.get(fetchURL)
-    return data
+    const fetchURL = `exportSubProjectToCsv/${DomainId}`
+    client(fetchURL)
   }
 
   const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectSublist', DomainId], () => fetchCSV(DomainId))
 
   async function fetchGooglesheet(DomainId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToGoogleSheet/${DomainId}`
-    const {data} = await axios.get(fetchURL)
-    return data
+    const fetchURL = `exportSubProjectToGoogleSheet/${DomainId}`
+    client(fetchURL)
   }
 
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
@@ -119,29 +104,20 @@ function Project() {
     mutate: deleteProject,
     isLoading: deleteIsloading,
     isFetching: singalProjectlistIsFetching,
-  } = useMutation(
-    mutateData => axios.delete(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/deleteSubProject/${mutateData}`),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('singalProject')
-        queryClient.invalidateQueries('analyticsSingalProject')
-        queryClient.invalidateQueries('csvProjectSublist')
-        queryClient.invalidateQueries('exportSubProjectToGoogleSheet')
-        setDeleteModal(false)
-        setEditId(null)
-      },
-    }
-  )
-
-  async function fetchApiSingalProject(DomainId) {
-    const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/subProjectDashboard/${DomainId}`
-    const {data} = await axios.get(fetchURL)
-    return data
-  }
+  } = useMutation(mutateData => client(`deleteSubProject/${mutateData}`, {mutateData, method: 'delete'}), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('singalProject')
+      queryClient.invalidateQueries('analyticsSingalProject')
+      queryClient.invalidateQueries('csvProjectSublist')
+      queryClient.invalidateQueries('exportSubProjectToGoogleSheet')
+      setDeleteModal(false)
+      setEditId(null)
+    },
+  })
 
   const {data: singalAna, isFetching: analyticsSingalProjectisFetching} = useQuery(
     ['analyticsSingalProject', DomainId],
-    () => fetchApiSingalProject(DomainId)
+    () => client(`subProjectDashboard/${DomainId}`)
   )
   const analyticsData = singalAna?.data
 
@@ -517,4 +493,4 @@ function Project() {
   )
 }
 
-export {Project}
+export {SubProjectList}

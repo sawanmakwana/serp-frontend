@@ -2,17 +2,12 @@ import React from 'react'
 import {Box, Grid, Typography} from '@material-ui/core'
 import AnalyticCard from 'components/analytic-card'
 import {blueGrey, green, indigo, lightGreen, orange, red, teal} from '@material-ui/core/colors'
-import axios from 'axios'
 import {useQuery} from 'react-query'
-
-async function fetchApi() {
-  const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/projectDashboard`
-  const {data} = await axios.get(fetchURL)
-  return data
-}
+import {useClient} from 'useClient'
 
 function Dashbord() {
-  const {data, isFetching} = useQuery(['analyticsDashboard'], () => fetchApi())
+  const client = useClient()
+  const {data, isFetching} = useQuery(['analyticsDashboard'], () => client(`projectDashboard`))
   const analyticsData = data?.data
 
   const analyticCardList = [

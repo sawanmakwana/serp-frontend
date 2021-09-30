@@ -1,6 +1,6 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {PorjectList} from 'pages/project-list'
-import {Project} from 'pages/project'
+import {SubProjectList} from 'pages/sub-project-list'
 import {DocumentTitle} from 'util/document-title'
 import {Dashbord} from 'pages/dashbord'
 import {KeywordList} from 'pages/keyword-list'
@@ -21,7 +21,7 @@ function AppRoutespath() {
       </Route>
       <Route exact path="/project/:projectId">
         <DocumentTitle title="Sub Project" />
-        <Project />
+        <SubProjectList />
       </Route>
       <Route exact path="/project/:projectId/keyword/:subProjectId">
         <DocumentTitle title="Project Keyword" />
