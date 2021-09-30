@@ -138,7 +138,9 @@ function User() {
                                   display: 'flex',
                                 }}
                               >
-                                <Avatar style={{marginRight: 16}}>T</Avatar>
+                                <Avatar style={{marginRight: 16}}>
+                                  {user.firstName.toString().charAt(0).toUpperCase()}
+                                </Avatar>
                                 <Typography color="textPrimary" variant="body1">
                                   {`${user.firstName}${' '}${user.lastName}`}
                                 </Typography>
