@@ -203,10 +203,8 @@
   color: rgb(86, 100, 210) !important;
 }
 .avatar-user {
-  background: rgb(101 118 255 / 98%) !important;
-  color: rgba(60, 163, 247, 0.918) !important;
+  background: #FF5722 !important;
 }
 .avatar-client {
-  background: rgb(101 38 255 / 18%) !important;
-  color: rgb(111, 210, 86) !important;
+  background: #4CAF50 !important;
 }

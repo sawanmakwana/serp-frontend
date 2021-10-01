@@ -26,7 +26,7 @@ import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
 import {DeleteModal} from 'components/delete-modal'
 import {AddUser} from 'components/add-user'
-import {getUserAvtar} from 'util/app-utill'
+import {getUserAccess, getUserAvtar} from 'util/app-utill'
 
 function User() {
   const queryClient = useQueryClient()
@@ -147,7 +147,7 @@ function User() {
                               </Box>
                             </TableCell>
                             <TableCell>{user.email}</TableCell>
-                            <TableCell>{user.permissionLevel}</TableCell>
+                            <TableCell>{getUserAccess(user.permissionLevel)}</TableCell>
                             <TableCell>
                               <>
                                 <Button
