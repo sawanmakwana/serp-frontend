@@ -142,7 +142,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           variant="temporary"
           PaperProps={{
             style: {
-              width: 256,
+              width: 236,
             },
           }}
         >
@@ -156,7 +156,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           variant="persistent"
           PaperProps={{
             style: {
-              width: 256,
+              width: 236,
               top: 64,
               height: 'calc(100% - 64px)',
             },
