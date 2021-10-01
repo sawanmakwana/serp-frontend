@@ -21,6 +21,12 @@ export const getUserAccess = Access => {
   return 'Access not founds'
 }
 
+export const getUserAvtar = Access => {
+  if (Access === 1) return 'avatar-admin'
+  if (Access === 2) return 'avatar-user'
+  if (Access === 3) return 'avatar-client'
+}
+
 export const getDifference = (prevRank, currentRank, type = '') => {
   // let diff
   switch (type) {

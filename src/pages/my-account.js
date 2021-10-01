@@ -19,7 +19,7 @@ import {
 import {Controller, useForm} from 'react-hook-form'
 import {useMutation, useQuery} from 'react-query'
 import {useClient} from 'useClient'
-import {getUserAccess} from 'util/app-utill'
+import {getUserAccess, getUserAvtar} from 'util/app-utill'
 import {MyAcc} from 'validations/user-list'
 import {toast} from 'react-toastify'
 
@@ -93,10 +93,12 @@ function MyAccount() {
                 }}
               >
                 <Avatar
+                  className={getUserAvtar(data?.data?.permissionLevel)}
                   style={{
                     height: 100,
                     width: 100,
                     marginBottom: 14,
+                    fontSize: 28,
                   }}
                 >
                   {isLoading ? (

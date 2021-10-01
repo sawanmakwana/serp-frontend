@@ -26,6 +26,7 @@ import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
 import {DeleteModal} from 'components/delete-modal'
 import {AddUser} from 'components/add-user'
+import {getUserAvtar} from 'util/app-utill'
 
 function User() {
   const queryClient = useQueryClient()
@@ -137,7 +138,7 @@ function User() {
                                   display: 'flex',
                                 }}
                               >
-                                <Avatar style={{marginRight: 16}}>
+                                <Avatar className={getUserAvtar(user?.permissionLevel)} style={{marginRight: 16}}>
                                   {user.firstName.toString().charAt(0).toUpperCase()}
                                 </Avatar>
                                 <Typography color="textPrimary" variant="body1">

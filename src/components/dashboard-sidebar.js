@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import {Avatar, Box, Button, Divider, Drawer, Hidden, List, ListItem, Typography} from '@material-ui/core'
 import theme from 'theme'
 import {Lock} from 'react-feather'
-import {getUserAccess} from 'util/app-utill'
+import {getUserAccess, getUserAvtar} from 'util/app-utill'
 import {NavItem} from './nav-item'
 import {Logout} from './logout-modal'
 import {sidbarItem} from '../constants/sidebar-item'
@@ -48,14 +48,13 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
         <Avatar
           component={RouterLink}
           to="/my-account"
-          alt="Lol"
+          alt="-"
+          className={getUserAvtar(uservalue?.permissionLevel)}
           style={{
             cursor: 'pointer',
             width: 64,
             height: 64,
             marginBottom: 8,
-            background: 'rgb(101 118 255 / 28%)',
-            color: 'rgb(86, 100, 210)',
           }}
         >
           {uservalue?.email.toString().charAt(0).toUpperCase()}

@@ -198,3 +198,15 @@
 .multi-select svg {
   right: 6px !important;
 }
+.avatar-admin {
+  background: rgb(101 118 255 / 28%) !important;
+  color: rgb(86, 100, 210) !important;
+}
+.avatar-user {
+  background: rgb(101 118 255 / 98%) !important;
+  color: rgba(60, 163, 247, 0.918) !important;
+}
+.avatar-client {
+  background: rgb(101 38 255 / 18%) !important;
+  color: rgb(111, 210, 86) !important;
+}
