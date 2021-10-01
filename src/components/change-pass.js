@@ -17,7 +17,6 @@ import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient} from 'react-query'
 
-import {useClient} from 'useClient'
 import {getToken} from 'auth/auth-utils'
 import axios from 'axios'
 import {changePassword} from '../validations/user'
@@ -49,7 +48,7 @@ function ChangePass({open, setOpen}) {
   const classes = useStyles()
   const classesFrom = useStylesForm()
 
-  const {handleSubmit, errors, control, getValues} = useForm({
+  const {handleSubmit, errors, control} = useForm({
     mode: 'onTouched',
     shouldFocusError: true,
     reValidateMode: 'onChange',
