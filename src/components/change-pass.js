@@ -1,13 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React from 'react'
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  FormHelperText,
   IconButton,
-  MenuItem,
   TextField,
   Typography,
   useMediaQuery,
@@ -18,13 +15,12 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles, useTheme} from '@material-ui/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
-import {useMutation, useQuery, useQueryClient} from 'react-query'
-import axios from 'axios'
-import {useClient} from 'useClient'
-import {currencies} from '../constants/constants'
-import {ProjectList} from '../validations/project'
+import {useMutation, useQueryClient} from 'react-query'
 
-function ChangePass({open, setOpen, editId, setEditId, data}) {
+import {useClient} from 'useClient'
+import {changePassword} from '../validations/user'
+
+function ChangePass({open, setOpen}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -51,19 +47,21 @@ function ChangePass({open, setOpen, editId, setEditId, data}) {
   const classes = useStyles()
   const classesFrom = useStylesForm()
 
-  const {handleSubmit, errors, control, reset} = useForm({
+  const {handleSubmit, errors, control, getValues} = useForm({
     mode: 'onTouched',
     shouldFocusError: true,
     reValidateMode: 'onChange',
     submitFocusError: true,
     shouldUnregister: false,
-    // resolver: joiResolver(ProjectList),
+    resolver: joiResolver(changePassword),
     defaultValues: {
       currentPassword: '',
       newPassword: '',
       confirmPassword: '',
     },
   })
+
+  // console.log(getValues('newPassword'))
 
   const queryClient = useQueryClient()
 
@@ -73,16 +71,18 @@ function ChangePass({open, setOpen, editId, setEditId, data}) {
         data,
         method: 'post',
       }),
-
     {
       onSuccess: () => {
         queryClient.invalidateQueries('reposData')
-        // queryClient.invalidateQueries('csvProjectlist')
-        // queryClient.invalidateQueries('exportProjectToGoogleSheet')
         setOpen(false)
+      },
+      onError: () => {
+        console.log('Error')
       },
     }
   )
+
+  // console.log(isError)
 
   const submitForm = submitdata => mutate(submitdata)
 
