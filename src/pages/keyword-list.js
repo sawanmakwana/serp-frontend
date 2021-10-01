@@ -135,7 +135,7 @@ function KeywordList() {
       color: red,
     },
     {
-      name: 'Top 1',
+      name: 'Top Spot',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.topSpot,
       color: green,
@@ -177,13 +177,13 @@ function KeywordList() {
       color: lime,
     },
     {
-      name: 'Improved Count',
+      name: 'Improved',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.improvedCount,
       color: lightGreen,
     },
     {
-      name: 'Declined Count',
+      name: 'Declined',
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.declinedCount,
       color: blueGrey,

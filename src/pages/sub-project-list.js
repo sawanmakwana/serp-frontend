@@ -129,7 +129,7 @@ function SubProjectList() {
       color: red,
     },
     {
-      name: 'Top 1',
+      name: 'Top Spot',
       analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.topSpot,
       color: green,

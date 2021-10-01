@@ -18,7 +18,7 @@ function Dashbord() {
       color: red,
     },
     {
-      name: 'Top 1',
+      name: 'Top Spot',
       analyticsDataFetching: isFetching,
       value: analyticsData?.topSpot,
       color: green,
@@ -42,13 +42,13 @@ function Dashbord() {
       color: teal,
     },
     {
-      name: 'Improved Count',
+      name: 'Improved',
       analyticsDataFetching: isFetching,
       value: analyticsData?.improvedCount,
       color: lightGreen,
     },
     {
-      name: 'Declined Count',
+      name: 'Declined',
       analyticsDataFetching: isFetching,
       value: analyticsData?.declinedCount,
       color: blueGrey,
