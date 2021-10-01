@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {joiResolver} from '@hookform/resolvers'
 import {
   Box,
@@ -22,8 +22,11 @@ import {useClient} from 'useClient'
 import {getUserAccess, getUserAvtar} from 'util/app-utill'
 import {MyAcc} from 'validations/user-list'
 import {toast} from 'react-toastify'
+import {ChangePass} from 'components/change-pass'
 
 function MyAccount() {
+  const [changepass, setChangePass] = useState(false)
+
   const userlocal = window.localStorage.getItem('__user_data__')
   const uservalue = JSON.parse(userlocal)
   const client = useClient()
@@ -128,7 +131,7 @@ function MyAccount() {
             </CardContent>
             <Divider />
             <CardActions>
-              <Button color="primary" fullWidth variant="text">
+              <Button color="primary" fullWidth variant="text" onClick={() => setChangePass(true)}>
                 Change Password
               </Button>
             </CardActions>
@@ -223,6 +226,7 @@ function MyAccount() {
           </Card>
         </Grid>
       </Grid>
+      {changepass && <ChangePass setOpen={setChangePass} open={changepass} />}
     </Container>
   )
 }
