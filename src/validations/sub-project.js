@@ -21,3 +21,10 @@ export const editSubProject = Joi.object({
     'any.required': `Keyword cannot be an empty field`,
   }),
 })
+
+export const AddKeywordModalJoi = Joi.object({
+  keyword: Joi.string().trim().required().messages({
+    'string.empty': `Keyword cannot be an empty field`,
+    'any.required': `Keyword cannot be an empty field`,
+  }),
+})

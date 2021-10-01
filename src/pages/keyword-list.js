@@ -35,6 +35,7 @@ import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
 import {useClient} from 'useClient'
+import {AddKeywordModal} from 'components/add-keyword-modal'
 
 function KeywordList() {
   const history = useHistory()
@@ -48,6 +49,7 @@ function KeywordList() {
   const getkeywordLocation = window.localStorage.getItem('keywordLocation')
   const getkeywordRowtocall = window.localStorage.getItem('keywordRowtocall')
   const [page, setPage] = useState(0)
+  const [keyWordModal, setKeywordModal] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
@@ -286,6 +288,10 @@ function KeywordList() {
               </Menu>
             </>
           )}
+
+          <Button className="ml-2" color="primary" variant="contained" onClick={() => setKeywordModal(true)}>
+            Add Keyword
+          </Button>
         </Box>
       </Box>
       <Paper>
@@ -349,7 +355,6 @@ function KeywordList() {
                         Keyword
                       </TableSortLabel>
                     </TableCell>
-                    {/* <TableCell>Frequency</TableCell> */}
                     <TableCell>Prev Date</TableCell>
                     <TableCell>Next Date</TableCell>
                     <TableCell>Prev Rank</TableCell>
@@ -389,7 +394,6 @@ function KeywordList() {
                       > */}
                       {/* </TableSortLabel> */}
                     </TableCell>
-                    {/* <TableCell>Status</TableCell> */}
                   </TableRow>
                 </TableHead>
 
@@ -452,6 +456,7 @@ function KeywordList() {
             />
           </CardContent>
         </Card>
+        {keyWordModal && <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} editId={KeywordId} />}
       </Paper>
     </>
   )
