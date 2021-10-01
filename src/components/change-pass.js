@@ -18,6 +18,8 @@ import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient} from 'react-query'
 
 import {useClient} from 'useClient'
+import {getToken} from 'auth/auth-utils'
+import axios from 'axios'
 import {changePassword} from '../validations/user'
 
 function ChangePass({open, setOpen}) {
@@ -43,7 +45,7 @@ function ChangePass({open, setOpen}) {
       },
     },
   }))
-  const client = useClient()
+  // const client = useClient()
   const classes = useStyles()
   const classesFrom = useStylesForm()
 
@@ -65,24 +67,35 @@ function ChangePass({open, setOpen}) {
 
   const queryClient = useQueryClient()
 
-  const {isLoading, isError, error, isSuccess, mutate} = useMutation(
+  // const {isLoading, isError, error, isSuccess, mutate} = useMutation(
+  //   data =>
+  //     client(`changePassword`, {
+  //       data,
+  //       method: 'post',
+  //     }),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries('reposData')
+  //       setOpen(false)
+  //     },
+  //     onError: () => {
+  //       console.log('Error')
+  //     },
+  //   }
+  // )
+
+  const {isLoading, mutate} = useMutation(
     data =>
-      client(`changePassword`, {
-        data,
-        method: 'post',
+      axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/changePassword`, data, {
+        headers: {Authorization: `Bearer ${getToken()}`},
       }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('reposData')
         setOpen(false)
       },
-      onError: () => {
-        console.log('Error')
-      },
     }
   )
-
-  // console.log(isError)
 
   const submitForm = submitdata => mutate(submitdata)
 
