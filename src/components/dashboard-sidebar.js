@@ -2,25 +2,36 @@
 import {useEffect, useState} from 'react'
 import {useLocation, Link as RouterLink} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Avatar, Box, Button, Divider, Drawer, Hidden, List, ListItem, Typography} from '@material-ui/core'
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Drawer,
+  Hidden,
+  List,
+  ListItem,
+  Typography,
+} from '@material-ui/core'
 import theme from 'theme'
 import {Lock} from 'react-feather'
 import {getUserAccess, getUserAvtar} from 'util/app-utill'
+import {useClient} from 'useClient'
+import {useQuery} from 'react-query'
 import {NavItem} from './nav-item'
 import {Logout} from './logout-modal'
 import {sidbarItem} from '../constants/sidebar-item'
 
-const userlocal = window.localStorage.getItem('__user_data__')
-const uservalue = JSON.parse(userlocal)
-
-const user = {
-  name: uservalue?.email,
-  jobTitle: getUserAccess(uservalue?.permissionLevel),
-}
-
 const DashboardSidebar = ({onMobileClose, openMobile}) => {
   const location = useLocation()
+  const client = useClient()
   const [openLogout, setOpenLogout] = useState(false)
+
+  const userlocal = window.localStorage.getItem('__user_data__')
+  const uservalue = JSON.parse(userlocal)
+
+  const {data, isFetching} = useQuery(['sideBarUserInfo'], () => client(`viewUserProfile/${uservalue?._id}`))
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -57,14 +68,31 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
             marginBottom: 8,
           }}
         >
-          {uservalue?.email.toString().charAt(0).toUpperCase()}
+          {/* {uservalue?.email.toString().charAt(0).toUpperCase()} */}
+          {isFetching ? (
+            <CircularProgress style={{height: 18, width: 18}} />
+          ) : (
+            data?.data?.firstName.toString().charAt(0).toUpperCase()
+          )}
         </Avatar>
+
         <Typography color="textPrimary" variant="h5" style={{margin: '5px 0 2px'}}>
-          {user.name}
+          {isFetching ? (
+            <CircularProgress style={{height: 14, width: 14}} />
+          ) : (
+            getUserAccess(data?.data?.permissionLevel)
+          )}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
+          {isFetching ? (
+            <CircularProgress style={{height: 14, width: 14}} />
+          ) : (
+            `${data?.data?.firstName}${' '}${data?.data?.lastName}`
+          )}
         </Typography>
+        {/* <Typography color="textSecondary" variant="body2">
+          {isFetching ? <CircularProgress style={{height: 14, width: 14}} /> : data?.data?.email}
+        </Typography> */}
       </Box>
       <Divider />
       <Box sx={{p: 2}}>

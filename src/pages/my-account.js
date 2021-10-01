@@ -17,7 +17,7 @@ import {
   CircularProgress,
 } from '@material-ui/core'
 import {Controller, useForm} from 'react-hook-form'
-import {useMutation, useQuery} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
 import {getUserAccess, getUserAvtar} from 'util/app-utill'
 import {MyAcc} from 'validations/user-list'
@@ -27,8 +27,9 @@ function MyAccount() {
   const userlocal = window.localStorage.getItem('__user_data__')
   const uservalue = JSON.parse(userlocal)
   const client = useClient()
+  const queryClient = useQueryClient()
 
-  const {data, isFetching, isLoading} = useQuery(['myAccount'], () => client(`viewUserProfile/${uservalue?._id}`))
+  const {data, isFetching} = useQuery(['myAccount'], () => client(`viewUserProfile/${uservalue?._id}`))
 
   const {
     handleSubmit,
@@ -72,6 +73,8 @@ function MyAccount() {
       }),
     {
       onSuccess: () => {
+        queryClient.invalidateQueries('sideBarUserInfo')
+        queryClient.invalidateQueries('myAccount')
         toast.success('Profile Updated')
       },
     }
@@ -101,22 +104,22 @@ function MyAccount() {
                     fontSize: 28,
                   }}
                 >
-                  {isLoading ? (
-                    <CircularProgress style={{height: 19, width: 19}} />
+                  {isFetching ? (
+                    <CircularProgress style={{height: 30, width: 30}} />
                   ) : (
                     data?.data?.firstName.toString().charAt(0).toUpperCase()
                   )}
                 </Avatar>
                 <Typography color="textPrimary" gutterBottom variant="h3">
-                  {isLoading ? (
-                    <CircularProgress style={{height: 19, width: 19}} />
+                  {isFetching ? (
+                    <CircularProgress style={{height: 15, width: 15}} />
                   ) : (
                     `${data?.data?.firstName}${' '}${data?.data?.lastName}`
                   )}
                 </Typography>
                 <Typography color="textSecondary" variant="body1">
-                  {isLoading ? (
-                    <CircularProgress style={{height: 19, width: 19}} />
+                  {isFetching ? (
+                    <CircularProgress style={{height: 15, width: 15}} />
                   ) : (
                     getUserAccess(data?.data?.permissionLevel)
                   )}
