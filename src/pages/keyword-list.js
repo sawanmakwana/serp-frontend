@@ -72,9 +72,9 @@ function KeywordList() {
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
   const [diffSortingtype, setdiffSortingtype] = useState('asc')
+  const [urlSortingtype, setUrlSortingtype] = useState('asc')
   const [selected, setSelected] = React.useState([])
   const [deleteModal, setDeleteModal] = useState(false)
-  // const [urlSortingtype, seturlSortingtype] = useState('asc')
 
   const [anchorE2, setAnchorE2] = useState(null)
   const open = Boolean(anchorE2)
@@ -500,16 +500,16 @@ function KeywordList() {
                       </TableSortLabel>
                     </TableCell>
                     <TableCell>
-                      URL
-                      {/* <TableSortLabel
+                      <TableSortLabel
                         active={Sorting.includes('url')}
                         direction={urlSortingtype === 'asc' ? 'desc' : 'asc'}
                         onClick={() => {
-                          seturlSortingtype(urlSortingtype === 'asc' ? 'desc' : 'asc')
+                          setUrlSortingtype(urlSortingtype === 'asc' ? 'desc' : 'asc')
                           setSorting(`&sort=url:${urlSortingtype}`)
                         }}
-                      > */}
-                      {/* </TableSortLabel> */}
+                      >
+                        URL
+                      </TableSortLabel>
                     </TableCell>
                   </TableRow>
                 </TableHead>

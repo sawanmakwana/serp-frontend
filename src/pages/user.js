@@ -19,6 +19,7 @@ import {
   LinearProgress,
   Menu,
   MenuItem,
+  TableSortLabel,
 } from '@material-ui/core'
 import {useState} from 'react'
 import {MoreVertical} from 'react-feather'
@@ -39,8 +40,10 @@ function User() {
   const [addUserModal, setAddUserModal] = useState(false)
   const [editId, setEditId] = useState(null)
   const [deleteModal, setDeleteModal] = useState(false)
-
-  // const [Sorting, setSorting] = useState('')
+  const [Sorting, setSorting] = useState('')
+  const [nametype, setNameSortingtype] = useState('asc')
+  const [emailtype, setEmailtype] = useState('asc')
+  const [permissiontype, setPermissiontype] = useState('asc')
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -53,8 +56,8 @@ function User() {
   }
 
   const {data, isFetching} = useQuery(
-    ['userList', page, rowsPerPage],
-    () => client(`getUserList?limit=${rowsPerPage}&page=${page + 1}`),
+    ['userList', page, rowsPerPage, Sorting],
+    () => client(`getUserList?limit=${rowsPerPage}&page=${page + 1}${Sorting}`),
     {
       keepPreviousData: true,
     }
@@ -114,9 +117,42 @@ function User() {
                     <TableHead>
                       <TableRow>
                         <TableCell className="pl-4">#</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Permission</TableCell>
+                        <TableCell>
+                          <TableSortLabel
+                            active={Sorting.includes('firstName')}
+                            direction={nametype === 'asc' ? 'desc' : 'asc'}
+                            onClick={() => {
+                              setNameSortingtype(nametype === 'asc' ? 'desc' : 'asc')
+                              setSorting(`&sort=firstName:${nametype}`)
+                            }}
+                          >
+                            Name
+                          </TableSortLabel>
+                        </TableCell>
+                        <TableCell>
+                          <TableSortLabel
+                            active={Sorting.includes('email')}
+                            direction={emailtype === 'asc' ? 'desc' : 'asc'}
+                            onClick={() => {
+                              setEmailtype(emailtype === 'asc' ? 'desc' : 'asc')
+                              setSorting(`&sort=email:${emailtype}`)
+                            }}
+                          >
+                            Email
+                          </TableSortLabel>
+                        </TableCell>
+                        <TableCell>
+                          <TableSortLabel
+                            active={Sorting.includes('permissionLevel')}
+                            direction={permissiontype === 'asc' ? 'desc' : 'asc'}
+                            onClick={() => {
+                              setPermissiontype(permissiontype === 'asc' ? 'desc' : 'asc')
+                              setSorting(`&sort=permissionLevel:${permissiontype}`)
+                            }}
+                          >
+                            Permission
+                          </TableSortLabel>
+                        </TableCell>
                         <TableCell>Action</TableCell>
                       </TableRow>
                     </TableHead>

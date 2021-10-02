@@ -63,6 +63,9 @@ function SubProjectList() {
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
+  const [frequencytype, setFrequencySortingtype] = useState('asc')
+  const [prevdatetype, setPrevDatetype] = useState('asc')
+  const [nextdatetype, setNedxtDatetype] = useState('asc')
   const [addSubProjectModal, setSubAddProjectModal] = useState(false)
   const [listProject, setListProject] = useState([])
   const [domain, setDomain] = useState([])
@@ -381,9 +384,42 @@ function SubProjectList() {
                         Keyword
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell>Frequency</TableCell>
-                    <TableCell>Prev Date</TableCell>
-                    <TableCell>Next Date</TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        active={Sorting.includes('keywordCheckFrequency')}
+                        direction={frequencytype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setFrequencySortingtype(frequencytype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=keywordCheckFrequency:${frequencytype}`)
+                        }}
+                      >
+                        Frequency
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        active={Sorting.includes('prevDate')}
+                        direction={prevdatetype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setPrevDatetype(prevdatetype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=prevDate:${prevdatetype}`)
+                        }}
+                      >
+                        Prev Date
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        active={Sorting.includes('nextDate')}
+                        direction={nextdatetype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setNedxtDatetype(nextdatetype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=nextDate:${nextdatetype}`)
+                        }}
+                      >
+                        Next Date
+                      </TableSortLabel>
+                    </TableCell>
                     {getCompoAccess[permissionLevel]?.action && <TableCell>Action</TableCell>}
                   </TableRow>
                 </TableHead>

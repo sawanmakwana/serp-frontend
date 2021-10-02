@@ -44,6 +44,7 @@ function PorjectList() {
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
   const [Sorting, setSorting] = useState('')
   const [projectSortingtype, setprojectSortingtype] = useState('asc')
+  const [urlSortingtype, setUrlSortingtype] = useState('asc')
   const [anchorEl, setAnchorEl] = useState(null)
   const [addProjectModal, setAddProjectModal] = useState(false)
   const [editId, setEditId] = useState(null)
@@ -234,7 +235,18 @@ function PorjectList() {
                       </TableSortLabel>
                     </TableCell>
 
-                    <TableCell>URL</TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        active={Sorting.includes('domain')}
+                        direction={urlSortingtype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setUrlSortingtype(urlSortingtype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=domain:${urlSortingtype}`)
+                        }}
+                      >
+                        URL
+                      </TableSortLabel>
+                    </TableCell>
                     {getCompoAccess[permissionLevel]?.action && <TableCell>Action</TableCell>}
                   </TableRow>
                 </TableHead>
