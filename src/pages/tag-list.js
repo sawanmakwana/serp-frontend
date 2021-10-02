@@ -20,13 +20,32 @@ import {
 import {getCompoAccess} from 'util/app-utill'
 import {Trash2} from 'react-feather'
 import {GlobalContext} from 'context/global-context'
+import Chart from 'react-apexcharts'
 
 function TagList() {
   const {permissionLevel} = useContext(GlobalContext)
 
+  const chartData = {
+    options: {
+      chart: {
+        id: 'basic-bar',
+      },
+      xaxis: {
+        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+      },
+    },
+    series: [
+      {
+        name: 'series-1',
+        data: [30, 40, 45, 50, 49, 60, 70, 91],
+      },
+    ],
+  }
+
   return (
     <>
-      <Box className="d-flex pb-3">
+      <Chart options={chartData.options} series={chartData.series} type="line" width="100%" height="320px" />
+      <Box sx={{mt: 2}} className="d-flex pb-3 pt-2">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           Tag <span> (12)</span>
         </Typography>
