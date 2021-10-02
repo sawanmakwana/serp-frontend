@@ -116,8 +116,12 @@ function KeywordList() {
     client(fetchURL)
   }
 
-  const {data: csvData, isLoading: csvisLoading} = useQuery(['exportKeywordsToCsv', KeywordId], () =>
-    fetchCSV(KeywordId)
+  const {data: csvData, isLoading: csvisLoading} = useQuery(
+    ['exportKeywordsToCsv', KeywordId],
+    () => fetchCSV(KeywordId),
+    {
+      enabled: getCompoAccess[permissionLevel]?.headBtn,
+    }
   )
 
   async function fetchGooglesheet(KeywordId) {
@@ -127,7 +131,10 @@ function KeywordList() {
 
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
     ['exportKeywordsToGoogleSheet', KeywordId],
-    () => fetchGooglesheet(KeywordId)
+    () => fetchGooglesheet(KeywordId),
+    {
+      enabled: getCompoAccess[permissionLevel]?.headBtn,
+    }
   )
 
   const {

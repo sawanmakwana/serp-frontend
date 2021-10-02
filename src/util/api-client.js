@@ -1,4 +1,6 @@
+/* eslint-disable prefer-promise-reject-errors */
 import {logout} from 'auth/auth-utils'
+import {toast} from 'react-toastify'
 
 const baseUrl = `${process.env.REACT_APP_PLATFORM_ENDPOINT}`
 
@@ -22,23 +24,33 @@ async function client(endpoint, {apiURL = baseUrl, data, token, headers: customH
     config.body = JSON.stringify(data)
   }
 
-  return fetch(`${apiURL}/${endpoint}`, config).then(async response => {
-    // console.log(response)
-    if (response.status === 401) {
-      await logout()
-      // console.log('loguot')
-      // refresh the page for them
-      window.location.assign(window.location)
-      // eslint-disable-next-line prefer-promise-reject-errors
-      return Promise.reject({message: 'Please re-authenticate.'})
-    }
-    const responseData = await response.json()
-    if (response.ok) {
-      // console.log(responseData)
-      return responseData
-    }
-    return Promise.reject(responseData)
-  })
-  // .catch(er => console.log(er))
+  return fetch(`${apiURL}/${endpoint}`, config)
+    .then(async response => {
+      if (response.status === 403) {
+        toast.error("You don't have access to this page or resource.")
+
+        // await logout()
+        // // refresh the page for them
+        // window.location.assign(window.location)
+        // return Promise.reject({
+        //   message: `You don't have access for this page`,
+        // })
+      }
+      if (response.status === 401) {
+        await logout()
+        window.location.assign(window.location)
+        // refresh the page for them
+        return Promise.reject({message: 'Please re-authenticate.'})
+      }
+      const responseData = await response.json()
+      if (response.ok) {
+        return responseData
+      }
+      return Promise.reject(responseData)
+    })
+    .catch(err => {
+      // eslint-disable-next-line no-console
+      console.log('catch')
+    })
 }
 export {client}

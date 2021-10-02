@@ -90,7 +90,9 @@ function SubProjectList() {
     client(fetchURL)
   }
 
-  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectSublist', DomainId], () => fetchCSV(DomainId))
+  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectSublist', DomainId], () => fetchCSV(DomainId), {
+    enabled: getCompoAccess[permissionLevel]?.headBtn,
+  })
 
   async function fetchGooglesheet(DomainId) {
     const fetchURL = `exportSubProjectToGoogleSheet/${DomainId}`
@@ -99,7 +101,10 @@ function SubProjectList() {
 
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
     ['exportSubProjectToGoogleSheet', DomainId],
-    () => fetchGooglesheet(DomainId)
+    () => fetchGooglesheet(DomainId),
+    {
+      enabled: getCompoAccess[permissionLevel]?.headBtn,
+    }
   )
 
   const {
