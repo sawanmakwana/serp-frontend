@@ -15,7 +15,7 @@ function AnalyticCard({name, value, color, analyticsDataFetching}) {
                 {analyticsDataFetching ? <CircularProgress style={{height: 19, width: 19}} /> : value}
               </Typography>
             </Grid>
-            <Grid style={{padding: '0 12px 0 0'}}>
+            <Grid style={{padding: '0 11px 0 0'}}>
               <Avatar
                 style={{
                   backgroundColor: color[600],
