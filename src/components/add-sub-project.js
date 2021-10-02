@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable react/jsx-props-no-spreading */
+import React, {useState} from 'react'
 import {
   Button,
   Dialog,
@@ -19,8 +20,9 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles, useTheme} from '@material-ui/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
-import {useMutation, useQueryClient} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
+import {Autocomplete, createFilterOptions} from '@material-ui/lab'
 import {currencies, keywordFrequency} from '../constants/constants'
 import {editSubProject, SubProject} from '../validations/sub-project'
 
@@ -47,13 +49,16 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
       },
     },
   }))
+
   const classes = useStyles()
   const client = useClient()
   const classesFrom = useStylesForm()
   const theme = useTheme()
+  const [tag, setTag] = useState(null)
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
+  const filter = createFilterOptions()
 
-  const {handleSubmit, errors, control, reset} = useForm({
+  const {handleSubmit, errors, control, reset, watch} = useForm({
     mode: 'onTouched',
     shouldFocusError: true,
     reValidateMode: 'onChange',
@@ -65,8 +70,11 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
       keywordCheckFrequency: '',
       keyword: '',
       enableEmail: false,
+      tags: [],
     },
   })
+
+  // console.log(watch('tags'))
 
   React.useEffect(() => {
     if (editId) {
@@ -117,9 +125,14 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
         keyword: submitdata.keyword.split('\n'),
         domain: domain[0].domain,
         _projectId,
+        tags: [tag],
       })
     }
   }
+
+  const {data: tagListDropDownData} = useQuery(['tagListDropDown', _projectId], () =>
+    client(`tagListDropDown/${_projectId}`)
+  )
 
   return (
     <Dialog
@@ -223,6 +236,74 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
             )}
           />
           <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
+
+          <Autocomplete
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params)
+              // Suggest the creation of a new value
+              if (params.inputValue !== '') {
+                filtered.push(params.inputValue)
+              }
+              return filtered
+            }}
+            selectOnFocus
+            fullWidth
+            handleHomeEndKeys
+            freeSolo
+            options={tagListDropDownData?.data}
+            renderOption={selected => selected}
+            renderInput={params => (
+              <TextField
+                {...params}
+                onChange={e => {
+                  setTag(e.target.value)
+                }}
+                label="Select Tag"
+                variant="outlined"
+                helperText={errors.tags && errors.tags.message}
+              />
+            )}
+          />
+
+          {/* <Controller
+            control={control}
+            name="tags"
+            render={({onChange, onBlur, value}) => (
+              <FormControl className="multi-select">
+                <InputLabel style={{left: 15, top: -4}}>Select Tag</InputLabel>
+                <Select
+                  multiple
+                  required
+                  onBlur={onBlur}
+                  value={value}
+                  onChange={e => onChange(e.target.value)}
+                  input={<OutlinedInput label="Select Tag" />}
+                  error={errors.tags}
+                  disabled={isLoading}
+                  renderValue={selected =>
+                    tagListDropDownData?.data
+                      .filter(user => selected.includes(user._id))
+                      .map(data => data.projectName)
+                      .join(', ')
+                  }
+                  MenuProps={MenuProps}
+                  helperText={errors.tags && errors.tags.message}
+                >
+                  <>
+                    <MenuItem>
+                      <ListItemText primary="Add New Tag" />
+                    </MenuItem>
+                    {tagListDropDownData?.data?.map(user => (
+                      <MenuItem key={user._id} value={user._id}>
+                        <ListItemText primary={user.projectName} />
+                      </MenuItem>
+                    ))}
+                  </>
+                </Select>
+                {errors.tags && <p className="p-error"> {errors.tags.message}</p>}
+              </FormControl>
+            )}
+          /> */}
           <TextField required variant="outlined" label="Enter Domain" disabled value={domain[0].domain} />
           {Boolean(!editId) && (
             <Controller
