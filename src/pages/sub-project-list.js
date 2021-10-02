@@ -53,6 +53,7 @@ import {downloadResponseCSV, getCompoAccess, getFormetedData, getKeywordFrequenc
 import {ArrowBack, Cached} from '@material-ui/icons'
 import {useClient} from 'useClient'
 import {GlobalContext} from 'context/global-context'
+import {TagList} from './tag-list'
 
 function SubProjectList() {
   const queryClient = useQueryClient()
@@ -585,7 +586,7 @@ function SubProjectList() {
         </Paper>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Tag
+        <TagList />
       </TabPanel>
     </>
   )
