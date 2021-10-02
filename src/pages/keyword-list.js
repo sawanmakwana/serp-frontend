@@ -362,7 +362,7 @@ function KeywordList() {
               </Typography>
             )}
             {selected.length > 0 && (
-              <Tooltip title="Delete" onClick={() => setDeleteModal(true)}>
+              <Tooltip title="Delete selected keyword" onClick={() => setDeleteModal(true)}>
                 <IconButton>
                   <Delete />
                 </IconButton>
