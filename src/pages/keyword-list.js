@@ -343,7 +343,6 @@ function KeywordList() {
               </Menu>
             </>
           )}
-
           <Button className="ml-2" color="primary" variant="contained" onClick={() => setKeywordModal(true)}>
             Add Keyword
           </Button>
@@ -357,8 +356,13 @@ function KeywordList() {
                 Selected Keyword <span>({selected.length})</span>
               </Typography>
             ) : (
-              <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-                Current page <span> ({page + 1})</span>
+              <Typography className="tableHeader next-rank" variant="h6" id="tableTitle" component="div">
+                <font>
+                  Current page <span> ({page + 1})</span>
+                </font>
+                <Tooltip title={`Next Date: ${getFormetedData(data?.data?.result[0]?.nextDate)}`}>
+                  <span className="next-rank-data">{getFormetedData(data?.data?.result[0]?.nextDate)}</span>
+                </Tooltip>
               </Typography>
             )}
             {selected.length > 0 && (
@@ -421,7 +425,7 @@ function KeywordList() {
                         }}
                       />
                     </TableCell>
-                    <TableCell className="pl-4">#</TableCell>
+                    <TableCell>#</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
                         active={Sorting.includes('keyword')}
@@ -434,9 +438,12 @@ function KeywordList() {
                         Keyword
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell>Prev Date</TableCell>
-                    <TableCell>Next Date</TableCell>
-                    <TableCell>Prev Rank</TableCell>
+                    <TableCell className="prev-rank">
+                      <p>Prev Rank</p>
+                      <Tooltip title={`Previous Date: ${getFormetedData(data?.data?.result[0]?.prevDate)}`}>
+                        <span>{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
+                      </Tooltip>
+                    </TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
                         active={Sorting.includes('rankGroup')}
@@ -485,7 +492,7 @@ function KeywordList() {
                     </TableRow>
                   ) : (
                     data?.data?.result?.map(
-                      ({_id, keyword, prevDate, nextDate, prevRankGroup, rankGroup, url, difference}, index) => {
+                      ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference}, index) => {
                         const isItemSelected = isSelected(_id)
                         const labelId = `enhanced-table-checkbox-${index}`
                         return (
@@ -507,11 +514,9 @@ function KeywordList() {
                                 }}
                               />
                             </TableCell>
-                            <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
+                            <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
                             <TableCell>{keyword}</TableCell>
                             {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
-                            <TableCell>{getFormetedData(prevDate)}</TableCell>
-                            <TableCell>{getFormetedData(nextDate)}</TableCell>
                             <TableCell>{prevRankGroup || '-'}</TableCell>
                             <TableCell>{rankGroup || '-'}</TableCell>
                             <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>

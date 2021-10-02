@@ -208,3 +208,25 @@
 .avatar-client {
   background: #4CAF50 !important;
 }
+.prev-rank {
+  display: flex;
+  flex-direction: column;
+}
+.prev-rank p {
+  line-height: 1.5;
+}
+.prev-rank span {
+  opacity: 0.85;
+  font-size: 12px;
+}
+.next-rank {
+  display: flex;
+  flex-direction: column;
+}
+.next-rank font{
+  line-height: 1.5;
+}
+.next-rank .next-rank-data {
+  opacity: 0.85;
+  font-size: 12px;
+}
