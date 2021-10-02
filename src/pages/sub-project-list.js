@@ -80,9 +80,6 @@ function SubProjectList() {
   const [value, setValue] = React.useState(0)
   const open = Boolean(anchorE2)
   const [deleteModal, setDeleteModal] = useState(false)
-  const [emailToggel, setEmailToggel] = useState(false)
-
-  // console.log(emailToggel)
 
   const theme = useTheme()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
