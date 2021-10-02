@@ -11,6 +11,8 @@ import {
   Typography,
   useMediaQuery,
   LinearProgress,
+  Switch,
+  FormControlLabel,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
@@ -62,6 +64,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
       locationCode: '',
       keywordCheckFrequency: '',
       keyword: '',
+      enableEmail: false,
     },
   })
 
@@ -221,6 +224,20 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
           />
           <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
           <TextField required variant="outlined" label="Enter Domain" disabled value={domain[0].domain} />
+          {Boolean(!editId) && (
+            <Controller
+              control={control}
+              name="enableEmail"
+              render={({onChange, value, onBlur}) => (
+                <FormControlLabel
+                  control={
+                    <Switch checked={value} onBlur={onBlur} value={value} onChange={e => onChange(e.target.checked)} />
+                  }
+                  label="Enable Email Notification"
+                />
+              )}
+            />
+          )}
         </form>
       </DialogContent>
       {isLoading && <LinearProgress />}

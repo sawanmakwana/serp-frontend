@@ -11,6 +11,7 @@ export const SubProject = Joi.object({
     'string.empty': `Keyword cannot be an empty field`,
     'any.required': `Keyword cannot be an empty field`,
   }),
+  enableEmail: Joi.allow(),
 })
 
 export const editSubProject = Joi.object({
