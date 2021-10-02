@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import {
   TableHead,
   TablePagination,
@@ -33,11 +33,12 @@ import AnalyticCard from 'components/analytic-card'
 import {blueGrey, green, indigo, lightGreen, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
+import {downloadResponseCSV, getCompoAccess, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
 import {ArrowBack, Delete} from '@material-ui/icons'
 import {useClient} from 'useClient'
 import {AddKeywordModal} from 'components/add-keyword-modal'
 import {DeleteModal} from 'components/delete-modal'
+import {GlobalContext} from 'context/global-context'
 
 function KeywordList() {
   const history = useHistory()
@@ -45,6 +46,7 @@ function KeywordList() {
   const client = useClient()
   const {state} = useLocation()
   const queryClient = useQueryClient()
+  const {permissionLevel} = useContext(GlobalContext)
   const {subProjectId: KeywordId, projectId} = useParams()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const getRows = JSON.parse(window.localStorage.getItem('keywordlistRow'))
@@ -307,46 +309,48 @@ function KeywordList() {
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           Keyword List <span> ({data?.data?.total})</span>
         </Typography>
-        <Box>
-          {!xsScreen && (
-            <>
-              <Button
-                style={{
-                  color:
-                    googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
-                      ? theme.palette.text.secondary
-                      : theme.palette.primary.main,
-                }}
-                disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
-                onClick={e => setAnchorE2(e.currentTarget)}
-              >
-                Export
-              </Button>
-              <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
-                <MenuItem
-                  onClick={() => {
-                    downloadResponseCSV(csvData, `keyword_list`)
-                    setAnchorE2(null)
+        {getCompoAccess[permissionLevel]?.headBtn && (
+          <Box>
+            {!xsScreen && (
+              <>
+                <Button
+                  style={{
+                    color:
+                      googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
+                        ? theme.palette.text.secondary
+                        : theme.palette.primary.main,
                   }}
+                  disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
+                  onClick={e => setAnchorE2(e.currentTarget)}
                 >
-                  Export CSV
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
-                    win.focus()
-                    setAnchorE2(null)
-                  }}
-                >
-                  Export Google Sheet
-                </MenuItem>
-              </Menu>
-            </>
-          )}
-          <Button className="ml-2" color="primary" variant="contained" onClick={() => setKeywordModal(true)}>
-            Add Keyword
-          </Button>
-        </Box>
+                  Export
+                </Button>
+                <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                  <MenuItem
+                    onClick={() => {
+                      downloadResponseCSV(csvData, `keyword_list`)
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export CSV
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                      win.focus()
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export Google Sheet
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+            <Button className="ml-2" color="primary" variant="contained" onClick={() => setKeywordModal(true)}>
+              Add Keyword
+            </Button>
+          </Box>
+        )}
       </Box>
       <Paper>
         <Card>
@@ -365,14 +369,14 @@ function KeywordList() {
                 </Tooltip>
               </Typography>
             )}
-            {selected.length > 0 && (
+            {selected.length > 0 && getCompoAccess[permissionLevel]?.action && (
               <Tooltip title="Delete selected keyword" onClick={() => setDeleteModal(true)}>
                 <IconButton>
                   <Delete />
                 </IconButton>
               </Tooltip>
             )}
-            {xsScreen && (
+            {xsScreen && getCompoAccess[permissionLevel]?.headBtn && (
               <>
                 <Button
                   style={{
@@ -414,17 +418,19 @@ function KeywordList() {
               <Table size="medium" className="selectTable sublist">
                 <TableHead>
                   <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        indeterminate={selected.length > 0 && selected.length < data?.data?.total}
-                        checked={data?.data?.total > 0 && selected.length === data?.data?.total}
-                        onChange={handleSelectAllClick}
-                        inputProps={{
-                          'aria-label': 'select all',
-                        }}
-                      />
-                    </TableCell>
+                    {getCompoAccess[permissionLevel]?.action && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          indeterminate={selected.length > 0 && selected.length < data?.data?.total}
+                          checked={data?.data?.total > 0 && selected.length === data?.data?.total}
+                          onChange={handleSelectAllClick}
+                          inputProps={{
+                            'aria-label': 'select all',
+                          }}
+                        />
+                      </TableCell>
+                    )}
                     <TableCell>#</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
@@ -505,15 +511,17 @@ function KeywordList() {
                             tabIndex={-1}
                             selected={isItemSelected}
                           >
-                            <TableCell padding="checkbox">
-                              <Checkbox
-                                color="primary"
-                                checked={isItemSelected}
-                                inputProps={{
-                                  'aria-labelledby': labelId,
-                                }}
-                              />
-                            </TableCell>
+                            {getCompoAccess[permissionLevel]?.headBtn && (
+                              <TableCell padding="checkbox">
+                                <Checkbox
+                                  color="primary"
+                                  checked={isItemSelected}
+                                  inputProps={{
+                                    'aria-labelledby': labelId,
+                                  }}
+                                />
+                              </TableCell>
+                            )}
                             <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
                             <TableCell>{keyword}</TableCell>
                             {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}

@@ -27,6 +27,24 @@ export const getUserAvtar = Access => {
   if (Access === 3) return 'avatar-client'
 }
 
+export const getCompoAccess = {
+  1: {
+    headBtn: true,
+    action: true,
+    user: true,
+  },
+  2: {
+    headBtn: true,
+    action: true,
+    user: false,
+  },
+  3: {
+    headBtn: false,
+    action: false,
+    user: false,
+  },
+}
+
 export const getDifference = (prevRank, currentRank, type = '') => {
   // let diff
   switch (type) {

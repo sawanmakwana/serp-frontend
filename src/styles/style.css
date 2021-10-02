@@ -72,11 +72,12 @@
   height: 90vh;
 }
 .urlEcllips {
-  max-width: 500px;
-  min-width: 500px;
-  white-space: nowrap;
+  max-width: 470px;
+  min-width: 470px;
+  word-wrap: break-word;
+  /* white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; */
 }
 .emptyTable {
   text-align: center !important;

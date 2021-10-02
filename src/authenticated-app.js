@@ -6,9 +6,14 @@ import {Dashbord} from 'pages/dashbord'
 import {KeywordList} from 'pages/keyword-list'
 import {User} from 'pages/user'
 import {MyAccount} from 'pages/my-account'
+import {getCompoAccess} from 'util/app-utill'
+import {useContext} from 'react'
 import {AppLayout} from './layouts/app-layout'
+import {GlobalContext} from './context/global-context'
 
 function AppRoutespath() {
+  const {permissionLevel} = useContext(GlobalContext)
+
   return (
     <Switch>
       <Route exact path="/dashboard">
@@ -27,10 +32,13 @@ function AppRoutespath() {
         <DocumentTitle title="Project Keyword" />
         <KeywordList />
       </Route>
-      <Route path="/user">
-        <DocumentTitle title="User" />
-        <User />
-      </Route>
+
+      {getCompoAccess[permissionLevel]?.user && (
+        <Route path="/user">
+          <DocumentTitle title="User" />
+          <User />
+        </Route>
+      )}
       <Route path="/my-account">
         <DocumentTitle title="My Account" />
         <MyAccount />

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import {
   TableHead,
   TablePagination,
@@ -35,15 +35,17 @@ import {useHistory, useParams} from 'react-router-dom'
 import {MoreVertical} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getFormetedData, getKeywordFrequency, getLoaction} from 'util/app-utill'
+import {downloadResponseCSV, getCompoAccess, getFormetedData, getKeywordFrequency, getLoaction} from 'util/app-utill'
 import {ArrowBack, Cached} from '@material-ui/icons'
 import {useClient} from 'useClient'
+import {GlobalContext} from 'context/global-context'
 
 function SubProjectList() {
   const queryClient = useQueryClient()
   const client = useClient()
   const history = useHistory()
   const {projectId: DomainId} = useParams()
+  const {permissionLevel} = useContext(GlobalContext)
   const getRows = JSON.parse(window.localStorage.getItem('subprojectlistRow'))
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
@@ -252,46 +254,48 @@ function SubProjectList() {
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           Sub Project <span> ({isLoading ? '0' : data?.data?.total})</span>
         </Typography>
-        <Box>
-          {!xsScreen && (
-            <>
-              <Button
-                style={{
-                  color:
-                    googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
-                      ? theme.palette.text.secondary
-                      : theme.palette.primary.main,
-                }}
-                disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
-                onClick={e => setAnchorE2(e.currentTarget)}
-              >
-                Export
-              </Button>
-              <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
-                <MenuItem
-                  onClick={() => {
-                    downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
-                    setAnchorE2(null)
+        {getCompoAccess[permissionLevel]?.headBtn && (
+          <Box>
+            {!xsScreen && (
+              <>
+                <Button
+                  style={{
+                    color:
+                      googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
+                        ? theme.palette.text.secondary
+                        : theme.palette.primary.main,
                   }}
+                  disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
+                  onClick={e => setAnchorE2(e.currentTarget)}
                 >
-                  Export CSV
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
-                    win.focus()
-                    setAnchorE2(null)
-                  }}
-                >
-                  Export Google Sheet
-                </MenuItem>
-              </Menu>
-            </>
-          )}
-          <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
-            Add Sub Project
-          </Button>
-        </Box>
+                  Export
+                </Button>
+                <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                  <MenuItem
+                    onClick={() => {
+                      downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export CSV
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                      win.focus()
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export Google Sheet
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+            <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
+              Add Sub Project
+            </Button>
+          </Box>
+        )}
       </Box>
       <Paper>
         <Card>
@@ -299,7 +303,7 @@ function SubProjectList() {
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
               Current page <span> ({page + 1})</span>
             </Typography>
-            {xsScreen && (
+            {xsScreen && getCompoAccess[permissionLevel]?.headBtn && (
               <>
                 <Button
                   style={{
@@ -357,7 +361,7 @@ function SubProjectList() {
                     <TableCell>Frequency</TableCell>
                     <TableCell>Prev Date</TableCell>
                     <TableCell>Next Date</TableCell>
-                    <TableCell>Action</TableCell>
+                    {getCompoAccess[permissionLevel]?.action && <TableCell>Action</TableCell>}
                   </TableRow>
                 </TableHead>
 
@@ -397,55 +401,57 @@ function SubProjectList() {
                           <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell>
                           <TableCell>{getFormetedData(prevDate)}</TableCell>
                           <TableCell>{getFormetedData(nextDate)}</TableCell>
-                          <TableCell>
-                            <>
-                              <Button
-                                className="selectTablebtn"
-                                onClick={e => {
-                                  setAnchorEl(e.currentTarget)
-                                  setEditId(_id)
-                                  e.stopPropagation()
-                                }}
-                              >
-                                <MoreVertical />
-                              </Button>
-                              <Menu
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={anchorEl}
-                                onClose={e => {
-                                  setAnchorEl(null)
-                                  setEditId(null)
-                                  e.stopPropagation()
-                                }}
-                                PaperProps={{
-                                  style: {
-                                    maxHeight: 220,
-                                    width: 120,
-                                  },
-                                }}
-                              >
-                                <MenuItem
+                          {getCompoAccess[permissionLevel]?.action && (
+                            <TableCell>
+                              <>
+                                <Button
+                                  className="selectTablebtn"
                                   onClick={e => {
+                                    setAnchorEl(e.currentTarget)
+                                    setEditId(_id)
                                     e.stopPropagation()
-                                    setSubAddProjectModal(true)
-                                    setAnchorEl(null)
                                   }}
                                 >
-                                  Edit
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={e => {
-                                    e.stopPropagation()
-                                    setDeleteModal(true)
+                                  <MoreVertical />
+                                </Button>
+                                <Menu
+                                  anchorEl={anchorEl}
+                                  keepMounted
+                                  open={anchorEl}
+                                  onClose={e => {
                                     setAnchorEl(null)
+                                    setEditId(null)
+                                    e.stopPropagation()
+                                  }}
+                                  PaperProps={{
+                                    style: {
+                                      maxHeight: 220,
+                                      width: 120,
+                                    },
                                   }}
                                 >
-                                  Delete
-                                </MenuItem>
-                              </Menu>
-                            </>
-                          </TableCell>
+                                  <MenuItem
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      setSubAddProjectModal(true)
+                                      setAnchorEl(null)
+                                    }}
+                                  >
+                                    Edit
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      setDeleteModal(true)
+                                      setAnchorEl(null)
+                                    }}
+                                  >
+                                    Delete
+                                  </MenuItem>
+                                </Menu>
+                              </>
+                            </TableCell>
+                          )}
                         </TableRow>
                       )
                     )

@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core'
 import theme from 'theme'
 import {Lock} from 'react-feather'
-import {getUserAccess, getUserAvtar} from 'util/app-utill'
+import {getUserAccess, getUserAvtar, getCompoAccess} from 'util/app-utill'
 import {useClient} from 'useClient'
 import {useQuery} from 'react-query'
 import {GlobalContext} from 'context/global-context'
@@ -25,11 +25,10 @@ import {Logout} from './logout-modal'
 import {sidbarItem} from '../constants/sidebar-item'
 
 const DashboardSidebar = ({onMobileClose, openMobile}) => {
-  const {permissionLevel} = useContext(GlobalContext)
-
-  console.log(permissionLevel)
   const location = useLocation()
   const client = useClient()
+  const {permissionLevel} = useContext(GlobalContext)
+
   const [openLogout, setOpenLogout] = useState(false)
 
   const userlocal = window.localStorage.getItem('__user_data__')
@@ -93,17 +92,19 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
             `${data?.data?.firstName}${' '}${data?.data?.lastName}`
           )}
         </Typography>
-        {/* <Typography color="textSecondary" variant="body2">
-          {isFetching ? <CircularProgress style={{height: 14, width: 14}} /> : data?.data?.email}
-        </Typography> */}
       </Box>
       <Divider />
       <Box sx={{p: 2}}>
         <List>
           <>
-            {sidbarItem.map(item => (
-              <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
-            ))}
+            {sidbarItem
+              .filter(nav => {
+                if (!getCompoAccess[permissionLevel]?.user) return nav.title !== 'User'
+                return nav
+              })
+              .map(item => (
+                <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
+              ))}
             <ListItem
               disableGutters
               style={{
