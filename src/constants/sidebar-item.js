@@ -21,9 +21,4 @@ export const sidbarItem = [
     icon: Settings,
     title: 'My Account',
   },
-  // {
-  //   href: '/settings',
-  //   icon: Settings,
-  //   title: 'Settings',
-  // },
 ]
