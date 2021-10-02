@@ -26,22 +26,25 @@ import {
   IconButton,
   Menu,
   TextField,
+  Checkbox,
 } from '@material-ui/core'
-import {useQuery} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
 import {blueGrey, green, indigo, lightGreen, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
-import {ArrowBack} from '@material-ui/icons'
+import {ArrowBack, Delete} from '@material-ui/icons'
 import {useClient} from 'useClient'
 import {AddKeywordModal} from 'components/add-keyword-modal'
+import {DeleteModal} from 'components/delete-modal'
 
 function KeywordList() {
   const history = useHistory()
   const theme = useTheme()
   const client = useClient()
   const {state} = useLocation()
+  const queryClient = useQueryClient()
   const {subProjectId: KeywordId, projectId} = useParams()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const getRows = JSON.parse(window.localStorage.getItem('keywordlistRow'))
@@ -55,6 +58,8 @@ function KeywordList() {
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
   const [diffSortingtype, setdiffSortingtype] = useState('asc')
+  const [selected, setSelected] = React.useState([])
+  const [deleteModal, setDeleteModal] = useState(false)
   // const [urlSortingtype, seturlSortingtype] = useState('asc')
 
   const [anchorE2, setAnchorE2] = useState(null)
@@ -121,6 +126,28 @@ function KeywordList() {
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
     ['exportKeywordsToGoogleSheet', KeywordId],
     () => fetchGooglesheet(KeywordId)
+  )
+
+  const {
+    mutate: deleteKeyword,
+    isLoading: deleteIsloading,
+    isFetching: singalkeydeleteKeywordlistIsFetching,
+  } = useMutation(
+    data =>
+      client(`deleteKeywords`, {
+        data,
+        method: 'delete',
+      }),
+    {
+      onSuccess: () => {
+        setSelected([])
+        setDeleteModal(false)
+        queryClient.invalidateQueries('keyWordList')
+        queryClient.invalidateQueries('DdlistKeyword')
+        queryClient.invalidateQueries('exportKeywordsToCsv')
+        queryClient.invalidateQueries('exportKeywordsToGoogleSheet')
+      },
+    }
   )
 
   const {data: keywordAnalytics, isFetching: analyticsKeywordisFetching} = useQuery(
@@ -191,6 +218,34 @@ function KeywordList() {
       color: blueGrey,
     },
   ]
+
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name)
+    let newSelected = []
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name)
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1))
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1))
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
+    }
+
+    setSelected(newSelected)
+  }
+
+  const isSelected = name => selected.indexOf(name) !== -1
+
+  const handleSelectAllClick = event => {
+    if (event.target.checked) {
+      const newSelecteds = data?.data?.result?.map(n => n._id)
+      setSelected(newSelecteds)
+      return
+    }
+    setSelected([])
+  }
 
   return (
     <>
@@ -296,10 +351,23 @@ function KeywordList() {
       </Box>
       <Paper>
         <Card>
-          <Toolbar className="d-flex ">
-            <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-              Current page <span> ({page + 1})</span>
-            </Typography>
+          <Toolbar className="d-flex">
+            {selected.length > 0 ? (
+              <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+                Selected Keyword <span>({selected.length})</span>
+              </Typography>
+            ) : (
+              <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+                Current page <span> ({page + 1})</span>
+              </Typography>
+            )}
+            {selected.length > 0 && (
+              <Tooltip title="Delete" onClick={() => setDeleteModal(true)}>
+                <IconButton>
+                  <Delete />
+                </IconButton>
+              </Tooltip>
+            )}
             {xsScreen && (
               <>
                 <Button
@@ -342,6 +410,17 @@ function KeywordList() {
               <Table size="medium" className="selectTable sublist">
                 <TableHead>
                   <TableRow>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                        indeterminate={selected.length > 0 && selected.length < data?.data?.total}
+                        checked={data?.data?.total > 0 && selected.length === data?.data?.total}
+                        onChange={handleSelectAllClick}
+                        inputProps={{
+                          'aria-label': 'select all',
+                        }}
+                      />
+                    </TableCell>
                     <TableCell className="pl-4">#</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
@@ -406,45 +485,66 @@ function KeywordList() {
                     </TableRow>
                   ) : (
                     data?.data?.result?.map(
-                      ({_id, keyword, prevDate, nextDate, prevRankGroup, rankGroup, url, difference}, index) => (
-                        <TableRow hover key={_id}>
-                          <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
-                          <TableCell>{keyword}</TableCell>
-                          {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
-                          <TableCell>{getFormetedData(prevDate)}</TableCell>
-                          <TableCell>{getFormetedData(nextDate)}</TableCell>
-                          <TableCell>{prevRankGroup || '-'}</TableCell>
-                          <TableCell>{rankGroup || '-'}</TableCell>
-                          <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
-                            {difference?.toString()?.replace('-', '')}
-                            {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
-                          </TableCell>
-                          <Tooltip
-                            onClick={() => {
-                              const win = window.open(url, '_blank')
-                              win.focus()
-                            }}
-                            TransitionComponent={Zoom}
-                            title={url || 'Not available'}
-                            placement="top"
+                      ({_id, keyword, prevDate, nextDate, prevRankGroup, rankGroup, url, difference}, index) => {
+                        const isItemSelected = isSelected(_id)
+                        const labelId = `enhanced-table-checkbox-${index}`
+                        return (
+                          <TableRow
+                            hover
+                            key={_id}
+                            onClick={event => handleClick(event, _id)}
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            selected={isItemSelected}
                           >
-                            <TableCell className="urlEcllips">{url || '-'}</TableCell>
-                          </Tooltip>
-                          {/* <Tooltip
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                color="primary"
+                                checked={isItemSelected}
+                                inputProps={{
+                                  'aria-labelledby': labelId,
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
+                            <TableCell>{keyword}</TableCell>
+                            {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
+                            <TableCell>{getFormetedData(prevDate)}</TableCell>
+                            <TableCell>{getFormetedData(nextDate)}</TableCell>
+                            <TableCell>{prevRankGroup || '-'}</TableCell>
+                            <TableCell>{rankGroup || '-'}</TableCell>
+                            <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
+                              {difference?.toString()?.replace('-', '')}
+                              {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
+                            </TableCell>
+                            <Tooltip
+                              onClick={() => {
+                                const win = window.open(url, '_blank')
+                                win.focus()
+                              }}
+                              TransitionComponent={Zoom}
+                              title={url || 'Not available'}
+                              placement="top"
+                            >
+                              <TableCell className="urlEcllips">{url || '-'}</TableCell>
+                            </Tooltip>
+                            {/* <Tooltip
                             TransitionComponent={Zoom}
                             title={getStatus(error, errorMessage, newInserted, 'GET_TOOLTIP')}
                             placement="top"
                           >
                             <TableCell>{getStatus(error, errorMessage, newInserted, 'GET_VALUE')}</TableCell>
                           </Tooltip> */}
-                        </TableRow>
-                      )
+                          </TableRow>
+                        )
+                      }
                     )
                   )}
                 </TableBody>
               </Table>
             </TableContainer>
-            {isFetching && DdlistKeywordisFetching && <LinearProgress />}
+            {(isFetching || DdlistKeywordisFetching || singalkeydeleteKeywordlistIsFetching) && <LinearProgress />}
             <TablePagination
               rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
               component="div"
@@ -457,6 +557,18 @@ function KeywordList() {
           </CardContent>
         </Card>
         {keyWordModal && <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} editId={KeywordId} />}
+        {deleteModal && (
+          <DeleteModal
+            deleteProject={() => deleteKeyword({_id: selected})}
+            deleteModal={deleteModal}
+            deleteIsloading={deleteIsloading}
+            modalFrom="Keyword"
+            onClose={() => {
+              setDeleteModal(false)
+              setSelected([])
+            }}
+          />
+        )}
       </Paper>
     </>
   )
