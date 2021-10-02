@@ -240,7 +240,7 @@ function SubProjectList() {
         {...other}
       >
         {value === index && (
-          <Box sx={{py: 2}}>
+          <Box sx={{pt: 3, pb: 2}}>
             <Typography>{children}</Typography>
           </Box>
         )}
@@ -250,38 +250,38 @@ function SubProjectList() {
 
   return (
     <>
+      <Box className="d-flex">
+        <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+          <IconButton
+            className="backbtn"
+            style={{color: theme.palette.text.secondary}}
+            onClick={() => history.push('/project')}
+          >
+            <ArrowBack />
+          </IconButton>
+          Sub Project: {projectlistIsLoading ? '-' : domain && domain[0] && domain[0]?.projectName}
+        </Typography>
+        <TextField
+          select
+          className="ProjectDD"
+          label="Select Project"
+          style={{minWidth: 250}}
+          onChange={e => history.push(e.target.value)}
+          defaultValue={DomainId}
+          disabled={projectlistIsLoading}
+        >
+          {listProject?.map(({value, projectName}) => (
+            <MenuItem key={value} value={value}>
+              {projectName}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Box>
       <Tabs textColor="primary" indicatorColor="primary" value={value} onChange={(e, newValue) => setValue(newValue)}>
         <Tab label="Sub Project" />
         <Tab label="Tag" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <Box className="d-flex pb-3">
-          <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-            <IconButton
-              className="backbtn"
-              style={{color: theme.palette.text.secondary}}
-              onClick={() => history.push('/project')}
-            >
-              <ArrowBack />
-            </IconButton>
-            Sub Project: {projectlistIsLoading ? '-' : domain && domain[0] && domain[0]?.projectName}
-          </Typography>
-          <TextField
-            select
-            className="ProjectDD"
-            label="Select Project"
-            style={{minWidth: 250}}
-            onChange={e => history.push(e.target.value)}
-            defaultValue={DomainId}
-            disabled={projectlistIsLoading}
-          >
-            {listProject?.map(({value, projectName}) => (
-              <MenuItem key={value} value={value}>
-                {projectName}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Box>
         <Box
           sx={{
             backgroundColor: 'background.default',
