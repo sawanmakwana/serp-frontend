@@ -230,7 +230,7 @@ function SubProjectList() {
     }
   }, [projectlistData, DomainId])
 
-  const {mutate: Emailmutate, isFetching: EmailmutateIsFetching} = useMutation(
+  const {mutate: Emailmutate, isLoading: EmailmutateIsLoading} = useMutation(
     data =>
       client(`enableDisableEmailNotification`, {
         data,
@@ -496,6 +496,7 @@ function SubProjectList() {
                               <>
                                 <TableCell>
                                   <Switch
+                                    color="primary"
                                     checked={enableEmail}
                                     onClick={e => e.stopPropagation()}
                                     onChange={e =>
@@ -564,7 +565,7 @@ function SubProjectList() {
                   </TableBody>
                 </Table>
               </TableContainer>
-              {(isFetching || projectlistIsFetching || singalProjectlistIsFetching || EmailmutateIsFetching) && (
+              {(isFetching || projectlistIsFetching || singalProjectlistIsFetching || EmailmutateIsLoading) && (
                 <LinearProgress />
               )}
               <TablePagination

@@ -231,7 +231,13 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
               render={({onChange, value, onBlur}) => (
                 <FormControlLabel
                   control={
-                    <Switch checked={value} onBlur={onBlur} value={value} onChange={e => onChange(e.target.checked)} />
+                    <Switch
+                      color="primary"
+                      checked={value}
+                      onBlur={onBlur}
+                      value={value}
+                      onChange={e => onChange(e.target.checked)}
+                    />
                   }
                   label="Enable Email Notification"
                 />
