@@ -64,7 +64,7 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
           component={RouterLink}
           to="/my-account"
           alt="-"
-          className={getUserAvtar(uservalue?.permissionLevel)}
+          className={getUserAvtar(data?.data?.permissionLevel)}
           style={{
             cursor: 'pointer',
             width: 64,
@@ -72,7 +72,6 @@ const DashboardSidebar = ({onMobileClose, openMobile}) => {
             marginBottom: 8,
           }}
         >
-          {/* {uservalue?.email.toString().charAt(0).toUpperCase()} */}
           {isFetching ? (
             <CircularProgress style={{height: 18, width: 18}} />
           ) : (
