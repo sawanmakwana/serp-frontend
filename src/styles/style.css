@@ -75,9 +75,6 @@
   max-width: 470px;
   min-width: 470px;
   word-wrap: break-word;
-  /* white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; */
 }
 .emptyTable {
   text-align: center !important;
@@ -232,4 +229,11 @@
 .next-rank .next-rank-data {
   opacity: 0.85;
   font-size: 12px;
+}
+.forget-link {
+  float: right;
+  cursor: pointer;
+}
+.forget-link:hover {
+  color: #5664D2;
 }

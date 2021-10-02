@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react'
-import {Avatar, Button, Container, CssBaseline, TextField, Typography} from '@material-ui/core'
+import {Avatar, Button, Container, CssBaseline, Grid, TextField, Typography} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import {Controller, useForm} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
@@ -7,6 +9,7 @@ import {useMutation} from 'react-query'
 import {useAuth} from 'context/auth-context'
 import axios from 'axios'
 import {makeStyles} from '@material-ui/styles'
+import {ForgotPassword} from 'components/forgot-password'
 import {addUser} from '../validations/user'
 
 const useStyles = makeStyles(theme => ({
@@ -32,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 }))
 function SignIn() {
   const classes = useStyles()
+  const [forgotPassModal, setForgotPassModal] = React.useState(false)
 
   const {handleSubmit, errors, control} = useForm({
     mode: 'onTouched',
@@ -128,8 +132,16 @@ function SignIn() {
           >
             Sign In
           </Button>
+          <Grid container>
+            <Grid item xs>
+              <a className="forget-link" variant="body2" onClick={() => setForgotPassModal(true)}>
+                Forgot password?
+              </a>
+            </Grid>
+          </Grid>
         </form>
       </div>
+      {forgotPassModal && <ForgotPassword open={forgotPassModal} setOpen={setForgotPassModal} />}
     </Container>
   )
 }

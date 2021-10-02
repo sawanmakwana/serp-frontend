@@ -6,7 +6,7 @@ export const addUser = Joi.object({
     .required()
     .messages({
       'string.empty': `Email cannot be an empty field`,
-      'string.email': `Enter valid Email Id`,
+      'string.email': `Enter valid Email ID`,
     }),
   password: Joi.string().trim().min(5).max(20).required().messages({
     'string.empty': `Password cannot be an empty field`,
@@ -33,4 +33,14 @@ export const changePassword = Joi.object({
     'string.min': `Confirm Password must be longer than 5 character`,
     'string.max': `Confirm Password can not be longer than 20 character`,
   }),
+})
+
+export const forgotPassword = Joi.object({
+  email: Joi.string()
+    .email({tlds: {allow: false}})
+    .required()
+    .messages({
+      'string.empty': `Email cannot be an empty field`,
+      'string.email': `Enter valid Email ID`,
+    }),
 })
