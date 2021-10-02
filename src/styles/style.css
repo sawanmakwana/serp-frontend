@@ -203,10 +203,12 @@
   color: rgb(86, 100, 210) !important;
 }
 .avatar-user {
-  background: #FF5722 !important;
+  background: #e6c6d8 !important;
+  color: #5B1F41 !important;
 }
 .avatar-client {
-  background: #4CAF50 !important;
+  background: #a7dbc0c4 !important;
+  color: #175a3b !important;
 }
 .prev-rank {
   display: flex;
