@@ -16,7 +16,7 @@ export const downloadResponseCSV = (data, name) => {
 
 export const getUserAccess = Access => {
   if (Access === 1) return 'Admin'
-  if (Access === 2) return 'User'
+  if (Access === 2) return 'Team'
   if (Access === 3) return 'Client'
   return 'Access not founds'
 }

@@ -75,7 +75,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
       firstName: '',
       lastName: '',
       email: '',
-      permissionLevel: '',
+      permissionLevel: 2,
       projectAccess: [],
     },
   })
@@ -198,7 +198,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
               <TextField
                 label="Enter Email"
                 required
-                disabled={isLoading}
+                disabled={isLoading || editId}
                 onBlur={onBlur}
                 error={errors.email}
                 variant="outlined"

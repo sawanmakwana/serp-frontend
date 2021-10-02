@@ -55,10 +55,10 @@ export const keywordFrequency = [
 export const permissionLevelOP = [
   {
     value: 2,
-    label: 'User',
+    label: 'Team (Edite and Export level permission)',
   },
   {
     value: 3,
-    label: 'client (Only can view)',
+    label: 'Client (Only view level permission)',
   },
 ]
