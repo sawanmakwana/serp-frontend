@@ -28,6 +28,7 @@ import {
   Tooltip,
   Tabs,
   Tab,
+  Switch,
 } from '@material-ui/core'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
@@ -53,6 +54,7 @@ import {downloadResponseCSV, getCompoAccess, getFormetedData, getKeywordFrequenc
 import {ArrowBack, Cached} from '@material-ui/icons'
 import {useClient} from 'useClient'
 import {GlobalContext} from 'context/global-context'
+import {TabPanel} from 'components/tab-panel'
 import {TagList} from './tag-list'
 
 function SubProjectList() {
@@ -77,8 +79,11 @@ function SubProjectList() {
   const [anchorE2, setAnchorE2] = useState(null)
   const [value, setValue] = React.useState(0)
   const open = Boolean(anchorE2)
-
   const [deleteModal, setDeleteModal] = useState(false)
+  const [emailToggel, setEmailToggel] = useState(false)
+
+  // console.log(emailToggel)
+
   const theme = useTheme()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
@@ -228,26 +233,18 @@ function SubProjectList() {
     }
   }, [projectlistData, DomainId])
 
-  function TabPanel(props) {
-    const {children, value, index, ...other} = props
-
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`full-width-tabpanel-${index}`}
-        aria-labelledby={`full-width-tab-${index}`}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...other}
-      >
-        {value === index && (
-          <Box sx={{pt: 3, pb: 2}}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    )
-  }
+  const {mutate: Emailmutate, isFetching: EmailmutateIsFetching} = useMutation(
+    data =>
+      client(`enableDisableEmailNotification`, {
+        data,
+        method: 'put',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('singalProject')
+      },
+    }
+  )
 
   return (
     <>
@@ -450,20 +447,28 @@ function SubProjectList() {
                           Next Date
                         </TableSortLabel>
                       </TableCell>
-                      {getCompoAccess[permissionLevel]?.action && <TableCell>Action</TableCell>}
+                      {getCompoAccess[permissionLevel]?.action && (
+                        <>
+                          <TableCell>Email Notification</TableCell>
+                          <TableCell>Action</TableCell>
+                        </>
+                      )}
                     </TableRow>
                   </TableHead>
 
                   <TableBody>
                     {data?.data?.result?.length === 0 ? (
                       <TableRow hover>
-                        <TableCell className="emptyTable" colSpan="11">
+                        <TableCell className="emptyTable" colSpan="8">
                           No Sub Project Available
                         </TableCell>
                       </TableRow>
                     ) : (
                       data?.data?.result?.map(
-                        ({_id, locationCode, keywordCheckFrequency, prevDate, nextDate, newInserted}, index) => (
+                        (
+                          {_id, locationCode, keywordCheckFrequency, prevDate, nextDate, newInserted, enableEmail},
+                          index
+                        ) => (
                           <TableRow
                             hover
                             key={_id}
@@ -491,55 +496,69 @@ function SubProjectList() {
                             <TableCell>{getFormetedData(prevDate)}</TableCell>
                             <TableCell>{getFormetedData(nextDate)}</TableCell>
                             {getCompoAccess[permissionLevel]?.action && (
-                              <TableCell>
-                                <>
-                                  <Button
-                                    className="selectTablebtn"
-                                    onClick={e => {
-                                      setAnchorEl(e.currentTarget)
-                                      setEditId(_id)
-                                      e.stopPropagation()
-                                    }}
-                                  >
-                                    <MoreVertical />
-                                  </Button>
-                                  <Menu
-                                    anchorEl={anchorEl}
-                                    keepMounted
-                                    open={anchorEl}
-                                    onClose={e => {
-                                      setAnchorEl(null)
-                                      setEditId(null)
-                                      e.stopPropagation()
-                                    }}
-                                    PaperProps={{
-                                      style: {
-                                        maxHeight: 220,
-                                        width: 120,
-                                      },
-                                    }}
-                                  >
-                                    <MenuItem
+                              <>
+                                <TableCell>
+                                  <Switch
+                                    checked={enableEmail}
+                                    onClick={e => e.stopPropagation()}
+                                    onChange={e =>
+                                      Emailmutate({
+                                        _id,
+                                        enableEmail: e.target.checked,
+                                      })
+                                    }
+                                  />
+                                </TableCell>
+                                <TableCell>
+                                  <>
+                                    <Button
+                                      className="selectTablebtn"
                                       onClick={e => {
+                                        setAnchorEl(e.currentTarget)
+                                        setEditId(_id)
                                         e.stopPropagation()
-                                        setSubAddProjectModal(true)
-                                        setAnchorEl(null)
                                       }}
                                     >
-                                      Edit
-                                    </MenuItem>
-                                    <MenuItem
-                                      onClick={e => {
-                                        e.stopPropagation()
-                                        setDeleteModal(true)
+                                      <MoreVertical />
+                                    </Button>
+                                    <Menu
+                                      anchorEl={anchorEl}
+                                      keepMounted
+                                      open={anchorEl}
+                                      onClose={e => {
                                         setAnchorEl(null)
+                                        setEditId(null)
+                                        e.stopPropagation()
+                                      }}
+                                      PaperProps={{
+                                        style: {
+                                          maxHeight: 220,
+                                          width: 120,
+                                        },
                                       }}
                                     >
-                                      Delete
-                                    </MenuItem>
-                                  </Menu>
-                                </>
-                              </TableCell>
+                                      <MenuItem
+                                        onClick={e => {
+                                          e.stopPropagation()
+                                          setSubAddProjectModal(true)
+                                          setAnchorEl(null)
+                                        }}
+                                      >
+                                        Edit
+                                      </MenuItem>
+                                      <MenuItem
+                                        onClick={e => {
+                                          e.stopPropagation()
+                                          setDeleteModal(true)
+                                          setAnchorEl(null)
+                                        }}
+                                      >
+                                        Delete
+                                      </MenuItem>
+                                    </Menu>
+                                  </>
+                                </TableCell>
+                              </>
                             )}
                           </TableRow>
                         )
@@ -548,7 +567,9 @@ function SubProjectList() {
                   </TableBody>
                 </Table>
               </TableContainer>
-              {(isFetching || projectlistIsFetching || singalProjectlistIsFetching) && <LinearProgress />}
+              {(isFetching || projectlistIsFetching || singalProjectlistIsFetching || EmailmutateIsFetching) && (
+                <LinearProgress />
+              )}
               <TablePagination
                 rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
                 component="div"
