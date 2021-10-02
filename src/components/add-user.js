@@ -113,7 +113,6 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
         setOpen(false)
         setEditId(null)
         queryClient.invalidateQueries('userList')
-        queryClient.invalidateQueries('sideBarUserInfo')
       },
     }
   )
