@@ -15,8 +15,7 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles, useTheme} from '@material-ui/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
-import {useMutation, useQueryClient} from 'react-query'
-
+import {useMutation} from 'react-query'
 import {getToken} from 'auth/auth-utils'
 import axios from 'axios'
 import {changePassword} from '../validations/user'
@@ -44,7 +43,6 @@ function ChangePass({open, setOpen}) {
       },
     },
   }))
-  // const client = useClient()
   const classes = useStyles()
   const classesFrom = useStylesForm()
 
@@ -61,10 +59,6 @@ function ChangePass({open, setOpen}) {
       confirmPassword: '',
     },
   })
-
-  // console.log(getValues('newPassword'))
-
-  const queryClient = useQueryClient()
 
   // const {isLoading, isError, error, isSuccess, mutate} = useMutation(
   //   data =>
@@ -83,17 +77,10 @@ function ChangePass({open, setOpen}) {
   //   }
   // )
 
-  const {isLoading, mutate} = useMutation(
-    data =>
-      axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/changePassword`, data, {
-        headers: {Authorization: `Bearer ${getToken()}`},
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('reposData')
-        setOpen(false)
-      },
-    }
+  const {isLoading, mutate} = useMutation(data =>
+    axios.post(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/changePassword`, data, {
+      headers: {Authorization: `Bearer ${getToken()}`},
+    })
   )
 
   const submitForm = submitdata => mutate(submitdata)
