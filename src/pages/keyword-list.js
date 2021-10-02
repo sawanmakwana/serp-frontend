@@ -30,7 +30,19 @@ import {
 } from '@material-ui/core'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
-import {blueGrey, green, indigo, lightGreen, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
+import {
+  blue,
+  blueGrey,
+  green,
+  indigo,
+  lightGreen,
+  lime,
+  orange,
+  pink,
+  purple,
+  red,
+  teal,
+} from '@material-ui/core/colors'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getCompoAccess, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
@@ -189,6 +201,12 @@ function KeywordList() {
       analyticsDataFetching: analyticsKeywordisFetching,
       value: analyticsData?.fourToTen,
       color: indigo,
+    },
+    {
+      name: 'Top 10',
+      analyticsDataFetching: analyticsKeywordisFetching,
+      value: analyticsData?.topTen,
+      color: blue,
     },
     {
       name: '11-20',

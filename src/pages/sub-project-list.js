@@ -30,7 +30,19 @@ import {
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
 import {AddSubProjectListModal} from 'components/add-sub-project'
-import {blueGrey, green, indigo, lightGreen, lime, orange, pink, purple, red, teal} from '@material-ui/core/colors'
+import {
+  blue,
+  blueGrey,
+  green,
+  indigo,
+  lightGreen,
+  lime,
+  orange,
+  pink,
+  purple,
+  red,
+  teal,
+} from '@material-ui/core/colors'
 import {useHistory, useParams} from 'react-router-dom'
 import {MoreVertical} from 'react-feather'
 import {DeleteModal} from 'components/delete-modal'
@@ -152,6 +164,12 @@ function SubProjectList() {
       analyticsDataFetching: analyticsSingalProjectisFetching,
       value: analyticsData?.fourToTen,
       color: indigo,
+    },
+    {
+      name: 'Top 10',
+      analyticsDataFetching: analyticsSingalProjectisFetching,
+      value: analyticsData?.topTen,
+      color: blue,
     },
     {
       name: '11-20',
