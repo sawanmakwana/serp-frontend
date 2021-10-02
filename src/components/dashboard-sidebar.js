@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useEffect, useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import {useLocation, Link as RouterLink} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
@@ -19,11 +19,15 @@ import {Lock} from 'react-feather'
 import {getUserAccess, getUserAvtar} from 'util/app-utill'
 import {useClient} from 'useClient'
 import {useQuery} from 'react-query'
+import {GlobalContext} from 'context/global-context'
 import {NavItem} from './nav-item'
 import {Logout} from './logout-modal'
 import {sidbarItem} from '../constants/sidebar-item'
 
 const DashboardSidebar = ({onMobileClose, openMobile}) => {
+  const {permissionLevel} = useContext(GlobalContext)
+
+  console.log(permissionLevel)
   const location = useLocation()
   const client = useClient()
   const [openLogout, setOpenLogout] = useState(false)
