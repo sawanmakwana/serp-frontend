@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import {
   TableHead,
   TablePagination,
@@ -16,14 +16,39 @@ import {
   CardContent,
   Box,
   Button,
+  LinearProgress,
 } from '@material-ui/core'
 import {getCompoAccess} from 'util/app-utill'
 import {Trash2} from 'react-feather'
 import {GlobalContext} from 'context/global-context'
 import Chart from 'react-apexcharts'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {useClient} from 'useClient'
+import {useParams} from 'react-router-dom'
+import {DeleteModal} from 'components/delete-modal'
 
 function TagList() {
+  const client = useClient()
+  const {projectId} = useParams()
+  const queryClient = useQueryClient()
   const {permissionLevel} = useContext(GlobalContext)
+  const getRows = JSON.parse(window.localStorage.getItem('taglistRow'))
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [page, setPage] = useState(0)
+  const [editId, setEditId] = useState(null)
+  const [Sorting, setSorting] = useState('')
+  const [tagNametype, setSetTagNametype] = useState('asc')
+  const [deleteModal, setDeleteModal] = useState(false)
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value))
+    window.localStorage.setItem('taglistRow', event.target.value)
+    setPage(0)
+  }
 
   const chartData = {
     options: {
@@ -41,6 +66,29 @@ function TagList() {
       },
     ],
   }
+
+  const {data, isFetching} = useQuery(
+    ['tagList', page, rowsPerPage, Sorting],
+    () => client(`tagList/${projectId}?limit=${rowsPerPage}page=${page + 1}${Sorting}`),
+    {
+      keepPreviousData: true,
+    }
+  )
+
+  const {mutate: deleteProject, isLoading: deleteIsloading} = useMutation(
+    mutateData =>
+      client(`deleteTag/${mutateData}`, {
+        mutateData,
+        method: 'delete',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('tagList')
+        setDeleteModal(false)
+        setEditId(null)
+      },
+    }
+  )
 
   return (
     <>
@@ -66,12 +114,12 @@ function TagList() {
                     <TableCell className="pl-4">#</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
-                      // active={Sorting.includes('keyword')}
-                      // direction={keySortingtype === 'asc' ? 'desc' : 'asc'}
-                      // onClick={() => {
-                      //   setkeySortingtype(keySortingtype === 'asc' ? 'desc' : 'asc')
-                      //   setSorting(`&sort=keyword:${keySortingtype}`)
-                      // }}
+                        active={Sorting.includes('tagName')}
+                        direction={tagNametype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setSetTagNametype(tagNametype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=tagName:${tagNametype}`)
+                        }}
                       >
                         Tag list
                       </TableSortLabel>
@@ -82,64 +130,74 @@ function TagList() {
                 </TableHead>
 
                 <TableBody>
-                  {/* {data?.data?.result?.length === 0 ? (
+                  {data?.data?.result?.length === 0 ? (
                     <TableRow hover>
                       <TableCell className="emptyTable" colSpan="11">
                         No Sub Project Available
                       </TableCell>
                     </TableRow>
                   ) : (
-                    data?.data?.result?.map(
-                      ({_id, locationCode, keywordCheckFrequency, prevDate, nextDate, newInserted}, index) => ( */}
-                  <TableRow
-                    hover
-                    // key={_id}
-                    // onClick={() =>
-                    //   history.push({
-                    //     pathname: `/project/${DomainId}/keyword/${_id}`,
-                    //     state: {
-                    //       keywordName: domain && domain[0] && domain[0]?.projectName,
-                    //       keywordlocation: getLoaction(locationCode),
-                    //       rowtoCall: data?.data?.total,
-                    //     },
-                    //   })
-                    // }
-                  >
-                    <TableCell className="pl-4">12</TableCell>
-
-                    <TableCell>asd</TableCell>
-
-                    {getCompoAccess[permissionLevel]?.action && (
-                      <TableCell>
-                        <Button
-                          className="selectTablebtn"
-                          // onClick={e => {
-                          //   setAnchorEl(e.currentTarget)
-                          //   setEditId(_id)
-                          //   e.stopPropagation()
-                          // }}
-                        >
-                          <Trash2 />
-                        </Button>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                  {/* ) ) )} */}
+                    data?.data?.result?.map(({_id, tagName}, index) => (
+                      <TableRow
+                        hover
+                        key={_id}
+                        // onClick={() =>
+                        //   history.push({
+                        //     pathname: `/project/${DomainId}/keyword/${_id}`,
+                        //     state: {
+                        //       keywordName: domain && domain[0] && domain[0]?.projectName,
+                        //       keywordlocation: getLoaction(locationCode),
+                        //       rowtoCall: data?.data?.total,
+                        //     },
+                        //   })
+                        // }
+                      >
+                        <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
+                        <TableCell>{tagName}</TableCell>
+                        {getCompoAccess[permissionLevel]?.action && (
+                          <TableCell>
+                            <Button
+                              className="selectTablebtn"
+                              onClick={e => {
+                                setDeleteModal(true)
+                                setEditId(_id)
+                                e.stopPropagation()
+                              }}
+                            >
+                              <Trash2 />
+                            </Button>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
-            {/* {(isFetching || projectlistIsFetching || singalProjectlistIsFetching) && <LinearProgress />} */}
+            {isFetching && <LinearProgress />}
             <TablePagination
-              rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
+              rowsPerPageOptions={[5, 10, 50, 100, 200, 500]}
               component="div"
-              // count={data?.data?.total}
-              // page={page}
-              // onPageChange={handleChangePage}
-              // rowsPerPage={rowsPerPage}
-              // onRowsPerPageChange={handleChangeRowsPerPage}
+              count={data?.data?.total}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </CardContent>
         </Card>
+        {deleteModal && (
+          <DeleteModal
+            deleteProject={() => deleteProject(editId)}
+            deleteModal={deleteModal}
+            deleteIsloading={deleteIsloading}
+            modalFrom="Tag"
+            onClose={() => {
+              setDeleteModal(false)
+              setEditId(null)
+            }}
+          />
+        )}
       </Paper>
     </>
   )
