@@ -54,11 +54,11 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
   const client = useClient()
   const classesFrom = useStylesForm()
   const theme = useTheme()
-  const [tag, setTag] = useState(null)
+
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const filter = createFilterOptions()
 
-  const {handleSubmit, errors, control, reset, watch} = useForm({
+  const {handleSubmit, errors, control, reset} = useForm({
     mode: 'onTouched',
     shouldFocusError: true,
     reValidateMode: 'onChange',
@@ -73,8 +73,6 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
       tags: [],
     },
   })
-
-  // console.log(watch('tags'))
 
   React.useEffect(() => {
     if (editId) {
@@ -125,7 +123,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
         keyword: submitdata.keyword.split('\n'),
         domain: domain[0].domain,
         _projectId,
-        tags: [tag],
+        tags: submitdata.tags.split(' '),
       })
     }
   }
@@ -237,30 +235,35 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
           />
           <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
 
-          <Autocomplete
-            filterOptions={(options, params) => {
-              const filtered = filter(options, params)
-              // Suggest the creation of a new value
-              if (params.inputValue !== '') {
-                filtered.push(params.inputValue)
-              }
-              return filtered
-            }}
-            selectOnFocus
-            fullWidth
-            handleHomeEndKeys
-            freeSolo
-            options={tagListDropDownData?.data}
-            renderOption={selected => selected}
-            renderInput={params => (
-              <TextField
-                {...params}
-                onChange={e => {
-                  setTag(e.target.value)
+          <Controller
+            control={control}
+            name="tags"
+            render={({onChange, onBlur, value}) => (
+              <Autocomplete
+                options={tagListDropDownData?.data}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params)
+                  if (params.inputValue !== '') {
+                    filtered.push(params.inputValue)
+                  }
+                  return filtered
                 }}
-                label="Select Tag"
-                variant="outlined"
-                helperText={errors.tags && errors.tags.message}
+                getOptionLabel={option => option.tagName}
+                id="controlled-demo"
+                freeSolo
+                selectOnFocus
+                handleHomeEndKeys
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    value={value}
+                    onBlur={onBlur}
+                    onChange={e => onChange(e.target.value)}
+                    variant="outlined"
+                    label="controlled"
+                    margin="normal"
+                  />
+                )}
               />
             )}
           />
