@@ -157,7 +157,7 @@ function KeywordTagList() {
                   {data?.data?.result?.length === 0 ? (
                     <TableRow hover>
                       <TableCell className="emptyTable" colSpan="11">
-                        No Keyword Available
+                        No Tag Keyword Available
                       </TableCell>
                     </TableRow>
                   ) : (

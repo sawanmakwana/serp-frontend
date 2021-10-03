@@ -136,7 +136,7 @@ function TagList() {
                   {data?.data?.result?.length === 0 ? (
                     <TableRow hover>
                       <TableCell className="emptyTable" colSpan="11">
-                        No Sub Project Available
+                        No Tag Available
                       </TableCell>
                     </TableRow>
                   ) : (
