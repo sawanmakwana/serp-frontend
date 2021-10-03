@@ -115,6 +115,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
     if (editId) {
       mutate({
         keyword: submitdata.keyword.split('\n'),
+        tags: submitdata.tags.split(' '),
       })
     }
     if (!editId) {
@@ -249,7 +250,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
                   return filtered
                 }}
                 getOptionLabel={option => option.tagName}
-                id="controlled-demo"
+                id="tag"
                 freeSolo
                 selectOnFocus
                 handleHomeEndKeys
@@ -260,53 +261,12 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
                     onBlur={onBlur}
                     onChange={e => onChange(e.target.value)}
                     variant="outlined"
-                    label="controlled"
-                    margin="normal"
+                    label="Select Tag"
                   />
                 )}
               />
             )}
           />
-
-          {/* <Controller
-            control={control}
-            name="tags"
-            render={({onChange, onBlur, value}) => (
-              <FormControl className="multi-select">
-                <InputLabel style={{left: 15, top: -4}}>Select Tag</InputLabel>
-                <Select
-                  multiple
-                  required
-                  onBlur={onBlur}
-                  value={value}
-                  onChange={e => onChange(e.target.value)}
-                  input={<OutlinedInput label="Select Tag" />}
-                  error={errors.tags}
-                  disabled={isLoading}
-                  renderValue={selected =>
-                    tagListDropDownData?.data
-                      .filter(user => selected.includes(user._id))
-                      .map(data => data.projectName)
-                      .join(', ')
-                  }
-                  MenuProps={MenuProps}
-                  helperText={errors.tags && errors.tags.message}
-                >
-                  <>
-                    <MenuItem>
-                      <ListItemText primary="Add New Tag" />
-                    </MenuItem>
-                    {tagListDropDownData?.data?.map(user => (
-                      <MenuItem key={user._id} value={user._id}>
-                        <ListItemText primary={user.projectName} />
-                      </MenuItem>
-                    ))}
-                  </>
-                </Select>
-                {errors.tags && <p className="p-error"> {errors.tags.message}</p>}
-              </FormControl>
-            )}
-          /> */}
           <TextField required variant="outlined" label="Enter Domain" disabled value={domain[0].domain} />
           {Boolean(!editId) && (
             <Controller

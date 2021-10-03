@@ -22,6 +22,7 @@ export const editSubProject = Joi.object({
     'string.empty': `Keyword cannot be an empty field`,
     'any.required': `Keyword cannot be an empty field`,
   }),
+  tags: Joi.allow(),
   // tags: Joi.array().min(1).messages({
   //   'array.empty': `Tag cannot be an empty field`,
   //   'any.required': `Tag is a required field`,
