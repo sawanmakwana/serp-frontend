@@ -8,6 +8,7 @@ import {User} from 'pages/user'
 import {MyAccount} from 'pages/my-account'
 import {getCompoAccess} from 'util/app-utill'
 import {useContext} from 'react'
+import {KeywordTagList} from 'pages/keyword-tag-list'
 import {AppLayout} from './layouts/app-layout'
 import {GlobalContext} from './context/global-context'
 
@@ -27,6 +28,10 @@ function AppRoutespath() {
       <Route exact path="/project/:projectId">
         <DocumentTitle title="Sub Project" />
         <SubProjectList />
+      </Route>
+      <Route exact path="/tag-keyword/:tagId">
+        <DocumentTitle title="Tag Keyword" />
+        <KeywordTagList />
       </Route>
       <Route exact path="/project/:projectId/keyword/:subProjectId">
         <DocumentTitle title="Project Keyword" />

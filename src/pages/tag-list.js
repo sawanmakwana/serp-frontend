@@ -24,7 +24,7 @@ import {GlobalContext} from 'context/global-context'
 import Chart from 'react-apexcharts'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 import {DeleteModal} from 'components/delete-modal'
 
 function TagList() {
@@ -39,6 +39,7 @@ function TagList() {
   const [Sorting, setSorting] = useState('')
   const [tagNametype, setSetTagNametype] = useState('asc')
   const [deleteModal, setDeleteModal] = useState(false)
+  const history = useHistory()
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -143,16 +144,16 @@ function TagList() {
                       <TableRow
                         hover
                         key={_id}
-                        // onClick={() =>
-                        //   history.push({
-                        //     pathname: `/project/${DomainId}/keyword/${_id}`,
-                        //     state: {
-                        //       keywordName: domain && domain[0] && domain[0]?.projectName,
-                        //       keywordlocation: getLoaction(locationCode),
-                        //       rowtoCall: data?.data?.total,
-                        //     },
-                        //   })
-                        // }
+                        onClick={() =>
+                          history.push({
+                            pathname: `/tag-keyword/${_id}`,
+                            // state: {
+                            //   keywordName: domain && domain[0] && domain[0]?.projectName,
+                            //   keywordlocation: getLoaction(locationCode),
+                            //   rowtoCall: data?.data?.total,
+                            // },
+                          })
+                        }
                       >
                         <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                         <TableCell>{tagName}</TableCell>
