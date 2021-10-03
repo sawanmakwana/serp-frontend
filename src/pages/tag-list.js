@@ -98,14 +98,14 @@ function TagList() {
       <Chart options={chartData.options} series={chartData.series} type="line" width="100%" height="320px" />
       <Box sx={{mt: 2}} className="d-flex pb-3 pt-2">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Tag <span> (12)</span>
+          Tag <span>({data?.data?.total})</span>
         </Typography>
       </Box>
       <Paper>
         <Card>
           <Toolbar className="d-flex ">
             <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-              Current page <span> (12)</span>
+              Current page <span> ({page + 1})</span>
             </Typography>
           </Toolbar>
           <Divider />
