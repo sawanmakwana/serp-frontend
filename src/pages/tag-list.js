@@ -93,8 +93,6 @@ function TagList() {
     }
   )
 
-  console.log(data?.data?.result)
-
   return (
     <>
       <Chart options={chartData.options} series={chartData.series} type="line" width="100%" height="320px" />
