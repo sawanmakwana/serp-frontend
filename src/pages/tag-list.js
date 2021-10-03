@@ -71,7 +71,7 @@ function TagList() {
   }
 
   const {data, isFetching} = useQuery(
-    ['tagList', page, rowsPerPage, Sorting],
+    ['tagList', page, rowsPerPage, Sorting, projectId],
     () => client(`tagList/${projectId}?limit=${rowsPerPage}page=${page + 1}${Sorting}`),
     {
       keepPreviousData: true,
@@ -92,6 +92,8 @@ function TagList() {
       },
     }
   )
+
+  console.log(data?.data?.result)
 
   return (
     <>
