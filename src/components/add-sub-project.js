@@ -253,6 +253,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
                 id="tag"
                 freeSolo
                 selectOnFocus
+                multiple
                 handleHomeEndKeys
                 renderInput={params => (
                   <TextField
