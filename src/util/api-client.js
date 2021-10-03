@@ -50,7 +50,7 @@ async function client(endpoint, {apiURL = baseUrl, data, token, headers: customH
     })
     .catch(err => {
       // eslint-disable-next-line no-console
-      console.log('catch')
+      // console.log('catch')
     })
 }
 export {client}
