@@ -146,12 +146,10 @@ function TagList() {
                         key={_id}
                         onClick={() =>
                           history.push({
-                            pathname: `/tag-keyword/${_id}`,
-                            // state: {
-                            //   keywordName: domain && domain[0] && domain[0]?.projectName,
-                            //   keywordlocation: getLoaction(locationCode),
-                            //   rowtoCall: data?.data?.total,
-                            // },
+                            pathname: `/project/tag-keyword/${_id}`,
+                            state: {
+                              tagName,
+                            },
                           })
                         }
                       >

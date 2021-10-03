@@ -18,16 +18,20 @@ import {
   LinearProgress,
   Tooltip,
   Zoom,
+  IconButton,
 } from '@material-ui/core'
 import Chart from 'react-apexcharts'
 import {useQuery} from 'react-query'
 import {useClient} from 'useClient'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory, useLocation} from 'react-router-dom'
 import {getDifference, getFormetedData} from 'util/app-utill'
+import {ArrowBack} from '@material-ui/icons'
+import theme from 'theme'
 
 function KeywordTagList() {
   const client = useClient()
   const {tagId} = useParams()
+  const {state} = useLocation()
   const getRows = JSON.parse(window.localStorage.getItem('KeywordTagListRow'))
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [page, setPage] = useState(0)
@@ -36,6 +40,7 @@ function KeywordTagList() {
   const [weekSortingtype, setweekSortingtype] = useState('asc')
   const [diffSortingtype, setdiffSortingtype] = useState('asc')
   const [urlSortingtype, setUrlSortingtype] = useState('asc')
+  const history = useHistory()
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -76,6 +81,18 @@ function KeywordTagList() {
 
   return (
     <>
+      <Box className="d-flex">
+        <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+          <IconButton
+            className="backbtn"
+            style={{color: theme.palette.text.secondary}}
+            onClick={() => history.goBack()}
+          >
+            <ArrowBack />
+          </IconButton>
+          Tag Name: {state.tagName ? state.tagName : '-'}
+        </Typography>
+      </Box>
       <Chart options={chartData.options} series={chartData.series} type="line" width="100%" height="320px" />
       <Box sx={{mt: 2}} className="d-flex pb-3 pt-2">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">

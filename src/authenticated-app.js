@@ -29,7 +29,7 @@ function AppRoutespath() {
         <DocumentTitle title="Sub Project" />
         <SubProjectList />
       </Route>
-      <Route exact path="/tag-keyword/:tagId">
+      <Route exact path="/project/tag-keyword/:tagId">
         <DocumentTitle title="Tag Keyword" />
         <KeywordTagList />
       </Route>
