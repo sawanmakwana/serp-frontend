@@ -77,7 +77,8 @@ function SubProjectList() {
   const [editId, setEditId] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [anchorE2, setAnchorE2] = useState(null)
-  const [value, setValue] = React.useState(0)
+  const getTabIndex = JSON.parse(window.localStorage.getItem('tabIndex'))
+  const [value, setValue] = useState(getTabIndex || 0)
   const open = Boolean(anchorE2)
   const [deleteModal, setDeleteModal] = useState(false)
 
@@ -272,7 +273,15 @@ function SubProjectList() {
           ))}
         </TextField>
       </Box>
-      <Tabs textColor="primary" indicatorColor="primary" value={value} onChange={(e, newValue) => setValue(newValue)}>
+      <Tabs
+        textColor="primary"
+        indicatorColor="primary"
+        value={value}
+        onChange={(e, newValue) => {
+          setValue(newValue)
+          window.localStorage.setItem('tabIndex', newValue)
+        }}
+      >
         <Tab label="Sub Project" />
         <Tab label="Tag" />
       </Tabs>
