@@ -236,41 +236,6 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
           />
           <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
 
-          {/* <Controller
-            control={control}
-            name="tags"
-            render={({onChange, onBlur, value}) => (
-              <Autocomplete
-                options={tagListDropDownData?.data}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params)
-                  if (params.inputValue !== '') {
-                    const tagName = `Add New Tag: "${params.inputValue}"`
-                    filtered.push({_id: -1, tagName})
-                  }
-                  return filtered
-                }}
-                getOptionLabel={option => option?.tagName}
-                id="tag"
-                selectOnFocus
-                clearOnBlur
-                handleHomeEndKeys
-                freeSolo
-                multiple
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    value={value}
-                    onBlur={onBlur}
-                    onChange={e => onChange(e.target.value)}
-                    variant="outlined"
-                    label="Select Tag"
-                  />
-                )}
-              />
-            )}
-          /> */}
-
           <Controller
             control={control}
             name="tags"
