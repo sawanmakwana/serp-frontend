@@ -113,21 +113,21 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
 
   const submitForm = submitdata => {
     console.log({tags: submitdata.tags})
-    if (editId) {
-      mutate({
-        keyword: submitdata.keyword.split('\n'),
-        tags: submitdata.tags.split(' '),
-      })
-    }
-    if (!editId) {
-      mutate({
-        ...submitdata,
-        keyword: submitdata.keyword.split('\n'),
-        domain: domain[0].domain,
-        _projectId,
-        tags: submitdata.tags.split(' '),
-      })
-    }
+    // if (editId) {
+    //   mutate({
+    //     keyword: submitdata.keyword.split('\n'),
+    //     tags: submitdata.tags.split(' '),
+    //   })
+    // }
+    // if (!editId) {
+    //   mutate({
+    //     ...submitdata,
+    //     keyword: submitdata.keyword.split('\n'),
+    //     domain: domain[0].domain,
+    //     _projectId,
+    //     tags: submitdata.tags.split(' '),
+    //   })
+    // }
   }
 
   const {data: tagListDropDownData} = useQuery(['tagListDropDown', _projectId], () =>
@@ -237,7 +237,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
           />
           <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
 
-          <Controller
+          {/* <Controller
             control={control}
             name="tags"
             render={({onChange, onBlur, value}) => (
@@ -268,6 +268,35 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
                     label="Select Tag"
                   />
                 )}
+              />
+            )}
+          /> */}
+
+          <Controller
+            control={control}
+            name="tags"
+            render={({onChange, onBlur, value}) => (
+              <Autocomplete
+                options={tagListDropDownData?.data}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params)
+                  if (params.inputValue !== '') {
+                    const tagName = `Add New Tag: "${params.inputValue}"`
+                    filtered.push({_id: -1, tagName})
+                  }
+                  return filtered
+                }}
+                getOptionLabel={option => option?.tagName}
+                id="tag"
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                freeSolo
+                multiple
+                onChange={(_, data) => onChange(data)}
+                value={value}
+                onBlur={onBlur}
+                renderInput={params => <TextField {...params} variant="outlined" label="Select Tag" />}
               />
             )}
           />
