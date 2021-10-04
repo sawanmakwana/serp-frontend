@@ -112,6 +112,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
   )
 
   const submitForm = submitdata => {
+    console.log({tags: submitdata.tags})
     if (editId) {
       mutate({
         keyword: submitdata.keyword.split('\n'),
@@ -245,16 +246,18 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
                 filterOptions={(options, params) => {
                   const filtered = filter(options, params)
                   if (params.inputValue !== '') {
-                    filtered.push(params.inputValue)
+                    const tagName = `Add New Tag: "${params.inputValue}"`
+                    filtered.push({_id: -1, tagName})
                   }
                   return filtered
                 }}
-                getOptionLabel={option => option.tagName}
+                getOptionLabel={option => option?.tagName}
                 id="tag"
-                freeSolo
                 selectOnFocus
-                multiple
+                clearOnBlur
                 handleHomeEndKeys
+                freeSolo
+                multiple
                 renderInput={params => (
                   <TextField
                     {...params}
