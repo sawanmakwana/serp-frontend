@@ -72,7 +72,6 @@ function SubProjectList() {
   const [prevdatetype, setPrevDatetype] = useState('asc')
   const [nextdatetype, setNedxtDatetype] = useState('asc')
   const [addSubProjectModal, setSubAddProjectModal] = useState(false)
-  const [listProject, setListProject] = useState([])
   const [domain, setDomain] = useState([])
   const [editId, setEditId] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -221,12 +220,7 @@ function SubProjectList() {
 
   React.useEffect(() => {
     if (projectlistData) {
-      const {data} = projectlistData
-      const listProject = data?.map(({projectName, _id, domain}) => {
-        return {projectName, value: _id, domain}
-      })
-      setListProject(listProject)
-      const domain = listProject?.filter(list => DomainId === list.value)
+      const domain = projectlistData?.data?.filter(list => DomainId === list._id)
       setDomain(domain)
     }
   }, [projectlistData, DomainId])
@@ -266,8 +260,8 @@ function SubProjectList() {
           defaultValue={DomainId}
           disabled={projectlistIsLoading}
         >
-          {listProject?.map(({value, projectName}) => (
-            <MenuItem key={value} value={value}>
+          {projectlistData?.data?.map(({_id, projectName}) => (
+            <MenuItem key={value} value={_id}>
               {projectName}
             </MenuItem>
           ))}
