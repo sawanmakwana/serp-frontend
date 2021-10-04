@@ -189,7 +189,7 @@ function MyAccount() {
                       fullWidth
                       disabled
                       label="Email asdasdsadads"
-                      value={data?.data?.email}
+                      value={data?.data?.email ? data?.data?.email : '-'}
                       variant="outlined"
                     />
                   </Grid>
