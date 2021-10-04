@@ -27,6 +27,7 @@ import {
   Menu,
   TextField,
   Checkbox,
+  Chip,
 } from '@material-ui/core'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
@@ -525,7 +526,7 @@ function KeywordList() {
                     </TableRow>
                   ) : (
                     data?.data?.result?.map(
-                      ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference}, index) => {
+                      ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference, tags}, index) => {
                         const isItemSelected = isSelected(_id)
                         const labelId = `enhanced-table-checkbox-${index}`
                         return (
@@ -550,7 +551,12 @@ function KeywordList() {
                               </TableCell>
                             )}
                             <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
-                            <TableCell>{keyword}</TableCell>
+                            <TableCell>
+                              {keyword}{' '}
+                              {tags.map(e => (
+                                <Chip className="ml-1" label={e.tagName} />
+                              ))}
+                            </TableCell>
                             {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
                             <TableCell>{prevRankGroup || '-'}</TableCell>
                             <TableCell>{rankGroup || '-'}</TableCell>
