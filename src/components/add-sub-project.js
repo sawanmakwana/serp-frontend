@@ -112,22 +112,21 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
   )
 
   const submitForm = submitdata => {
-    console.log({tags: submitdata.tags})
-    // if (editId) {
-    //   mutate({
-    //     keyword: submitdata.keyword.split('\n'),
-    //     tags: submitdata.tags.split(' '),
-    //   })
-    // }
-    // if (!editId) {
-    //   mutate({
-    //     ...submitdata,
-    //     keyword: submitdata.keyword.split('\n'),
-    //     domain: domain[0].domain,
-    //     _projectId,
-    //     tags: submitdata.tags.split(' '),
-    //   })
-    // }
+    if (editId) {
+      mutate({
+        keyword: submitdata.keyword.split('\n'),
+        tags: submitdata.tags.map(e => e.tagName),
+      })
+    }
+    if (!editId) {
+      mutate({
+        ...submitdata,
+        keyword: submitdata.keyword.split('\n'),
+        domain: domain[0].domain,
+        _projectId,
+        tags: submitdata.tags.map(e => e.tagName),
+      })
+    }
   }
 
   const {data: tagListDropDownData} = useQuery(['tagListDropDown', _projectId], () =>
@@ -280,9 +279,12 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
                 options={tagListDropDownData?.data}
                 filterOptions={(options, params) => {
                   const filtered = filter(options, params)
-                  if (params.inputValue !== '') {
-                    const tagName = `Add New Tag: "${params.inputValue}"`
-                    filtered.push({_id: -1, tagName})
+                  if (filtered.length === 0) {
+                    if (params.inputValue !== '') {
+                      const tagName = params.inputValue
+                      filtered.push({_id: -1, tagName})
+                    }
+                    return filtered
                   }
                   return filtered
                 }}
