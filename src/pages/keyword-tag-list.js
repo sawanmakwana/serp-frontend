@@ -19,6 +19,7 @@ import {
   Tooltip,
   Zoom,
   IconButton,
+  Collapse,
 } from '@material-ui/core'
 import Chart from 'react-apexcharts'
 import {useQuery} from 'react-query'
@@ -27,6 +28,8 @@ import {useParams, useHistory, useLocation} from 'react-router-dom'
 import {getDifference, getFormetedData} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
 import theme from 'theme'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
 function KeywordTagList() {
   const client = useClient()
@@ -35,6 +38,7 @@ function KeywordTagList() {
   const getRows = JSON.parse(window.localStorage.getItem('KeywordTagListRow'))
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [page, setPage] = useState(0)
+  const [open, setOpen] = useState(false)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
@@ -112,6 +116,7 @@ function KeywordTagList() {
               <Table size="medium" className="selectTable">
                 <TableHead>
                   <TableRow>
+                    <TableCell />
                     <TableCell>#</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
@@ -181,28 +186,55 @@ function KeywordTagList() {
                     data?.data?.result?.map(
                       ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference}, index) => {
                         return (
-                          <TableRow hover key={_id} role="checkbox">
-                            <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
-                            <TableCell>{keyword}</TableCell>
-                            {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
-                            <TableCell>{prevRankGroup || '-'}</TableCell>
-                            <TableCell>{rankGroup || '-'}</TableCell>
-                            <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
-                              {difference?.toString()?.replace('-', '')}
-                              {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
-                            </TableCell>
-                            <Tooltip
-                              onClick={() => {
-                                const win = window.open(url, '_blank')
-                                win.focus()
-                              }}
-                              TransitionComponent={Zoom}
-                              title={url || 'Not available'}
-                              placement="top"
-                            >
-                              <TableCell className="urlEcllips">{url || '-'}</TableCell>
-                            </Tooltip>
-                          </TableRow>
+                          <>
+                            <TableRow hover key={_id} role="checkbox">
+                              <TableCell>
+                                <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                </IconButton>
+                              </TableCell>
+                              <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
+                              <TableCell>{keyword}</TableCell>
+                              <TableCell>{prevRankGroup || '-'}</TableCell>
+                              <TableCell>{rankGroup || '-'}</TableCell>
+                              <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
+                                {difference?.toString()?.replace('-', '')}
+                                {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
+                              </TableCell>
+                              <Tooltip
+                                onClick={() => {
+                                  const win = window.open(url, '_blank')
+                                  win.focus()
+                                }}
+                                TransitionComponent={Zoom}
+                                title={url || 'Not available'}
+                                placement="top"
+                              >
+                                <TableCell className="urlEcllips">{url || '-'}</TableCell>
+                              </Tooltip>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell
+                                style={{
+                                  paddingBottom: 0,
+                                  paddingTop: 0,
+                                }}
+                                colSpan={11}
+                              >
+                                <Collapse in={open} timeout="auto" unmountOnExit>
+                                  <Box margin={1}>
+                                    <Chart
+                                      options={chartData.options}
+                                      series={chartData.series}
+                                      type="line"
+                                      width="100%"
+                                      height="320px"
+                                    />
+                                  </Box>
+                                </Collapse>
+                              </TableCell>
+                            </TableRow>
+                          </>
                         )
                       }
                     )
