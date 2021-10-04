@@ -26,6 +26,7 @@ import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
 import {useParams, useHistory} from 'react-router-dom'
 import {DeleteModal} from 'components/delete-modal'
+import {toast} from 'react-toastify'
 
 function TagList() {
   const client = useClient()
@@ -89,6 +90,7 @@ function TagList() {
         queryClient.invalidateQueries('tagList')
         setDeleteModal(false)
         setEditId(null)
+        toast.success(`Tag Deleted`)
       },
     }
   )

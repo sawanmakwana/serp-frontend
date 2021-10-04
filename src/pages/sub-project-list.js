@@ -55,6 +55,7 @@ import {ArrowBack, Cached} from '@material-ui/icons'
 import {useClient} from 'useClient'
 import {GlobalContext} from 'context/global-context'
 import {TabPanel} from 'components/tab-panel'
+import {toast} from 'react-toastify'
 import {TagList} from './tag-list'
 
 function SubProjectList() {
@@ -140,6 +141,7 @@ function SubProjectList() {
       queryClient.invalidateQueries('exportSubProjectToGoogleSheet')
       setDeleteModal(false)
       setEditId(null)
+      toast.success(`Sub Project Deleted`)
     },
   })
 
@@ -234,6 +236,7 @@ function SubProjectList() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('singalProject')
+        toast.success(`Email Notification Changed`)
       },
     }
   )

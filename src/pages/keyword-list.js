@@ -51,6 +51,7 @@ import {useClient} from 'useClient'
 import {AddKeywordModal} from 'components/add-keyword-modal'
 import {DeleteModal} from 'components/delete-modal'
 import {GlobalContext} from 'context/global-context'
+import {toast} from 'react-toastify'
 
 function KeywordList() {
   const history = useHistory()
@@ -167,6 +168,7 @@ function KeywordList() {
         queryClient.invalidateQueries('DdlistKeyword')
         queryClient.invalidateQueries('exportKeywordsToCsv')
         queryClient.invalidateQueries('exportKeywordsToGoogleSheet')
+        toast.success(`Keyword Deleted`)
       },
     }
   )

@@ -18,6 +18,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
+import {toast} from 'react-toastify'
 import {AddKeywordModalJoi} from '../validations/sub-project'
 
 function AddKeywordModal({open, setOpen, editId}) {
@@ -76,6 +77,7 @@ function AddKeywordModal({open, setOpen, editId}) {
         queryClient.invalidateQueries('exportKeywordsToCsv')
         queryClient.invalidateQueries('exportKeywordsToGoogleSheet')
         queryClient.invalidateQueries('analyticskeywordDashboard')
+        toast.success(`Keyword Added`)
       },
     }
   )

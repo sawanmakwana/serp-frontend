@@ -28,6 +28,7 @@ import {useClient} from 'useClient'
 import {DeleteModal} from 'components/delete-modal'
 import {AddUser} from 'components/add-user'
 import {getUserAccess, getUserAvtar} from 'util/app-utill'
+import {toast} from 'react-toastify'
 
 function User() {
   const queryClient = useQueryClient()
@@ -74,6 +75,7 @@ function User() {
         queryClient.invalidateQueries('userList')
         setDeleteModal(false)
         setEditId(null)
+        toast.success(`User Deleted`)
       },
     }
   )

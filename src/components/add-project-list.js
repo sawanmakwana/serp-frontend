@@ -21,6 +21,7 @@ import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
 import {useClient} from 'useClient'
+import {toast} from 'react-toastify'
 import {currencies} from '../constants/constants'
 import {ProjectList} from '../validations/project'
 
@@ -84,6 +85,7 @@ function AddProjectListModal({open, setOpen, editId, setEditId, data}) {
         queryClient.invalidateQueries('exportProjectToGoogleSheet')
         setOpen(false)
         setEditId(null)
+        toast.success(`Project ${editId ? 'Edited' : 'Added'}`)
       },
     }
   )

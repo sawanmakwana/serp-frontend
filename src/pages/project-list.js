@@ -32,6 +32,7 @@ import {useTheme} from '@material-ui/core/styles'
 import {downloadResponseCSV, getCompoAccess} from 'util/app-utill'
 import {useClient} from 'useClient'
 import {GlobalContext} from 'context/global-context'
+import {toast} from 'react-toastify'
 
 function PorjectList() {
   const theme = useTheme()
@@ -80,6 +81,7 @@ function PorjectList() {
         queryClient.invalidateQueries('exportProjectToGoogleSheet')
         setDeleteModal(false)
         setEditId(null)
+        toast.success(`Project Deleted`)
       },
     }
   )
@@ -106,24 +108,6 @@ function PorjectList() {
     }
   )
 
-  // async function fetchGooglesheet() {
-  //   const fetchURL = `${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToGoogleSheet`
-
-  //   const config = {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `${getToken()}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //   }
-  //   const response = await fetch(fetchURL, config)
-  //   if (!response.ok) throw new Error(response.statusText)
-  //   return response.json()
-  // }
-
-  // const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(['exportProjectToGoogleSheet'], () =>
-  //   fetchGooglesheet()
-  // )
   return (
     <>
       <Box className="d-flex pb-3">

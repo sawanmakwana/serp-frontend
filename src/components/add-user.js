@@ -23,6 +23,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQueryClient, useQuery} from 'react-query'
 import {useClient} from 'useClient'
+import {toast} from 'react-toastify'
 import {permissionLevelOP} from '../constants/constants'
 import {UserList} from '../validations/user-list'
 
@@ -113,6 +114,7 @@ function AddUser({open, setOpen, data, editId, setEditId}) {
         setOpen(false)
         setEditId(null)
         queryClient.invalidateQueries('userList')
+        toast.success(`User ${editId ? 'Edited' : 'Added'}`)
       },
     }
   )

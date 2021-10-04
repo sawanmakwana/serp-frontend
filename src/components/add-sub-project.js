@@ -23,6 +23,7 @@ import {joiResolver} from '@hookform/resolvers'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
 import {Autocomplete, createFilterOptions} from '@material-ui/lab'
+import {toast} from 'react-toastify'
 import {currencies, keywordFrequency} from '../constants/constants'
 import {editSubProject, SubProject} from '../validations/sub-project'
 
@@ -107,6 +108,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
         queryClient.invalidateQueries('analyticsSingalProject')
         queryClient.invalidateQueries('csvProjectSublist')
         queryClient.invalidateQueries('exportSubProjectToGoogleSheet')
+        toast.success(`Sub Project ${editId ? 'Edited' : 'Added'}`)
       },
     }
   )
