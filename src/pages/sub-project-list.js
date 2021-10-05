@@ -53,6 +53,8 @@ import {ArrowBack, Cached} from '@material-ui/icons'
 import {useClient} from 'useClient'
 import {GlobalContext} from 'context/global-context'
 import {toast} from 'react-toastify'
+import axios from 'axios'
+import {getToken} from 'auth/auth-utils'
 
 function SubProjectList() {
   const queryClient = useQueryClient()
@@ -101,23 +103,20 @@ function SubProjectList() {
     isLoading: projectlistIsLoading,
   } = useQuery(['DdList'], () => client(`getProjectsListDrpDwn`))
 
-  async function fetchCSV(DomainId) {
-    const fetchURL = `exportSubProjectToCsv/${DomainId}`
-    client(fetchURL)
-  }
-
-  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectSublist', DomainId], () => fetchCSV(DomainId), {
-    enabled: getCompoAccess[permissionLevel]?.headBtn,
-  })
-
-  async function fetchGooglesheet(DomainId) {
-    const fetchURL = `exportSubProjectToGoogleSheet/${DomainId}`
-    client(fetchURL)
-  }
+  const {data: csvData, isLoading: csvisLoading} = useQuery(
+    ['csvProjectSublist', DomainId],
+    () =>
+      axios.get(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportSubProjectToCsv/${DomainId}`, {
+        headers: {Authorization: `Bearer ${getToken()}`},
+      }),
+    {
+      enabled: getCompoAccess[permissionLevel]?.headBtn,
+    }
+  )
 
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
     ['exportSubProjectToGoogleSheet', DomainId],
-    () => fetchGooglesheet(DomainId),
+    () => client(`exportSubProjectToGoogleSheet/${DomainId}`),
     {
       enabled: getCompoAccess[permissionLevel]?.headBtn,
     }
@@ -311,7 +310,7 @@ function SubProjectList() {
                 <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
                   <MenuItem
                     onClick={() => {
-                      downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                      downloadResponseCSV(csvData?.data, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
                       setAnchorE2(null)
                     }}
                   >
@@ -358,7 +357,7 @@ function SubProjectList() {
                 <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
                   <MenuItem
                     onClick={() => {
-                      downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                      downloadResponseCSV(csvData?.data, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
                       setAnchorE2(null)
                     }}
                   >

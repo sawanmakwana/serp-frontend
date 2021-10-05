@@ -56,6 +56,8 @@ import {DeleteModal} from 'components/delete-modal'
 import {GlobalContext} from 'context/global-context'
 import {toast} from 'react-toastify'
 import {TabPanel} from 'components/tab-panel'
+import axios from 'axios'
+import {getToken} from 'auth/auth-utils'
 import {TagList} from './tag-list'
 
 function KeywordList() {
@@ -130,27 +132,20 @@ function KeywordList() {
     client(`getSubProjectsList/${projectId}?limit=${state?.rowtoCall || getkeywordRowtocall}`)
   )
 
-  async function fetchCSV(KeywordId) {
-    const fetchURL = `exportKeywordsToCsv/${KeywordId}`
-    client(fetchURL)
-  }
-
   const {data: csvData, isLoading: csvisLoading} = useQuery(
-    ['exportKeywordsToCsv', KeywordId],
-    () => fetchCSV(KeywordId),
+    ['csvProjectSublist', KeywordId],
+    () =>
+      axios.get(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportKeywordsToCsv/${KeywordId}`, {
+        headers: {Authorization: `Bearer ${getToken()}`},
+      }),
     {
       enabled: getCompoAccess[permissionLevel]?.headBtn,
     }
   )
 
-  async function fetchGooglesheet(KeywordId) {
-    const fetchURL = `exportKeywordsToGoogleSheet/${KeywordId}`
-    client(fetchURL)
-  }
-
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
     ['exportKeywordsToGoogleSheet', KeywordId],
-    () => fetchGooglesheet(KeywordId),
+    () => client(`exportKeywordsToGoogleSheet/${KeywordId}`),
     {
       enabled: getCompoAccess[permissionLevel]?.headBtn,
     }
@@ -374,7 +369,7 @@ function KeywordList() {
                   <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
                     <MenuItem
                       onClick={() => {
-                        downloadResponseCSV(csvData, `keyword_list`)
+                        downloadResponseCSV(csvData?.data, `keyword_list`)
                         setAnchorE2(null)
                       }}
                     >
@@ -439,7 +434,7 @@ function KeywordList() {
                   <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
                     <MenuItem
                       onClick={() => {
-                        downloadResponseCSV(csvData, `keyword_list`)
+                        downloadResponseCSV(csvData?.data, `keyword_list`)
                         setAnchorE2(null)
                       }}
                     >

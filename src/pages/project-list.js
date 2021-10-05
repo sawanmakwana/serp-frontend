@@ -33,6 +33,8 @@ import {downloadResponseCSV, getCompoAccess} from 'util/app-utill'
 import {useClient} from 'useClient'
 import {GlobalContext} from 'context/global-context'
 import {toast} from 'react-toastify'
+import axios from 'axios'
+import {getToken} from 'auth/auth-utils'
 
 function PorjectList() {
   const theme = useTheme()
@@ -86,14 +88,16 @@ function PorjectList() {
     }
   )
 
-  async function fetchCSV() {
-    const fetchURL = `exportProjectToCsv`
-    client(fetchURL)
-  }
-
-  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectlist'], () => client(`exportProjectToCsv`), {
-    enabled: getCompoAccess[permissionLevel]?.headBtn,
-  })
+  const {data: csvData, isLoading: csvisLoading} = useQuery(
+    ['csvProjectlist'],
+    () =>
+      axios.get(`${process.env.REACT_APP_PLATFORM_ENDPOINT}/exportProjectToCsv`, {
+        headers: {Authorization: `Bearer ${getToken()}`},
+      }),
+    {
+      enabled: getCompoAccess[permissionLevel]?.headBtn,
+    }
+  )
 
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
     ['exportProjectToGoogleSheet'],
@@ -128,7 +132,7 @@ function PorjectList() {
                 <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
                   <MenuItem
                     onClick={() => {
-                      downloadResponseCSV(csvData, 'main_project')
+                      downloadResponseCSV(csvData?.data, 'main_project')
                       setAnchorE2(null)
                     }}
                   >
@@ -175,7 +179,7 @@ function PorjectList() {
                 <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
                   <MenuItem
                     onClick={() => {
-                      downloadResponseCSV(csvData, 'main_project')
+                      downloadResponseCSV(csvData?.data, 'main_project')
                       setAnchorE2(null)
                     }}
                   >
