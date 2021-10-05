@@ -86,13 +86,13 @@ function KeywordList() {
   const getTabIndex = JSON.parse(window.localStorage.getItem('tabIndex'))
   const [value, setValue] = useState(getTabIndex || 0)
 
-  React.useEffect(() => {
-    window.history.pushState(null, '', window.location.href)
-    window.onpopstate = () => {
-      history.push(`/project/${projectId}`)
-    }
-    return () => (window.onpopstate = () => {})
-  }, [history, projectId])
+  // React.useEffect(() => {
+  //   window.history.pushState(null, '', window.location.href)
+  //   window.onpopstate = () => {
+  //     history.push(`/project/${projectId}`)
+  //   }
+  //   return () => (window.onpopstate = () => {})
+  // }, [history, projectId])
 
   React.useEffect(() => {
     if (state?.keywordName) {
@@ -324,8 +324,8 @@ function KeywordList() {
           window.localStorage.setItem('tabIndex', newValue)
         }}
       >
-        <Tab label="Sub Project" />
-        <Tab label="Tag" />
+        <Tab label="Keyword List" />
+        <Tab label="Keyword Tag" />
       </Tabs>
       <TabPanel value={value} index={0}>
         <Box
