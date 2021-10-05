@@ -20,6 +20,7 @@ import {
   Zoom,
   IconButton,
   Collapse,
+  Chip,
 } from '@material-ui/core'
 import Chart from 'react-apexcharts'
 import {useQuery} from 'react-query'
@@ -184,7 +185,7 @@ function KeywordTagList() {
                     </TableRow>
                   ) : (
                     data?.data?.result?.map(
-                      ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference}, index) => {
+                      ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference, tags}, index) => {
                         return (
                           <>
                             <TableRow hover key={_id} role="checkbox">
@@ -194,7 +195,12 @@ function KeywordTagList() {
                                 </IconButton>
                               </TableCell>
                               <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
-                              <TableCell>{keyword}</TableCell>
+                              <TableCell>
+                                {keyword}
+                                {tags.map(e => (
+                                  <Chip className="ml-1" label={e.tagName} />
+                                ))}
+                              </TableCell>
                               <TableCell>{prevRankGroup || '-'}</TableCell>
                               <TableCell>{rankGroup || '-'}</TableCell>
                               <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
