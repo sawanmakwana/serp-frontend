@@ -91,18 +91,13 @@ function PorjectList() {
     client(fetchURL)
   }
 
-  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectlist'], () => fetchCSV(), {
+  const {data: csvData, isLoading: csvisLoading} = useQuery(['csvProjectlist'], () => client(`exportProjectToCsv`), {
     enabled: getCompoAccess[permissionLevel]?.headBtn,
   })
 
-  async function fetchGooglesheet() {
-    const fetchURL = `exportProjectToGoogleSheet`
-    client(fetchURL)
-  }
-
   const {data: googlesheetData, isLoading: googlesheetisLoading} = useQuery(
     ['exportProjectToGoogleSheet'],
-    () => fetchGooglesheet(),
+    () => client(`exportProjectToGoogleSheet`),
     {
       enabled: getCompoAccess[permissionLevel]?.headBtn,
     }
