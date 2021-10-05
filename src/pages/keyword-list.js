@@ -28,6 +28,8 @@ import {
   TextField,
   Checkbox,
   Chip,
+  Tabs,
+  Tab,
 } from '@material-ui/core'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
@@ -53,6 +55,8 @@ import {AddKeywordModal} from 'components/add-keyword-modal'
 import {DeleteModal} from 'components/delete-modal'
 import {GlobalContext} from 'context/global-context'
 import {toast} from 'react-toastify'
+import {TabPanel} from 'components/tab-panel'
+import {TagList} from './tag-list'
 
 function KeywordList() {
   const history = useHistory()
@@ -77,9 +81,10 @@ function KeywordList() {
   const [urlSortingtype, setUrlSortingtype] = useState('asc')
   const [selected, setSelected] = React.useState([])
   const [deleteModal, setDeleteModal] = useState(false)
-
   const [anchorE2, setAnchorE2] = useState(null)
   const open = Boolean(anchorE2)
+  const getTabIndex = JSON.parse(window.localStorage.getItem('tabIndex'))
+  const [value, setValue] = useState(getTabIndex || 0)
 
   React.useEffect(() => {
     window.history.pushState(null, '', window.location.href)
@@ -279,7 +284,7 @@ function KeywordList() {
 
   return (
     <>
-      <Box className="d-flex pb-3">
+      <Box className="d-flex">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           <IconButton
             className="backbtn"
@@ -310,312 +315,329 @@ function KeywordList() {
           ))}
         </TextField>
       </Box>
-      <Box
-        sx={{
-          backgroundColor: 'background.default',
-          minHeight: '100%',
-          pb: 3,
+      <Tabs
+        textColor="primary"
+        indicatorColor="primary"
+        value={value}
+        onChange={(e, newValue) => {
+          setValue(newValue)
+          window.localStorage.setItem('tabIndex', newValue)
         }}
       >
-        <Container maxWidth={false} style={{padding: 0}}>
-          <Grid container spacing={3}>
-            {analyticCardList.map(({name, analyticsDataFetching, value, color}, i) => {
-              return (
-                <AnalyticCard
-                  key={i}
-                  name={name}
-                  analyticsDataFetching={analyticsDataFetching}
-                  value={value}
-                  color={color}
-                />
-              )
-            })}
-          </Grid>
-        </Container>
-      </Box>
-      <Box className="d-flex pb-3">
-        <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-          Keyword List <span> ({data?.data?.total})</span>
-        </Typography>
-        {getCompoAccess[permissionLevel]?.headBtn && (
-          <Box>
-            {!xsScreen && (
-              <>
-                <Button
-                  style={{
-                    color:
-                      googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
-                        ? theme.palette.text.secondary
-                        : theme.palette.primary.main,
-                  }}
-                  disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
-                  onClick={e => setAnchorE2(e.currentTarget)}
-                >
-                  Export
-                </Button>
-                <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
-                  <MenuItem
-                    onClick={() => {
-                      downloadResponseCSV(csvData, `keyword_list`)
-                      setAnchorE2(null)
+        <Tab label="Sub Project" />
+        <Tab label="Tag" />
+      </Tabs>
+      <TabPanel value={value} index={0}>
+        <Box
+          sx={{
+            backgroundColor: 'background.default',
+            minHeight: '100%',
+            pb: 3,
+          }}
+        >
+          <Container maxWidth={false} style={{padding: 0}}>
+            <Grid container spacing={3}>
+              {analyticCardList.map(({name, analyticsDataFetching, value, color}, i) => {
+                return (
+                  <AnalyticCard
+                    key={i}
+                    name={name}
+                    analyticsDataFetching={analyticsDataFetching}
+                    value={value}
+                    color={color}
+                  />
+                )
+              })}
+            </Grid>
+          </Container>
+        </Box>
+        <Box className="d-flex pb-3">
+          <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+            Keyword List <span> ({data?.data?.total})</span>
+          </Typography>
+          {getCompoAccess[permissionLevel]?.headBtn && (
+            <Box>
+              {!xsScreen && (
+                <>
+                  <Button
+                    style={{
+                      color:
+                        googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
+                          ? theme.palette.text.secondary
+                          : theme.palette.primary.main,
                     }}
+                    disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
+                    onClick={e => setAnchorE2(e.currentTarget)}
                   >
-                    Export CSV
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
-                      win.focus()
-                      setAnchorE2(null)
-                    }}
-                  >
-                    Export Google Sheet
-                  </MenuItem>
-                </Menu>
-              </>
-            )}
-            <Button className="ml-2" color="primary" variant="contained" onClick={() => setKeywordModal(true)}>
-              Add Keyword
-            </Button>
-          </Box>
-        )}
-      </Box>
-      <Paper>
-        <Card>
-          <Toolbar className="d-flex">
-            {selected.length > 0 ? (
-              <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-                Selected Keyword <span>({selected.length})</span>
-              </Typography>
-            ) : (
-              <Typography className="tableHeader next-rank" variant="h6" id="tableTitle" component="div">
-                <font>
-                  Current page <span> ({page + 1})</span>
-                </font>
-                <Tooltip title={`Next Date: ${getFormetedData(data?.data?.result[0]?.nextDate)}`}>
-                  <span className="next-rank-data">{getFormetedData(data?.data?.result[0]?.nextDate)}</span>
+                    Export
+                  </Button>
+                  <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                    <MenuItem
+                      onClick={() => {
+                        downloadResponseCSV(csvData, `keyword_list`)
+                        setAnchorE2(null)
+                      }}
+                    >
+                      Export CSV
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                        win.focus()
+                        setAnchorE2(null)
+                      }}
+                    >
+                      Export Google Sheet
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
+              <Button className="ml-2" color="primary" variant="contained" onClick={() => setKeywordModal(true)}>
+                Add Keyword
+              </Button>
+            </Box>
+          )}
+        </Box>
+        <Paper>
+          <Card>
+            <Toolbar className="d-flex">
+              {selected.length > 0 ? (
+                <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+                  Selected Keyword <span>({selected.length})</span>
+                </Typography>
+              ) : (
+                <Typography className="tableHeader next-rank" variant="h6" id="tableTitle" component="div">
+                  <font>
+                    Current page <span> ({page + 1})</span>
+                  </font>
+                  <Tooltip title={`Next Date: ${getFormetedData(data?.data?.result[0]?.nextDate)}`}>
+                    <span className="next-rank-data">{getFormetedData(data?.data?.result[0]?.nextDate)}</span>
+                  </Tooltip>
+                </Typography>
+              )}
+              {selected.length > 0 && getCompoAccess[permissionLevel]?.action && (
+                <Tooltip title="Delete selected keyword" onClick={() => setDeleteModal(true)}>
+                  <IconButton>
+                    <Delete />
+                  </IconButton>
                 </Tooltip>
-              </Typography>
-            )}
-            {selected.length > 0 && getCompoAccess[permissionLevel]?.action && (
-              <Tooltip title="Delete selected keyword" onClick={() => setDeleteModal(true)}>
-                <IconButton>
-                  <Delete />
-                </IconButton>
-              </Tooltip>
-            )}
-            {xsScreen && getCompoAccess[permissionLevel]?.headBtn && (
-              <>
-                <Button
-                  style={{
-                    color:
-                      googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
-                        ? theme.palette.text.secondary
-                        : theme.palette.primary.main,
-                  }}
-                  disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
-                  onClick={e => setAnchorE2(e.currentTarget)}
-                >
-                  Export
-                </Button>
-                <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
-                  <MenuItem
-                    onClick={() => {
-                      downloadResponseCSV(csvData, `keyword_list`)
-                      setAnchorE2(null)
+              )}
+              {xsScreen && getCompoAccess[permissionLevel]?.headBtn && (
+                <>
+                  <Button
+                    style={{
+                      color:
+                        googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
+                          ? theme.palette.text.secondary
+                          : theme.palette.primary.main,
                     }}
+                    disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
+                    onClick={e => setAnchorE2(e.currentTarget)}
                   >
-                    Export CSV
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
-                      win.focus()
-                      setAnchorE2(null)
-                    }}
-                  >
-                    Export Google Sheet
-                  </MenuItem>
-                </Menu>
-              </>
-            )}
-          </Toolbar>
-          <Divider />
-          <CardContent style={{padding: '0'}}>
-            <TableContainer>
-              <Table size="medium" className="selectTable sublist">
-                <TableHead>
-                  <TableRow>
-                    {getCompoAccess[permissionLevel]?.action && (
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          indeterminate={selected.length > 0 && selected.length < data?.data?.total}
-                          checked={data?.data?.total > 0 && selected.length === data?.data?.total}
-                          onChange={handleSelectAllClick}
-                          inputProps={{
-                            'aria-label': 'select all',
+                    Export
+                  </Button>
+                  <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                    <MenuItem
+                      onClick={() => {
+                        downloadResponseCSV(csvData, `keyword_list`)
+                        setAnchorE2(null)
+                      }}
+                    >
+                      Export CSV
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                        win.focus()
+                        setAnchorE2(null)
+                      }}
+                    >
+                      Export Google Sheet
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
+            </Toolbar>
+            <Divider />
+            <CardContent style={{padding: '0'}}>
+              <TableContainer>
+                <Table size="medium" className="selectTable sublist">
+                  <TableHead>
+                    <TableRow>
+                      {getCompoAccess[permissionLevel]?.action && (
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            indeterminate={selected.length > 0 && selected.length < data?.data?.total}
+                            checked={data?.data?.total > 0 && selected.length === data?.data?.total}
+                            onChange={handleSelectAllClick}
+                            inputProps={{
+                              'aria-label': 'select all',
+                            }}
+                          />
+                        </TableCell>
+                      )}
+                      <TableCell>#</TableCell>
+                      <TableCell sortDirection={false}>
+                        <TableSortLabel
+                          active={Sorting.includes('keyword')}
+                          direction={keySortingtype === 'asc' ? 'desc' : 'asc'}
+                          onClick={() => {
+                            setkeySortingtype(keySortingtype === 'asc' ? 'desc' : 'asc')
+                            setSorting(`&sort=keyword:${keySortingtype}`)
                           }}
-                        />
+                        >
+                          Keyword
+                        </TableSortLabel>
                       </TableCell>
-                    )}
-                    <TableCell>#</TableCell>
-                    <TableCell sortDirection={false}>
-                      <TableSortLabel
-                        active={Sorting.includes('keyword')}
-                        direction={keySortingtype === 'asc' ? 'desc' : 'asc'}
-                        onClick={() => {
-                          setkeySortingtype(keySortingtype === 'asc' ? 'desc' : 'asc')
-                          setSorting(`&sort=keyword:${keySortingtype}`)
-                        }}
-                      >
-                        Keyword
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell className="prev-rank">
-                      <p>Prev Rank</p>
-                      <Tooltip title={`Previous Date: ${getFormetedData(data?.data?.result[0]?.prevDate)}`}>
-                        <span>{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell sortDirection={false}>
-                      <TableSortLabel
-                        active={Sorting.includes('rankGroup')}
-                        direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
-                        onClick={() => {
-                          setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
-                          setSorting(`&sort=rankGroup:${weekSortingtype}`)
-                        }}
-                      >
-                        Current Rank
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell style={{minWidth: 80}}>
-                      <TableSortLabel
-                        active={Sorting.includes('difference')}
-                        direction={diffSortingtype === 'asc' ? 'desc' : 'asc'}
-                        onClick={() => {
-                          setdiffSortingtype(diffSortingtype === 'asc' ? 'desc' : 'asc')
-                          setSorting(`&sort=difference:${diffSortingtype}`)
-                        }}
-                      >
-                        Diff
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell>
-                      <TableSortLabel
-                        active={Sorting.includes('url')}
-                        direction={urlSortingtype === 'asc' ? 'desc' : 'asc'}
-                        onClick={() => {
-                          setUrlSortingtype(urlSortingtype === 'asc' ? 'desc' : 'asc')
-                          setSorting(`&sort=url:${urlSortingtype}`)
-                        }}
-                      >
-                        URL
-                      </TableSortLabel>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-
-                <TableBody>
-                  {data?.data?.result?.length === 0 ? (
-                    <TableRow hover>
-                      <TableCell className="emptyTable" colSpan="11">
-                        No Keyword Available
+                      <TableCell className="prev-rank">
+                        <p>Prev Rank</p>
+                        <Tooltip title={`Previous Date: ${getFormetedData(data?.data?.result[0]?.prevDate)}`}>
+                          <span>{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell sortDirection={false}>
+                        <TableSortLabel
+                          active={Sorting.includes('rankGroup')}
+                          direction={weekSortingtype === 'asc' ? 'desc' : 'asc'}
+                          onClick={() => {
+                            setweekSortingtype(weekSortingtype === 'asc' ? 'desc' : 'asc')
+                            setSorting(`&sort=rankGroup:${weekSortingtype}`)
+                          }}
+                        >
+                          Current Rank
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell style={{minWidth: 80}}>
+                        <TableSortLabel
+                          active={Sorting.includes('difference')}
+                          direction={diffSortingtype === 'asc' ? 'desc' : 'asc'}
+                          onClick={() => {
+                            setdiffSortingtype(diffSortingtype === 'asc' ? 'desc' : 'asc')
+                            setSorting(`&sort=difference:${diffSortingtype}`)
+                          }}
+                        >
+                          Diff
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell>
+                        <TableSortLabel
+                          active={Sorting.includes('url')}
+                          direction={urlSortingtype === 'asc' ? 'desc' : 'asc'}
+                          onClick={() => {
+                            setUrlSortingtype(urlSortingtype === 'asc' ? 'desc' : 'asc')
+                            setSorting(`&sort=url:${urlSortingtype}`)
+                          }}
+                        >
+                          URL
+                        </TableSortLabel>
                       </TableCell>
                     </TableRow>
-                  ) : (
-                    data?.data?.result?.map(
-                      ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference, tags}, index) => {
-                        const isItemSelected = isSelected(_id)
-                        const labelId = `enhanced-table-checkbox-${index}`
-                        return (
-                          <TableRow
-                            hover
-                            key={_id}
-                            onClick={event => handleClick(event, _id)}
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            selected={isItemSelected}
-                          >
-                            {getCompoAccess[permissionLevel]?.headBtn && (
-                              <TableCell padding="checkbox">
-                                <Checkbox
-                                  color="primary"
-                                  checked={isItemSelected}
-                                  inputProps={{
-                                    'aria-labelledby': labelId,
-                                  }}
-                                />
-                              </TableCell>
-                            )}
-                            <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
-                            <TableCell>
-                              {keyword}{' '}
-                              {tags.map(e => (
-                                <Chip className="ml-1" label={e.tagName} />
-                              ))}
-                            </TableCell>
-                            {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
-                            <TableCell>{prevRankGroup || '-'}</TableCell>
-                            <TableCell>{rankGroup || '-'}</TableCell>
-                            <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
-                              {difference?.toString()?.replace('-', '')}
-                              {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
-                            </TableCell>
-                            <Tooltip
-                              onClick={() => {
-                                const win = window.open(url, '_blank')
-                                win.focus()
-                              }}
-                              TransitionComponent={Zoom}
-                              title={url || 'Not available'}
-                              placement="top"
+                  </TableHead>
+
+                  <TableBody>
+                    {data?.data?.result?.length === 0 ? (
+                      <TableRow hover>
+                        <TableCell className="emptyTable" colSpan="11">
+                          No Keyword Available
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      data?.data?.result?.map(
+                        ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference, tags}, index) => {
+                          const isItemSelected = isSelected(_id)
+                          const labelId = `enhanced-table-checkbox-${index}`
+                          return (
+                            <TableRow
+                              hover
+                              key={_id}
+                              onClick={event => handleClick(event, _id)}
+                              role="checkbox"
+                              aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              selected={isItemSelected}
                             >
-                              <TableCell className="urlEcllips">{url || '-'}</TableCell>
-                            </Tooltip>
-                            {/* <Tooltip
+                              {getCompoAccess[permissionLevel]?.headBtn && (
+                                <TableCell padding="checkbox">
+                                  <Checkbox
+                                    color="primary"
+                                    checked={isItemSelected}
+                                    inputProps={{
+                                      'aria-labelledby': labelId,
+                                    }}
+                                  />
+                                </TableCell>
+                              )}
+                              <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
+                              <TableCell>
+                                {keyword}{' '}
+                                {tags.map(e => (
+                                  <Chip className="ml-1" label={e.tagName} />
+                                ))}
+                              </TableCell>
+                              {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
+                              <TableCell>{prevRankGroup || '-'}</TableCell>
+                              <TableCell>{rankGroup || '-'}</TableCell>
+                              <TableCell className={getDifference(prevRankGroup, rankGroup, 'GET_ClASS')}>
+                                {difference?.toString()?.replace('-', '')}
+                                {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
+                              </TableCell>
+                              <Tooltip
+                                onClick={() => {
+                                  const win = window.open(url, '_blank')
+                                  win.focus()
+                                }}
+                                TransitionComponent={Zoom}
+                                title={url || 'Not available'}
+                                placement="top"
+                              >
+                                <TableCell className="urlEcllips">{url || '-'}</TableCell>
+                              </Tooltip>
+                              {/* <Tooltip
                             TransitionComponent={Zoom}
                             title={getStatus(error, errorMessage, newInserted, 'GET_TOOLTIP')}
                             placement="top"
                           >
                             <TableCell>{getStatus(error, errorMessage, newInserted, 'GET_VALUE')}</TableCell>
                           </Tooltip> */}
-                          </TableRow>
-                        )
-                      }
-                    )
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {(isFetching || DdlistKeywordisFetching || singalkeydeleteKeywordlistIsFetching) && <LinearProgress />}
-            <TablePagination
-              rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
-              component="div"
-              count={data?.data?.total}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
+                            </TableRow>
+                          )
+                        }
+                      )
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              {(isFetching || DdlistKeywordisFetching || singalkeydeleteKeywordlistIsFetching) && <LinearProgress />}
+              <TablePagination
+                rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
+                component="div"
+                count={data?.data?.total}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </CardContent>
+          </Card>
+          {keyWordModal && <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} editId={KeywordId} />}
+          {deleteModal && (
+            <DeleteModal
+              deleteProject={() => deleteKeyword({_id: selected})}
+              deleteModal={deleteModal}
+              deleteIsloading={deleteIsloading}
+              modalFrom="Keyword"
+              onClose={() => {
+                setDeleteModal(false)
+                setSelected([])
+              }}
             />
-          </CardContent>
-        </Card>
-        {keyWordModal && <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} editId={KeywordId} />}
-        {deleteModal && (
-          <DeleteModal
-            deleteProject={() => deleteKeyword({_id: selected})}
-            deleteModal={deleteModal}
-            deleteIsloading={deleteIsloading}
-            modalFrom="Keyword"
-            onClose={() => {
-              setDeleteModal(false)
-              setSelected([])
-            }}
-          />
-        )}
-      </Paper>
+          )}
+        </Paper>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <TagList />
+      </TabPanel>
     </>
   )
 }

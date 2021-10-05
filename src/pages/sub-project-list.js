@@ -26,8 +26,6 @@ import {
   Menu,
   Zoom,
   Tooltip,
-  Tabs,
-  Tab,
   Switch,
 } from '@material-ui/core'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
@@ -54,9 +52,7 @@ import {downloadResponseCSV, getCompoAccess, getFormetedData, getKeywordFrequenc
 import {ArrowBack, Cached} from '@material-ui/icons'
 import {useClient} from 'useClient'
 import {GlobalContext} from 'context/global-context'
-import {TabPanel} from 'components/tab-panel'
 import {toast} from 'react-toastify'
-import {TagList} from './tag-list'
 
 function SubProjectList() {
   const queryClient = useQueryClient()
@@ -77,8 +73,6 @@ function SubProjectList() {
   const [editId, setEditId] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [anchorE2, setAnchorE2] = useState(null)
-  const getTabIndex = JSON.parse(window.localStorage.getItem('tabIndex'))
-  const [value, setValue] = useState(getTabIndex || 0)
   const open = Boolean(anchorE2)
   const [deleteModal, setDeleteModal] = useState(false)
 
@@ -243,7 +237,7 @@ function SubProjectList() {
 
   return (
     <>
-      <Box className="d-flex">
+      <Box className="d-flex pb-3">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           <IconButton
             className="backbtn"
@@ -264,355 +258,339 @@ function SubProjectList() {
           disabled={projectlistIsLoading}
         >
           {projectlistData?.data?.map(({_id, projectName}) => (
-            <MenuItem key={value} value={_id}>
+            <MenuItem key={_id} value={_id}>
               {projectName}
             </MenuItem>
           ))}
         </TextField>
       </Box>
-      <Tabs
-        textColor="primary"
-        indicatorColor="primary"
-        value={value}
-        onChange={(e, newValue) => {
-          setValue(newValue)
-          window.localStorage.setItem('tabIndex', newValue)
+
+      <Box
+        sx={{
+          backgroundColor: 'background.default',
+          minHeight: '100%',
+          pb: 3,
         }}
       >
-        <Tab label="Sub Project" />
-        <Tab label="Tag" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <Box
-          sx={{
-            backgroundColor: 'background.default',
-            minHeight: '100%',
-            pb: 3,
-          }}
-        >
-          <Container maxWidth={false} style={{padding: 0}}>
-            <Grid container spacing={3}>
-              {analyticCardList.map(({name, analyticsDataFetching, value, color}, i) => {
-                return (
-                  <AnalyticCard
-                    key={i}
-                    name={name}
-                    analyticsDataFetching={analyticsDataFetching}
-                    value={value}
-                    color={color}
-                  />
-                )
-              })}
-            </Grid>
-          </Container>
-        </Box>
-        <Box className="d-flex pb-3">
-          <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-            Sub Project <span> ({isLoading ? '0' : data?.data?.total})</span>
-          </Typography>
-          {getCompoAccess[permissionLevel]?.headBtn && (
-            <Box>
-              {!xsScreen && (
-                <>
-                  <Button
-                    style={{
-                      color:
-                        googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
-                          ? theme.palette.text.secondary
-                          : theme.palette.primary.main,
+        <Container maxWidth={false} style={{padding: 0}}>
+          <Grid container spacing={3}>
+            {analyticCardList.map(({name, analyticsDataFetching, value, color}, i) => {
+              return (
+                <AnalyticCard
+                  key={i}
+                  name={name}
+                  analyticsDataFetching={analyticsDataFetching}
+                  value={value}
+                  color={color}
+                />
+              )
+            })}
+          </Grid>
+        </Container>
+      </Box>
+      <Box className="d-flex pb-3">
+        <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+          Sub Project <span> ({isLoading ? '0' : data?.data?.total})</span>
+        </Typography>
+        {getCompoAccess[permissionLevel]?.headBtn && (
+          <Box>
+            {!xsScreen && (
+              <>
+                <Button
+                  style={{
+                    color:
+                      googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
+                        ? theme.palette.text.secondary
+                        : theme.palette.primary.main,
+                  }}
+                  disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
+                  onClick={e => setAnchorE2(e.currentTarget)}
+                >
+                  Export
+                </Button>
+                <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                  <MenuItem
+                    onClick={() => {
+                      downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                      setAnchorE2(null)
                     }}
-                    disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
-                    onClick={e => setAnchorE2(e.currentTarget)}
                   >
-                    Export
-                  </Button>
-                  <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
-                    <MenuItem
-                      onClick={() => {
-                        downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
-                        setAnchorE2(null)
-                      }}
-                    >
-                      Export CSV
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
-                        win.focus()
-                        setAnchorE2(null)
-                      }}
-                    >
-                      Export Google Sheet
-                    </MenuItem>
-                  </Menu>
-                </>
-              )}
-              <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
-                Add Sub Project
-              </Button>
-            </Box>
-          )}
-        </Box>
-        <Paper>
-          <Card>
-            <Toolbar className="d-flex ">
-              <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-                Current page <span> ({page + 1})</span>
-              </Typography>
-              {xsScreen && getCompoAccess[permissionLevel]?.headBtn && (
-                <>
-                  <Button
-                    style={{
-                      color:
-                        googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
-                          ? theme.palette.text.secondary
-                          : theme.palette.primary.main,
+                    Export CSV
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                      win.focus()
+                      setAnchorE2(null)
                     }}
-                    disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
-                    onClick={e => setAnchorE2(e.currentTarget)}
                   >
-                    Export
-                  </Button>
-                  <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
-                    <MenuItem
-                      onClick={() => {
-                        downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
-                        setAnchorE2(null)
-                      }}
-                    >
-                      Export CSV
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
-                        win.focus()
-                        setAnchorE2(null)
-                      }}
-                    >
-                      Export Google Sheet
-                    </MenuItem>
-                  </Menu>
-                </>
-              )}
-            </Toolbar>
-            <Divider />
-            <CardContent style={{padding: '0'}}>
-              <TableContainer>
-                <Table size="medium" className="selectTable">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="pl-4">#</TableCell>
-                      <TableCell sortDirection={false}>
-                        <TableSortLabel
-                          active={Sorting.includes('keyword')}
-                          direction={keySortingtype === 'asc' ? 'desc' : 'asc'}
-                          onClick={() => {
-                            setkeySortingtype(keySortingtype === 'asc' ? 'desc' : 'asc')
-                            setSorting(`&sort=keyword:${keySortingtype}`)
-                          }}
-                        >
-                          Keyword
-                        </TableSortLabel>
-                      </TableCell>
-                      <TableCell>
-                        <TableSortLabel
-                          active={Sorting.includes('keywordCheckFrequency')}
-                          direction={frequencytype === 'asc' ? 'desc' : 'asc'}
-                          onClick={() => {
-                            setFrequencySortingtype(frequencytype === 'asc' ? 'desc' : 'asc')
-                            setSorting(`&sort=keywordCheckFrequency:${frequencytype}`)
-                          }}
-                        >
-                          Frequency
-                        </TableSortLabel>
-                      </TableCell>
-                      <TableCell>
-                        <TableSortLabel
-                          active={Sorting.includes('prevDate')}
-                          direction={prevdatetype === 'asc' ? 'desc' : 'asc'}
-                          onClick={() => {
-                            setPrevDatetype(prevdatetype === 'asc' ? 'desc' : 'asc')
-                            setSorting(`&sort=prevDate:${prevdatetype}`)
-                          }}
-                        >
-                          Prev Date
-                        </TableSortLabel>
-                      </TableCell>
-                      <TableCell>
-                        <TableSortLabel
-                          active={Sorting.includes('nextDate')}
-                          direction={nextdatetype === 'asc' ? 'desc' : 'asc'}
-                          onClick={() => {
-                            setNedxtDatetype(nextdatetype === 'asc' ? 'desc' : 'asc')
-                            setSorting(`&sort=nextDate:${nextdatetype}`)
-                          }}
-                        >
-                          Next Date
-                        </TableSortLabel>
-                      </TableCell>
-                      {getCompoAccess[permissionLevel]?.action && (
-                        <>
-                          <TableCell>Email Notification</TableCell>
-                          <TableCell>Action</TableCell>
-                        </>
-                      )}
-                    </TableRow>
-                  </TableHead>
-
-                  <TableBody>
-                    {data?.data?.result?.length === 0 ? (
-                      <TableRow hover>
-                        <TableCell className="emptyTable" colSpan="8">
-                          No Sub Project Available
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      data?.data?.result?.map(
-                        (
-                          {_id, locationCode, keywordCheckFrequency, prevDate, nextDate, newInserted, enableEmail},
-                          index
-                        ) => (
-                          <TableRow
-                            hover
-                            key={_id}
-                            onClick={() =>
-                              history.push({
-                                pathname: `/project/${DomainId}/keyword/${_id}`,
-                                state: {
-                                  keywordName: domain && domain[0] && domain[0]?.projectName,
-                                  keywordlocation: getLoaction(locationCode),
-                                  rowtoCall: data?.data?.total,
-                                },
-                              })
-                            }
-                          >
-                            <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
-                            <TableCell className="keywordCell">
-                              {`${domain && domain[0] && domain[0]?.projectName} - ${getLoaction(locationCode)}`}
-                              {newInserted && (
-                                <Tooltip TransitionComponent={Zoom} title="Keyword pending" placement="top">
-                                  <Cached style={{color: orange[500]}} />
-                                </Tooltip>
-                              )}
-                            </TableCell>
-                            <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell>
-                            <TableCell>{getFormetedData(prevDate)}</TableCell>
-                            <TableCell>{getFormetedData(nextDate)}</TableCell>
-                            {getCompoAccess[permissionLevel]?.action && (
-                              <>
-                                <TableCell>
-                                  <Switch
-                                    color="primary"
-                                    checked={enableEmail}
-                                    onClick={e => e.stopPropagation()}
-                                    onChange={e =>
-                                      Emailmutate({
-                                        _id,
-                                        enableEmail: e.target.checked,
-                                      })
-                                    }
-                                  />
-                                </TableCell>
-                                <TableCell>
-                                  <>
-                                    <Button
-                                      className="selectTablebtn"
-                                      onClick={e => {
-                                        setAnchorEl(e.currentTarget)
-                                        setEditId(_id)
-                                        e.stopPropagation()
-                                      }}
-                                    >
-                                      <MoreVertical />
-                                    </Button>
-                                    <Menu
-                                      anchorEl={anchorEl}
-                                      keepMounted
-                                      open={anchorEl}
-                                      onClose={e => {
-                                        setAnchorEl(null)
-                                        setEditId(null)
-                                        e.stopPropagation()
-                                      }}
-                                      PaperProps={{
-                                        style: {
-                                          maxHeight: 220,
-                                          width: 120,
-                                        },
-                                      }}
-                                    >
-                                      <MenuItem
-                                        onClick={e => {
-                                          e.stopPropagation()
-                                          setSubAddProjectModal(true)
-                                          setAnchorEl(null)
-                                        }}
-                                      >
-                                        Edit
-                                      </MenuItem>
-                                      <MenuItem
-                                        onClick={e => {
-                                          e.stopPropagation()
-                                          setDeleteModal(true)
-                                          setAnchorEl(null)
-                                        }}
-                                      >
-                                        Delete
-                                      </MenuItem>
-                                    </Menu>
-                                  </>
-                                </TableCell>
-                              </>
-                            )}
-                          </TableRow>
-                        )
-                      )
+                    Export Google Sheet
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+            <Button className="ml-2" color="primary" variant="contained" onClick={() => setSubAddProjectModal(true)}>
+              Add Sub Project
+            </Button>
+          </Box>
+        )}
+      </Box>
+      <Paper>
+        <Card>
+          <Toolbar className="d-flex ">
+            <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
+              Current page <span> ({page + 1})</span>
+            </Typography>
+            {xsScreen && getCompoAccess[permissionLevel]?.headBtn && (
+              <>
+                <Button
+                  style={{
+                    color:
+                      googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0
+                        ? theme.palette.text.secondary
+                        : theme.palette.primary.main,
+                  }}
+                  disabled={googlesheetisLoading || csvisLoading || data?.data?.result?.length === 0}
+                  onClick={e => setAnchorE2(e.currentTarget)}
+                >
+                  Export
+                </Button>
+                <Menu anchorEl={anchorE2} open={open} onClose={() => setAnchorE2(null)}>
+                  <MenuItem
+                    onClick={() => {
+                      downloadResponseCSV(csvData, `${domain && domain[0] && domain[0]?.projectName}_sub_project`)
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export CSV
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      const win = window.open(googlesheetData?.data?.sheetURL, '_blank')
+                      win.focus()
+                      setAnchorE2(null)
+                    }}
+                  >
+                    Export Google Sheet
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+          </Toolbar>
+          <Divider />
+          <CardContent style={{padding: '0'}}>
+            <TableContainer>
+              <Table size="medium" className="selectTable">
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="pl-4">#</TableCell>
+                    <TableCell sortDirection={false}>
+                      <TableSortLabel
+                        active={Sorting.includes('keyword')}
+                        direction={keySortingtype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setkeySortingtype(keySortingtype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=keyword:${keySortingtype}`)
+                        }}
+                      >
+                        Keyword
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        active={Sorting.includes('keywordCheckFrequency')}
+                        direction={frequencytype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setFrequencySortingtype(frequencytype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=keywordCheckFrequency:${frequencytype}`)
+                        }}
+                      >
+                        Frequency
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        active={Sorting.includes('prevDate')}
+                        direction={prevdatetype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setPrevDatetype(prevdatetype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=prevDate:${prevdatetype}`)
+                        }}
+                      >
+                        Prev Date
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        active={Sorting.includes('nextDate')}
+                        direction={nextdatetype === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setNedxtDatetype(nextdatetype === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=nextDate:${nextdatetype}`)
+                        }}
+                      >
+                        Next Date
+                      </TableSortLabel>
+                    </TableCell>
+                    {getCompoAccess[permissionLevel]?.action && (
+                      <>
+                        <TableCell>Email Notification</TableCell>
+                        <TableCell>Action</TableCell>
+                      </>
                     )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              {(isFetching || projectlistIsFetching || singalProjectlistIsFetching || EmailmutateIsLoading) && (
-                <LinearProgress />
-              )}
-              <TablePagination
-                rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
-                component="div"
-                count={data?.data?.total}
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </CardContent>
-          </Card>
-          {deleteModal && (
-            <DeleteModal
-              deleteProject={() => deleteProject(editId)}
-              deleteModal={deleteModal}
-              deleteIsloading={deleteIsloading}
-              modalFrom="Sub Project"
-              onClose={() => {
-                setDeleteModal(false)
-                setEditId(null)
-              }}
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {data?.data?.result?.length === 0 ? (
+                    <TableRow hover>
+                      <TableCell className="emptyTable" colSpan="8">
+                        No Sub Project Available
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    data?.data?.result?.map(
+                      (
+                        {_id, locationCode, keywordCheckFrequency, prevDate, nextDate, newInserted, enableEmail},
+                        index
+                      ) => (
+                        <TableRow
+                          hover
+                          key={_id}
+                          onClick={() =>
+                            history.push({
+                              pathname: `/project/${DomainId}/keyword/${_id}`,
+                              state: {
+                                keywordName: domain && domain[0] && domain[0]?.projectName,
+                                keywordlocation: getLoaction(locationCode),
+                                rowtoCall: data?.data?.total,
+                              },
+                            })
+                          }
+                        >
+                          <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
+                          <TableCell className="keywordCell">
+                            {`${domain && domain[0] && domain[0]?.projectName} - ${getLoaction(locationCode)}`}
+                            {newInserted && (
+                              <Tooltip TransitionComponent={Zoom} title="Keyword pending" placement="top">
+                                <Cached style={{color: orange[500]}} />
+                              </Tooltip>
+                            )}
+                          </TableCell>
+                          <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell>
+                          <TableCell>{getFormetedData(prevDate)}</TableCell>
+                          <TableCell>{getFormetedData(nextDate)}</TableCell>
+                          {getCompoAccess[permissionLevel]?.action && (
+                            <>
+                              <TableCell>
+                                <Switch
+                                  color="primary"
+                                  checked={enableEmail}
+                                  onClick={e => e.stopPropagation()}
+                                  onChange={e =>
+                                    Emailmutate({
+                                      _id,
+                                      enableEmail: e.target.checked,
+                                    })
+                                  }
+                                />
+                              </TableCell>
+                              <TableCell>
+                                <>
+                                  <Button
+                                    className="selectTablebtn"
+                                    onClick={e => {
+                                      setAnchorEl(e.currentTarget)
+                                      setEditId(_id)
+                                      e.stopPropagation()
+                                    }}
+                                  >
+                                    <MoreVertical />
+                                  </Button>
+                                  <Menu
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={anchorEl}
+                                    onClose={e => {
+                                      setAnchorEl(null)
+                                      setEditId(null)
+                                      e.stopPropagation()
+                                    }}
+                                    PaperProps={{
+                                      style: {
+                                        maxHeight: 220,
+                                        width: 120,
+                                      },
+                                    }}
+                                  >
+                                    <MenuItem
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        setSubAddProjectModal(true)
+                                        setAnchorEl(null)
+                                      }}
+                                    >
+                                      Edit
+                                    </MenuItem>
+                                    <MenuItem
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        setDeleteModal(true)
+                                        setAnchorEl(null)
+                                      }}
+                                    >
+                                      Delete
+                                    </MenuItem>
+                                  </Menu>
+                                </>
+                              </TableCell>
+                            </>
+                          )}
+                        </TableRow>
+                      )
+                    )
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {(isFetching || projectlistIsFetching || singalProjectlistIsFetching || EmailmutateIsLoading) && (
+              <LinearProgress />
+            )}
+            <TablePagination
+              rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
+              component="div"
+              count={data?.data?.total}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
-          )}
-          {addSubProjectModal && (
-            <AddSubProjectListModal
-              editId={editId}
-              data={data}
-              setEditId={setEditId}
-              _projectId={DomainId}
-              domain={domain}
-              open={addSubProjectModal}
-              setOpen={setSubAddProjectModal}
-            />
-          )}
-        </Paper>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <TagList />
-      </TabPanel>
+          </CardContent>
+        </Card>
+        {deleteModal && (
+          <DeleteModal
+            deleteProject={() => deleteProject(editId)}
+            deleteModal={deleteModal}
+            deleteIsloading={deleteIsloading}
+            modalFrom="Sub Project"
+            onClose={() => {
+              setDeleteModal(false)
+              setEditId(null)
+            }}
+          />
+        )}
+        {addSubProjectModal && (
+          <AddSubProjectListModal
+            editId={editId}
+            data={data}
+            setEditId={setEditId}
+            _projectId={DomainId}
+            domain={domain}
+            open={addSubProjectModal}
+            setOpen={setSubAddProjectModal}
+          />
+        )}
+      </Paper>
     </>
   )
 }

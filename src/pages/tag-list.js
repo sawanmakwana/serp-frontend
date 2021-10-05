@@ -30,7 +30,7 @@ import {toast} from 'react-toastify'
 
 function TagList() {
   const client = useClient()
-  const {projectId} = useParams()
+  const {subProjectId} = useParams()
   const queryClient = useQueryClient()
   const {permissionLevel} = useContext(GlobalContext)
   const getRows = JSON.parse(window.localStorage.getItem('taglistRow'))
@@ -72,8 +72,8 @@ function TagList() {
   }
 
   const {data, isFetching} = useQuery(
-    ['tagList', page, rowsPerPage, Sorting, projectId],
-    () => client(`tagList/${projectId}?limit=${rowsPerPage}page=${page + 1}${Sorting}`),
+    ['tagList', page, rowsPerPage, Sorting, subProjectId],
+    () => client(`tagList/${subProjectId}?limit=${rowsPerPage}page=${page + 1}${Sorting}`),
     {
       keepPreviousData: true,
     }
