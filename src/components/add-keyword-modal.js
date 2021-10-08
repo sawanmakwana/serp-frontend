@@ -177,6 +177,7 @@ function AddKeywordModal({open, setOpen, editId, projectId}) {
               />
             )}
           />
+          {errors.tags && <p className="p-error"> {errors.tags.message}</p>}
         </form>
       </DialogContent>
       {isLoading && <LinearProgress />}

@@ -117,7 +117,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
     if (editId) {
       mutate({
         keyword: submitdata.keyword.split('\n'),
-        tags: submitdata.tags.map(e => e.tagName),
+        tags: submitdata?.tags?.map(e => e.tagName),
       })
     }
     if (!editId) {
@@ -126,7 +126,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
         keyword: submitdata.keyword.split('\n'),
         domain: domain[0].domain,
         _projectId,
-        tags: submitdata.tags.map(e => e.tagName),
+        tags: submitdata?.tags?.map(e => e.tagName),
       })
     }
   }
@@ -256,7 +256,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
                   return filtered
                 }}
                 getOptionLabel={option => option?.tagName}
-                id="tag"
+                id="tags"
                 selectOnFocus
                 clearOnBlur
                 handleHomeEndKeys
@@ -269,6 +269,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
               />
             )}
           />
+          {errors.tags && <p className="p-error"> {errors.tags.message}</p>}
           <TextField required variant="outlined" label="Enter Domain" disabled value={domain[0].domain} />
           {Boolean(!editId) && (
             <Controller
