@@ -615,7 +615,9 @@ function KeywordList() {
               />
             </CardContent>
           </Card>
-          {keyWordModal && <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} editId={KeywordId} />}
+          {keyWordModal && (
+            <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} projectId={projectId} editId={KeywordId} />
+          )}
           {deleteModal && (
             <DeleteModal
               deleteProject={() => deleteKeyword({_id: selected})}

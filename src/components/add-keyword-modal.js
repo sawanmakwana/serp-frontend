@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 import {
   Button,
@@ -16,12 +17,13 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles, useTheme} from '@material-ui/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {joiResolver} from '@hookform/resolvers'
-import {useMutation, useQueryClient} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useClient} from 'useClient'
 import {toast} from 'react-toastify'
+import {Autocomplete, createFilterOptions} from '@material-ui/lab'
 import {AddKeywordModalJoi} from '../validations/sub-project'
 
-function AddKeywordModal({open, setOpen, editId}) {
+function AddKeywordModal({open, setOpen, editId, projectId}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -48,6 +50,7 @@ function AddKeywordModal({open, setOpen, editId}) {
   const client = useClient()
   const classesFrom = useStylesForm()
   const theme = useTheme()
+  const filter = createFilterOptions()
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   const {handleSubmit, errors, control} = useForm({
@@ -59,6 +62,7 @@ function AddKeywordModal({open, setOpen, editId}) {
     resolver: joiResolver(AddKeywordModalJoi),
     defaultValues: {
       keyword: '',
+      tags: [],
     },
   })
 
@@ -82,9 +86,14 @@ function AddKeywordModal({open, setOpen, editId}) {
     }
   )
 
+  const {data: tagListDropDownData} = useQuery(['tagListDropDown', projectId], () =>
+    client(`tagListDropDown/${projectId}`)
+  )
+
   const submitForm = submitdata => {
     mutate({
       keyword: submitdata.keyword.split('\n'),
+      tags: submitdata.tags.map(e => e.tagName),
     })
   }
 
@@ -136,6 +145,38 @@ function AddKeywordModal({open, setOpen, editId}) {
             )}
           />
           <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
+
+          <Controller
+            control={control}
+            name="tags"
+            render={({onChange, onBlur, value}) => (
+              <Autocomplete
+                options={tagListDropDownData?.data}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params)
+                  if (filtered.length === 0) {
+                    if (params.inputValue !== '') {
+                      const tagName = params.inputValue
+                      filtered.push({_id: -1, tagName})
+                    }
+                    return filtered
+                  }
+                  return filtered
+                }}
+                getOptionLabel={option => option?.tagName}
+                id="tag"
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                freeSolo
+                multiple
+                onChange={(_, data) => onChange(data)}
+                value={value}
+                onBlur={onBlur}
+                renderInput={params => <TextField {...params} variant="outlined" label="Select Tag" />}
+              />
+            )}
+          />
         </form>
       </DialogContent>
       {isLoading && <LinearProgress />}

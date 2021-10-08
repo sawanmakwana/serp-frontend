@@ -35,4 +35,5 @@ export const AddKeywordModalJoi = Joi.object({
     'string.empty': `Keyword cannot be an empty field`,
     'any.required': `Keyword cannot be an empty field`,
   }),
+  tags: Joi.allow(),
 })
