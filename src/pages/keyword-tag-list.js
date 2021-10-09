@@ -145,25 +145,16 @@ function KeywordTagList() {
     }
   )
 
-  const {data: GraphData} = useQuery(['keywordsOfTagsGraph', tagId], () => client(`keywordsOfTagsGraph/${tagId}`))
+  // const {data: GraphData} = useQuery(['keywordsOfTagsGraph', tagId], () => client(`keywordsOfTagsGraph/${tagId}`))
 
   // console.log(
   //   demoObj.data.map(Gd => {
   //     return {
-  //       name: Gd.tagName,
-  //       data: Gd.keywords.map(fd => fd.date),
+  //       // categories: Gd.keywords.map(fd => fd.rank)[0],
+  //       categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
   //     }
-  //   })
+  //   })[0]
   // )
-
-  console.log(
-    demoObj.data.map(Gd => {
-      return {
-        // categories: Gd.keywords.map(fd => fd.rank)[0],
-        categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
-      }
-    })[0]
-  )
 
   return (
     <>

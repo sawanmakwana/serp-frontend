@@ -18,7 +18,7 @@ import {
   Button,
   LinearProgress,
 } from '@material-ui/core'
-import {getCompoAccess} from 'util/app-utill'
+import {getCompoAccess, getFormetedData} from 'util/app-utill'
 import {Trash2} from 'react-feather'
 import {GlobalContext} from 'context/global-context'
 import Chart from 'react-apexcharts'
@@ -52,24 +52,86 @@ function TagList() {
     setPage(0)
   }
 
+  const demoObj = {
+    data: [
+      {
+        tagName: 'yash',
+        keywords: [
+          {
+            rank: 1,
+            date: '2021-10-03T00:00:00.000Z',
+          },
+          {
+            rank: 4.33,
+            date: '2021-10-01T00:00:00.000Z',
+          },
+          {
+            rank: 2.69,
+            date: '2021-09-30T00:00:00.000Z',
+          },
+          {
+            rank: 2.1,
+            date: '2021-09-29T00:00:00.000Z',
+          },
+          {
+            rank: 3,
+            date: '2021-09-04T00:00:00.000Z',
+          },
+        ],
+      },
+      {
+        tagName: 'trupesh',
+        keywords: [
+          {
+            rank: 4.2,
+            date: '2021-10-03T00:00:00.000Z',
+          },
+          {
+            rank: 1.9,
+            date: '2021-10-01T00:00:00.000Z',
+          },
+          {
+            rank: 3,
+            date: '2021-09-30T00:00:00.000Z',
+          },
+          {
+            rank: 3.2,
+            date: '2021-09-04T00:00:00.000Z',
+          },
+          {
+            rank: 2,
+            date: '2021-09-04T00:00:00.000Z',
+          },
+        ],
+      },
+    ],
+    message: 'Keyword(s) graph details fetched successfully.',
+    status: true,
+  }
+
   const chartData = {
     options: {
       chart: {
         id: 'basic-bar',
       },
-      xaxis: {
-        categories: [
-          1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2007,
-        ],
-      },
+
+      xaxis: demoObj.data.map(Gd => {
+        return {
+          categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
+        }
+      })[0],
+      yaxis: {reversed: true},
     },
-    series: [
-      {
-        name: 'series-1',
-        data: [10, 80, 205, 100, 49, 60, 70, 91, 200, 10, 250, 30, 60, 10, 100, 0, 200],
-      },
-    ],
+
+    series: demoObj.data.map(Gd => {
+      return {
+        name: Gd.tagName,
+        data: Gd.keywords.map(fd => fd.rank),
+      }
+    }),
   }
+
+  // const {data: GraphData} = useQuery(['keywordsOfTagsGraph', tagId], () => client(`keywordsOfTagsGraph/${tagId}`))
 
   const {data, isFetching} = useQuery(
     ['tagList', page, rowsPerPage, Sorting, subProjectId],
