@@ -58,6 +58,8 @@ import {toast} from 'react-toastify'
 import {TabPanel} from 'components/tab-panel'
 import axios from 'axios'
 import {getToken} from 'auth/auth-utils'
+import {MoreVertical} from 'react-feather'
+import {AddTag} from 'components/add-tag'
 import {TagList} from './tag-list'
 
 function KeywordList() {
@@ -88,6 +90,9 @@ function KeywordList() {
   const open = Boolean(anchorE2)
   const getTabIndex = JSON.parse(window.localStorage.getItem('tabIndex'))
   const [value, setValue] = useState(getTabIndex || 0)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [editId, setEditId] = useState(null)
+  const [appTagModal, setAddTagModal] = useState(false)
 
   // React.useEffect(() => {
   //   window.history.pushState(null, '', window.location.href)
@@ -540,6 +545,7 @@ function KeywordList() {
                           URL
                         </TableSortLabel>
                       </TableCell>
+                      <TableCell>Action</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -565,7 +571,7 @@ function KeywordList() {
                               tabIndex={-1}
                               selected={isItemSelected}
                             >
-                              {getCompoAccess[permissionLevel]?.headBtn && (
+                              {getCompoAccess[permissionLevel]?.action && (
                                 <TableCell padding="checkbox">
                                   <Checkbox
                                     color="primary"
@@ -603,6 +609,48 @@ function KeywordList() {
                               >
                                 <TableCell className="urlEcllips">{url || '-'}</TableCell>
                               </Tooltip>
+                              {getCompoAccess[permissionLevel]?.action && (
+                                <TableCell>
+                                  <>
+                                    <Button
+                                      className="selectTablebtn"
+                                      onClick={e => {
+                                        setAnchorEl(e.currentTarget)
+                                        setEditId(_id)
+                                        e.stopPropagation()
+                                      }}
+                                    >
+                                      <MoreVertical />
+                                    </Button>
+                                    <Menu
+                                      anchorEl={anchorEl}
+                                      keepMounted
+                                      open={anchorEl}
+                                      onClose={e => {
+                                        setAnchorEl(null)
+                                        setEditId(null)
+                                        e.stopPropagation()
+                                      }}
+                                      PaperProps={{
+                                        style: {
+                                          maxHeight: 220,
+                                          width: 120,
+                                        },
+                                      }}
+                                    >
+                                      <MenuItem
+                                        onClick={e => {
+                                          e.stopPropagation()
+                                          setAddTagModal(true)
+                                          setAnchorEl(null)
+                                        }}
+                                      >
+                                        Add tag
+                                      </MenuItem>
+                                    </Menu>
+                                  </>
+                                </TableCell>
+                              )}
                               {/* <Tooltip
                             TransitionComponent={Zoom}
                             title={getStatus(error, errorMessage, newInserted, 'GET_TOOLTIP')}
@@ -630,6 +678,18 @@ function KeywordList() {
               />
             </CardContent>
           </Card>
+          {appTagModal && (
+            <AddTag
+              open1={appTagModal}
+              setOpen1={setAddTagModal}
+              editId={editId}
+              projectId={projectId}
+              onClose={() => {
+                setAddTagModal(false)
+                setEditId(null)
+              }}
+            />
+          )}
           {keyWordModal && (
             <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} projectId={projectId} editId={KeywordId} />
           )}

@@ -43,3 +43,11 @@ export const AddKeywordModalJoi = Joi.object({
     'array.min': `Tag should have a minimum length of 1`,
   }),
 })
+
+export const AddTagJoi = Joi.object({
+  tags: Joi.array().min(1).messages({
+    'array.empty': `Tag cannot be an empty field`,
+    'any.required': `Tag is a required field`,
+    'array.min': `Tag should have a minimum length of 1`,
+  }),
+})
