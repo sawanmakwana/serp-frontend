@@ -265,6 +265,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
                 onChange={(_, data) => onChange(data)}
                 value={value}
                 onBlur={onBlur}
+                disabled={isLoading}
                 renderInput={params => <TextField {...params} variant="outlined" label="Select Tag" />}
               />
             )}

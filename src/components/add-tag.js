@@ -141,6 +141,7 @@ function AddTag({open1, setOpen1, editId, onClose, KeywordId}) {
                 onChange={(_, data) => onChange(data)}
                 value={value}
                 onBlur={onBlur}
+                disabled={isLoading}
                 renderInput={params => <TextField {...params} variant="outlined" label="Select Tag" />}
               />
             )}

@@ -173,6 +173,7 @@ function AddKeywordModal({open, setOpen, editId, KeywordId}) {
                 onChange={(_, data) => onChange(data)}
                 value={value}
                 onBlur={onBlur}
+                disabled={isLoading}
                 renderInput={params => <TextField {...params} variant="outlined" label="Select Tag" />}
               />
             )}
