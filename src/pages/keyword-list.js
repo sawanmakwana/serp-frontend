@@ -592,8 +592,10 @@ function KeywordList() {
                               </TableCell>
                               <Tooltip
                                 onClick={() => {
-                                  const win = window.open(url, '_blank')
-                                  win.focus()
+                                  if (url) {
+                                    const win = window.open(url, '_blank')
+                                    win.focus()
+                                  }
                                 }}
                                 TransitionComponent={Zoom}
                                 title={url || 'Not available'}

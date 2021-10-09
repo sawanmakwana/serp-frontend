@@ -76,6 +76,10 @@
   min-width: 430px;
   word-wrap: break-word;
 }
+.urlEcllips:hover {
+  color: #5664D2;
+  cursor: pointer;
+}
 .emptyTable {
   text-align: center !important;
   opacity: 0.7;
