@@ -64,28 +64,32 @@ function KeywordTagList() {
         tagName: 'yash',
         keywords: [
           {
-            rank: 2,
+            rank: 4,
             date: '2021-10-03T00:00:00.000Z',
           },
           {
-            rank: 3.33,
+            rank: 1,
             date: '2021-10-01T00:00:00.000Z',
           },
           {
-            rank: 1.33,
+            rank: 3,
             date: '2021-09-30T00:00:00.000Z',
           },
           {
             rank: 3,
             date: '2021-09-04T00:00:00.000Z',
           },
+          {
+            rank: 2,
+            date: '2021-09-04T00:00:00.000Z',
+          },
         ],
       },
       {
-        tagName: 'trupesh1',
+        tagName: 'trupesh',
         keywords: [
           {
-            rank: 2,
+            rank: 3,
             date: '2021-10-03T00:00:00.000Z',
           },
           {
@@ -93,7 +97,7 @@ function KeywordTagList() {
             date: '2021-10-01T00:00:00.000Z',
           },
           {
-            rank: 1.33,
+            rank: 1.77,
             date: '2021-09-30T00:00:00.000Z',
           },
           {
