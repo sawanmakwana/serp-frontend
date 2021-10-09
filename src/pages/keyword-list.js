@@ -283,6 +283,21 @@ function KeywordList() {
     setSelected([])
   }
 
+  const {isLoading: removeTagLoading, mutate: removeTag} = useMutation(
+    data =>
+      client(`removeTag`, {
+        data,
+        method: 'post',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('keyWordList')
+        queryClient.invalidateQueries('analyticskeywordDashboard')
+        toast.success(`Tag Removed from Keyword`)
+      },
+    }
+  )
+
   return (
     <>
       <Box className="d-flex">
@@ -586,7 +601,16 @@ function KeywordList() {
                               <TableCell>
                                 {keyword}{' '}
                                 {tags.map(e => (
-                                  <Chip className="ml-1" label={e.tagName} />
+                                  <Chip
+                                    className="ml-1"
+                                    label={e.tagName}
+                                    onDelete={() =>
+                                      removeTag({
+                                        _tagId: e._id,
+                                        _keywordId: _id,
+                                      })
+                                    }
+                                  />
                                 ))}
                               </TableCell>
                               {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
@@ -666,7 +690,9 @@ function KeywordList() {
                   </TableBody>
                 </Table>
               </TableContainer>
-              {(isFetching || DdlistKeywordisFetching || singalkeydeleteKeywordlistIsFetching) && <LinearProgress />}
+              {(isFetching || DdlistKeywordisFetching || singalkeydeleteKeywordlistIsFetching || removeTagLoading) && (
+                <LinearProgress />
+              )}
               <TablePagination
                 rowsPerPageOptions={[50, 100, 200, 500, 1000, 2000]}
                 component="div"
