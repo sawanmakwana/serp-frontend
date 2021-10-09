@@ -81,6 +81,7 @@ function KeywordList() {
   const [weekSortingtype, setweekSortingtype] = useState('asc')
   const [diffSortingtype, setdiffSortingtype] = useState('asc')
   const [urlSortingtype, setUrlSortingtype] = useState('asc')
+  const [prwRank, setprwRank] = useState('asc')
   const [selected, setSelected] = React.useState([])
   const [deleteModal, setDeleteModal] = useState(false)
   const [anchorE2, setAnchorE2] = useState(null)
@@ -485,12 +486,24 @@ function KeywordList() {
                           Keyword
                         </TableSortLabel>
                       </TableCell>
-                      <TableCell className="prev-rank">
-                        <p>Prev Rank</p>
-                        <Tooltip title={`Previous Date: ${getFormetedData(data?.data?.result[0]?.prevDate)}`}>
-                          <span>{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
-                        </Tooltip>
+                      <TableCell className="prev-rank ">
+                        <TableSortLabel
+                          active={Sorting.includes('prevRankGroup')}
+                          direction={prwRank === 'asc' ? 'desc' : 'asc'}
+                          onClick={() => {
+                            setprwRank(prwRank === 'asc' ? 'desc' : 'asc')
+                            setSorting(`&sort=prevRankGroup:${prwRank}`)
+                          }}
+                        >
+                          <div>
+                            Prev Rank
+                            <Tooltip title={`Previous Date: ${getFormetedData(data?.data?.result[0]?.prevDate)}`}>
+                              <span className="ml-2">{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
+                            </Tooltip>
+                          </div>
+                        </TableSortLabel>
                       </TableCell>
+
                       <TableCell sortDirection={false}>
                         <TableSortLabel
                           active={Sorting.includes('rankGroup')}

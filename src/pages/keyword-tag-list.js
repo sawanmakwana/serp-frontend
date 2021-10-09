@@ -43,6 +43,7 @@ function KeywordTagList() {
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
+  const [prwRank, setprwRank] = useState('asc')
   const [diffSortingtype, setdiffSortingtype] = useState('asc')
   const [urlSortingtype, setUrlSortingtype] = useState('asc')
   const history = useHistory()
@@ -207,11 +208,22 @@ function KeywordTagList() {
                         Keyword
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell className="prev-rank">
-                      <p>Prev Rank</p>
-                      <Tooltip title={`Previous Date: ${getFormetedData(data?.data?.result[0]?.prevDate)}`}>
-                        <span>{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
-                      </Tooltip>
+                    <TableCell className="prev-rank ">
+                      <TableSortLabel
+                        active={Sorting.includes('prevRankGroup')}
+                        direction={prwRank === 'asc' ? 'desc' : 'asc'}
+                        onClick={() => {
+                          setprwRank(prwRank === 'asc' ? 'desc' : 'asc')
+                          setSorting(`&sort=prevRankGroup:${prwRank}`)
+                        }}
+                      >
+                        <div>
+                          Prev Rank
+                          <Tooltip title={`Previous Date: ${getFormetedData(data?.data?.result[0]?.prevDate)}`}>
+                            <span className="ml-2">{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
+                          </Tooltip>
+                        </div>
+                      </TableSortLabel>
                     </TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
