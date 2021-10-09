@@ -22,7 +22,7 @@ import {toast} from 'react-toastify'
 import {Autocomplete, createFilterOptions} from '@material-ui/lab'
 import {AddTagJoi} from 'validations/sub-project'
 
-function AddTag({open1, setOpen1, editId, onClose, projectId}) {
+function AddTag({open1, setOpen1, editId, onClose, KeywordId}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -84,8 +84,8 @@ function AddTag({open1, setOpen1, editId, onClose, projectId}) {
     }
   )
 
-  const {data: tagListDropDownData} = useQuery(['tagListDropDown', projectId], () =>
-    client(`tagListDropDown/${projectId}`)
+  const {data: tagListDropDownData} = useQuery(['tagListDropDown', KeywordId], () =>
+    client(`tagListDropDown/${KeywordId}`)
   )
 
   const submitForm = submitdata => {

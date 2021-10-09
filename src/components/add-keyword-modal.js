@@ -23,7 +23,7 @@ import {toast} from 'react-toastify'
 import {Autocomplete, createFilterOptions} from '@material-ui/lab'
 import {AddKeywordModalJoi} from '../validations/sub-project'
 
-function AddKeywordModal({open, setOpen, editId, projectId}) {
+function AddKeywordModal({open, setOpen, editId, KeywordId}) {
   const useStyles = makeStyles(theme => ({
     root: {
       margin: 0,
@@ -86,8 +86,8 @@ function AddKeywordModal({open, setOpen, editId, projectId}) {
     }
   )
 
-  const {data: tagListDropDownData} = useQuery(['tagListDropDown', projectId], () =>
-    client(`tagListDropDown/${projectId}`)
+  const {data: tagListDropDownData} = useQuery(['tagListDropDown', KeywordId], () =>
+    client(`tagListDropDown/${KeywordId}`)
   )
 
   const submitForm = submitdata => {

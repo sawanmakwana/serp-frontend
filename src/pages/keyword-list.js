@@ -683,7 +683,7 @@ function KeywordList() {
               open1={appTagModal}
               setOpen1={setAddTagModal}
               editId={editId}
-              projectId={projectId}
+              KeywordId={KeywordId}
               onClose={() => {
                 setAddTagModal(false)
                 setEditId(null)
@@ -691,7 +691,7 @@ function KeywordList() {
             />
           )}
           {keyWordModal && (
-            <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} projectId={projectId} editId={KeywordId} />
+            <AddKeywordModal open={keyWordModal} setOpen={setKeywordModal} KeywordId={KeywordId} editId={KeywordId} />
           )}
           {deleteModal && (
             <DeleteModal
