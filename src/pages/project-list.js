@@ -246,7 +246,7 @@ function PorjectList() {
                         <TableCell className="pl-4">{index + 1 + page * rowsPerPage}</TableCell>
                         <TableCell>{projectName}</TableCell>
                         <Tooltip TransitionComponent={Zoom} title={domain} placement="top">
-                          <TableCell className="urlEcllips">{domain}</TableCell>
+                          <TableCell>{domain}</TableCell>
                         </Tooltip>
                         {getCompoAccess[permissionLevel]?.action && (
                           <TableCell>
