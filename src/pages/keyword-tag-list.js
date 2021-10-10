@@ -19,7 +19,6 @@ import {
   Tooltip,
   Zoom,
   IconButton,
-  Collapse,
   Chip,
 } from '@material-ui/core'
 import Chart from 'react-apexcharts'
@@ -29,8 +28,7 @@ import {useParams, useHistory, useLocation} from 'react-router-dom'
 import {getDifference, getFormetedData} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
 import theme from 'theme'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import {KeywordGraph} from 'components/keyword-graph-modal'
 
 function KeywordTagList() {
   const client = useClient()
@@ -39,6 +37,8 @@ function KeywordTagList() {
   const getRows = JSON.parse(window.localStorage.getItem('KeywordTagListRow'))
   const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
   const [page, setPage] = useState(0)
+  const [keywordId, setKeywordID] = useState(0)
+  const [keywordName, setKeywordName] = useState('')
   const [open, setOpen] = useState(false)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
@@ -57,85 +57,6 @@ function KeywordTagList() {
     window.localStorage.setItem('KeywordTagListRow', event.target.value)
     setPage(0)
   }
-
-  // const demoObj = {
-  //   data: [
-  //     {
-  //       tagName: 'yash',
-  //       keywords: [
-  //         {
-  //           rank: 4,
-  //           date: '2021-10-03T00:00:00.000Z',
-  //         },
-  //         {
-  //           rank: 1,
-  //           date: '2021-10-01T00:00:00.000Z',
-  //         },
-  //         {
-  //           rank: 3,
-  //           date: '2021-09-30T00:00:00.000Z',
-  //         },
-  //         {
-  //           rank: 3,
-  //           date: '2021-09-04T00:00:00.000Z',
-  //         },
-  //         {
-  //           rank: 2,
-  //           date: '2021-09-04T00:00:00.000Z',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       tagName: 'trupesh',
-  //       keywords: [
-  //         {
-  //           rank: 3,
-  //           date: '2021-10-03T00:00:00.000Z',
-  //         },
-  //         {
-  //           rank: 3.33,
-  //           date: '2021-10-01T00:00:00.000Z',
-  //         },
-  //         {
-  //           rank: 1.77,
-  //           date: '2021-09-30T00:00:00.000Z',
-  //         },
-  //         {
-  //           rank: 2,
-  //           date: '2021-09-29T00:00:00.000Z',
-  //         },
-  //         {
-  //           rank: 3,
-  //           date: '2021-09-04T00:00:00.000Z',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  //   message: 'Keyword(s) graph details fetched successfully.',
-  //   status: true,
-  // }
-
-  // const chartData = {
-  //   options: {
-  //     chart: {
-  //       id: 'basic-bar',
-  //     },
-
-  //     xaxis: demoObj.data.map(Gd => {
-  //       return {
-  //         categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
-  //       }
-  //     })[0],
-  //     yaxis: {reversed: true},
-  //   },
-
-  // series: demoObj.data.map(Gd => {
-  //   return {
-  //     name: Gd.tagName,
-  //     data: Gd.keywords.map(fd => fd.rank),
-  //   }
-  // }),
-  // }
 
   const {data, isFetching} = useQuery(
     ['keywordsForTags', page, rowsPerPage, Sorting],
@@ -195,7 +116,6 @@ function KeywordTagList() {
               <Table size="medium" className="selectTable">
                 <TableHead>
                   <TableRow>
-                    <TableCell />
                     <TableCell>#</TableCell>
                     <TableCell sortDirection={false}>
                       <TableSortLabel
@@ -277,12 +197,15 @@ function KeywordTagList() {
                       ({_id, keyword, nextDate, prevRankGroup, rankGroup, url, difference, tags}, index) => {
                         return (
                           <>
-                            <TableRow hover key={_id} role="checkbox">
-                              <TableCell>
-                                <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                                </IconButton>
-                              </TableCell>
+                            <TableRow
+                              hover
+                              key={_id}
+                              onClick={() => {
+                                setKeywordID(_id)
+                                setOpen(true)
+                                setKeywordName(keyword)
+                              }}
+                            >
                               <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
                               <TableCell>
                                 {keyword}
@@ -310,27 +233,6 @@ function KeywordTagList() {
                                 <TableCell className="urlEcllips">{url || '-'}</TableCell>
                               </Tooltip>
                             </TableRow>
-                            <TableRow>
-                              <TableCell
-                                style={{
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                }}
-                                colSpan={11}
-                              >
-                                <Collapse in={open} timeout="auto" unmountOnExit>
-                                  <Box margin={1}>
-                                    <Chart
-                                      options={chartData.options}
-                                      series={chartData.series}
-                                      type="line"
-                                      width="100%"
-                                      height="320px"
-                                    />
-                                  </Box>
-                                </Collapse>
-                              </TableCell>
-                            </TableRow>
                           </>
                         )
                       }
@@ -351,6 +253,18 @@ function KeywordTagList() {
             />
           </CardContent>
         </Card>
+        {open && (
+          <KeywordGraph
+            open={open}
+            keywordId={keywordId}
+            keywordName={keywordName}
+            onClose={() => {
+              setOpen(false)
+              setKeywordID(null)
+              setKeywordName('')
+            }}
+          />
+        )}
       </Paper>
     </>
   )
