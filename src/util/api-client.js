@@ -28,9 +28,7 @@ async function client(endpoint, {apiURL = baseUrl, data, token, headers: customH
     .then(async response => {
       if (response.status === 403) {
         toast.error("You don't have access to this page or resource.")
-
         // await logout()
-        // // refresh the page for them
         // window.location.assign(window.location)
         // return Promise.reject({
         //   message: `You don't have access for this page`,
@@ -49,7 +47,6 @@ async function client(endpoint, {apiURL = baseUrl, data, token, headers: customH
       return Promise.reject(responseData)
     })
     .catch(err => {
-      // eslint-disable-next-line no-console
       // console.log('catch')
     })
 }
