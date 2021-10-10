@@ -162,7 +162,7 @@ function KeywordTagList() {
 
       xaxis: GraphData?.data?.map(Gd => {
         return {
-          categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
+          categories: Gd?.keywords.map(fd => getFormetedData(fd.date)),
         }
       })[indexMaxData],
       yaxis: {reversed: true},
@@ -171,8 +171,8 @@ function KeywordTagList() {
     series:
       GraphData?.data?.map(Gd => {
         return {
-          name: Gd.tagName,
-          data: Gd.keywords.map(fd => fd.rank),
+          name: Gd?.tagName,
+          data: Gd?.keywords?.map(fd => fd?.rank),
         }
       }) || {},
   }
