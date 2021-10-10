@@ -94,6 +94,8 @@ function KeywordList() {
   const [editId, setEditId] = useState(null)
   const [appTagModal, setAddTagModal] = useState(false)
 
+  const smallScreen = useMediaQuery(theme.breakpoints.down('xs'))
+
   // React.useEffect(() => {
   //   window.history.pushState(null, '', window.location.href)
   //   window.onpopstate = () => {
@@ -334,6 +336,7 @@ function KeywordList() {
       <Tabs
         textColor="primary"
         indicatorColor="primary"
+        style={{marginTop: smallScreen && 12}}
         value={value}
         onChange={(e, newValue) => {
           setValue(newValue)
