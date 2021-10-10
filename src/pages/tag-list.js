@@ -83,7 +83,7 @@ function TagList() {
           name: Gd?.tagName,
           data: Gd?.keywords?.map(fd => fd?.rank),
         }
-      }) || {},
+      }) || [],
   }
 
   const {data, isFetching} = useQuery(
