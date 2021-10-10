@@ -58,84 +58,84 @@ function KeywordTagList() {
     setPage(0)
   }
 
-  const demoObj = {
-    data: [
-      {
-        tagName: 'yash',
-        keywords: [
-          {
-            rank: 4,
-            date: '2021-10-03T00:00:00.000Z',
-          },
-          {
-            rank: 1,
-            date: '2021-10-01T00:00:00.000Z',
-          },
-          {
-            rank: 3,
-            date: '2021-09-30T00:00:00.000Z',
-          },
-          {
-            rank: 3,
-            date: '2021-09-04T00:00:00.000Z',
-          },
-          {
-            rank: 2,
-            date: '2021-09-04T00:00:00.000Z',
-          },
-        ],
-      },
-      {
-        tagName: 'trupesh',
-        keywords: [
-          {
-            rank: 3,
-            date: '2021-10-03T00:00:00.000Z',
-          },
-          {
-            rank: 3.33,
-            date: '2021-10-01T00:00:00.000Z',
-          },
-          {
-            rank: 1.77,
-            date: '2021-09-30T00:00:00.000Z',
-          },
-          {
-            rank: 2,
-            date: '2021-09-29T00:00:00.000Z',
-          },
-          {
-            rank: 3,
-            date: '2021-09-04T00:00:00.000Z',
-          },
-        ],
-      },
-    ],
-    message: 'Keyword(s) graph details fetched successfully.',
-    status: true,
-  }
+  // const demoObj = {
+  //   data: [
+  //     {
+  //       tagName: 'yash',
+  //       keywords: [
+  //         {
+  //           rank: 4,
+  //           date: '2021-10-03T00:00:00.000Z',
+  //         },
+  //         {
+  //           rank: 1,
+  //           date: '2021-10-01T00:00:00.000Z',
+  //         },
+  //         {
+  //           rank: 3,
+  //           date: '2021-09-30T00:00:00.000Z',
+  //         },
+  //         {
+  //           rank: 3,
+  //           date: '2021-09-04T00:00:00.000Z',
+  //         },
+  //         {
+  //           rank: 2,
+  //           date: '2021-09-04T00:00:00.000Z',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       tagName: 'trupesh',
+  //       keywords: [
+  //         {
+  //           rank: 3,
+  //           date: '2021-10-03T00:00:00.000Z',
+  //         },
+  //         {
+  //           rank: 3.33,
+  //           date: '2021-10-01T00:00:00.000Z',
+  //         },
+  //         {
+  //           rank: 1.77,
+  //           date: '2021-09-30T00:00:00.000Z',
+  //         },
+  //         {
+  //           rank: 2,
+  //           date: '2021-09-29T00:00:00.000Z',
+  //         },
+  //         {
+  //           rank: 3,
+  //           date: '2021-09-04T00:00:00.000Z',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   message: 'Keyword(s) graph details fetched successfully.',
+  //   status: true,
+  // }
 
-  const chartData = {
-    options: {
-      chart: {
-        id: 'basic-bar',
-      },
+  // const chartData = {
+  //   options: {
+  //     chart: {
+  //       id: 'basic-bar',
+  //     },
 
-      xaxis: demoObj.data.map(Gd => {
-        return {
-          categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
-        }
-      })[0],
-      yaxis: {reversed: true},
-    },
+  //     xaxis: demoObj.data.map(Gd => {
+  //       return {
+  //         categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
+  //       }
+  //     })[0],
+  //     yaxis: {reversed: true},
+  //   },
 
-    series: demoObj.data.map(Gd => {
-      return {
-        name: Gd.tagName,
-        data: Gd.keywords.map(fd => fd.rank),
-      }
-    }),
-  }
+  //   series: demoObj.data.map(Gd => {
+  //     return {
+  //       name: Gd.tagName,
+  //       data: Gd.keywords.map(fd => fd.rank),
+  //     }
+  //   }),
+  // }
 
   const {data, isFetching} = useQuery(
     ['keywordsForTags', page, rowsPerPage, Sorting],
@@ -145,16 +145,37 @@ function KeywordTagList() {
     }
   )
 
-  // const {data: GraphData} = useQuery(['keywordsOfTagsGraph', tagId], () => client(`keywordsOfTagsGraph/${tagId}`))
+  const {data: GraphData = []} = useQuery(['keywordsOfTagsGraph', tagId], () => client(`keywordsOfTagsGraph/${tagId}`))
 
-  // console.log(
-  //   demoObj.data.map(Gd => {
-  //     return {
-  //       // categories: Gd.keywords.map(fd => fd.rank)[0],
-  //       categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
-  //     }
-  //   })[0]
-  // )
+  const maxNum = Math?.max?.apply(
+    null,
+    GraphData?.data?.map(Gd => Gd?.keywords?.length)
+  )
+
+  const indexMaxData = GraphData?.data?.map(Gd => Gd?.keywords?.length).findIndex(t => t === maxNum)
+
+  const chartData = {
+    options: {
+      chart: {
+        id: 'basic-bar',
+      },
+
+      xaxis: GraphData?.data?.map(Gd => {
+        return {
+          categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
+        }
+      })[indexMaxData],
+      yaxis: {reversed: true},
+    },
+
+    series:
+      GraphData?.data?.map(Gd => {
+        return {
+          name: Gd.tagName,
+          data: Gd.keywords.map(fd => fd.rank),
+        }
+      }) || {},
+  }
 
   return (
     <>
@@ -170,7 +191,7 @@ function KeywordTagList() {
           Tag Name: {state.tagName ? state.tagName : '-'}
         </Typography>
       </Box>
-      <Chart options={chartData.options} series={chartData.series} type="line" width="100%" height="320px" />
+      <Chart options={chartData?.options} series={chartData?.series} type="line" width="100%" height="320px" />
       <Box sx={{mt: 2}} className="d-flex pb-3 pt-2">
         <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
           Keyword Tag list <span> ({data?.data?.total})</span>

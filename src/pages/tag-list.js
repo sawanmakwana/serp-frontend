@@ -52,62 +52,16 @@ function TagList() {
     setPage(0)
   }
 
-  const demoObj = {
-    data: [
-      {
-        tagName: 'yash',
-        keywords: [
-          {
-            rank: 1,
-            date: '2021-10-03T00:00:00.000Z',
-          },
-          {
-            rank: 4.33,
-            date: '2021-10-01T00:00:00.000Z',
-          },
-          {
-            rank: 2.69,
-            date: '2021-09-30T00:00:00.000Z',
-          },
-          {
-            rank: 2.1,
-            date: '2021-09-29T00:00:00.000Z',
-          },
-          {
-            rank: 3,
-            date: '2021-09-04T00:00:00.000Z',
-          },
-        ],
-      },
-      {
-        tagName: 'trupesh',
-        keywords: [
-          {
-            rank: 4.2,
-            date: '2021-10-03T00:00:00.000Z',
-          },
-          {
-            rank: 1.9,
-            date: '2021-10-01T00:00:00.000Z',
-          },
-          {
-            rank: 3,
-            date: '2021-09-30T00:00:00.000Z',
-          },
-          {
-            rank: 3.2,
-            date: '2021-09-04T00:00:00.000Z',
-          },
-          {
-            rank: 2,
-            date: '2021-09-04T00:00:00.000Z',
-          },
-        ],
-      },
-    ],
-    message: 'Keyword(s) graph details fetched successfully.',
-    status: true,
-  }
+  const {data: GraphData = []} = useQuery(['allTagsCombineGraph', subProjectId], () =>
+    client(`allTagsCombineGraph/${subProjectId}`)
+  )
+
+  const maxNum = Math?.max?.apply(
+    null,
+    GraphData?.data?.map(Gd => Gd?.keywords?.length)
+  )
+
+  const indexMaxData = GraphData?.data?.map(Gd => Gd?.keywords?.length).findIndex(t => t === maxNum)
 
   const chartData = {
     options: {
@@ -115,23 +69,22 @@ function TagList() {
         id: 'basic-bar',
       },
 
-      xaxis: demoObj.data.map(Gd => {
+      xaxis: GraphData?.data?.map(Gd => {
         return {
-          categories: Gd.keywords.map(fd => getFormetedData(fd.date)),
+          categories: Gd.keywords?.map(fd => getFormetedData(fd.date)),
         }
-      })[0],
+      })[indexMaxData],
       yaxis: {reversed: true},
     },
 
-    series: demoObj.data.map(Gd => {
-      return {
-        name: Gd.tagName,
-        data: Gd.keywords.map(fd => fd.rank),
-      }
-    }),
+    series:
+      GraphData?.data?.map(Gd => {
+        return {
+          name: Gd.tagName,
+          data: Gd.keywords.map(fd => fd.rank),
+        }
+      }) || {},
   }
-
-  // const {data: GraphData} = useQuery(['keywordsOfTagsGraph', tagId], () => client(`keywordsOfTagsGraph/${tagId}`))
 
   const {data, isFetching} = useQuery(
     ['tagList', page, rowsPerPage, Sorting, subProjectId],
