@@ -129,12 +129,12 @@ function KeywordTagList() {
   //     yaxis: {reversed: true},
   //   },
 
-  //   series: demoObj.data.map(Gd => {
-  //     return {
-  //       name: Gd.tagName,
-  //       data: Gd.keywords.map(fd => fd.rank),
-  //     }
-  //   }),
+  // series: demoObj.data.map(Gd => {
+  //   return {
+  //     name: Gd.tagName,
+  //     data: Gd.keywords.map(fd => fd.rank),
+  //   }
+  // }),
   // }
 
   const {data, isFetching} = useQuery(
@@ -147,34 +147,19 @@ function KeywordTagList() {
 
   const {data: GraphData = []} = useQuery(['keywordsOfTagsGraph', tagId], () => client(`keywordsOfTagsGraph/${tagId}`))
 
-  const maxNum = Math?.max?.apply(
-    null,
-    GraphData?.data?.map(Gd => Gd?.keywords?.length)
-  )
-
-  const indexMaxData = GraphData?.data?.map(Gd => Gd?.keywords?.length).findIndex(t => t === maxNum)
-
   const chartData = {
     options: {
       chart: {
         id: 'basic-bar',
       },
 
-      xaxis: GraphData?.data?.map(Gd => {
-        return {
-          categories: Gd?.keywords.map(fd => getFormetedData(fd.date)),
-        }
-      })[indexMaxData],
+      xaxis: {
+        categories: GraphData?.data?.map(GD => getFormetedData(GD.date)),
+      },
       yaxis: {reversed: true},
     },
 
-    series:
-      GraphData?.data?.map(Gd => {
-        return {
-          name: Gd?.tagName,
-          data: Gd?.keywords?.map(fd => fd?.rank),
-        }
-      }) || {},
+    series: [{name: state.tagName ? state.tagName : '-', data: GraphData?.data?.map(Gd => Gd?.rank || {})}],
   }
 
   return (

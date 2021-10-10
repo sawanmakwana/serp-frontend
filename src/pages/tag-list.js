@@ -71,7 +71,7 @@ function TagList() {
 
       xaxis: GraphData?.data?.map(Gd => {
         return {
-          categories: Gd?.keywords?.map(fd => getFormetedData(fd.date)),
+          categories: Gd?.keywords?.map(fd => getFormetedData(fd?.date)),
         }
       })[indexMaxData],
       yaxis: {reversed: true},
