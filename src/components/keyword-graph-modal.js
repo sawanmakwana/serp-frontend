@@ -88,7 +88,6 @@ function KeywordGraph({open, onClose, keywordId, keywordName}) {
       <DialogActions>
         <Button
           style={{
-            display: isLoading ? 'none' : '',
             color: theme.palette.text.secondary,
           }}
           onClick={onClose}
