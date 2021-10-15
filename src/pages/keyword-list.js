@@ -563,7 +563,7 @@ function KeywordList() {
                           URL
                         </TableSortLabel>
                       </TableCell>
-                      <TableCell>Action</TableCell>
+                      {getCompoAccess[permissionLevel]?.action && <TableCell>Action</TableCell>}
                     </TableRow>
                   </TableHead>
 
@@ -603,18 +603,20 @@ function KeywordList() {
                               <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
                               <TableCell>
                                 {keyword}{' '}
-                                {tags.map(e => (
-                                  <Chip
-                                    className="ml-1"
-                                    label={e.tagName}
-                                    onDelete={() =>
-                                      removeTag({
-                                        _tagId: e._id,
-                                        _keywordId: _id,
-                                      })
-                                    }
-                                  />
-                                ))}
+                                {permissionLevel === 1 || permissionLevel === 2
+                                  ? tags.map(e => (
+                                      <Chip
+                                        className="ml-1"
+                                        label={e.tagName}
+                                        onDelete={() =>
+                                          removeTag({
+                                            _tagId: e._id,
+                                            _keywordId: _id,
+                                          })
+                                        }
+                                      />
+                                    ))
+                                  : tags.map(e => <Chip className="ml-1" label={e.tagName} />)}
                               </TableCell>
                               {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
                               <TableCell>{prevRankGroup || '-'}</TableCell>
