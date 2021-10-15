@@ -607,7 +607,16 @@ function KeywordList() {
                                   ? tags.map(e => (
                                       <Chip
                                         className="ml-1"
+                                        key={e._id}
                                         label={e.tagName}
+                                        onClick={() =>
+                                          history.push({
+                                            pathname: `/project/tag-keyword/${e._id}`,
+                                            state: {
+                                              tagName: e.tagName,
+                                            },
+                                          })
+                                        }
                                         onDelete={() =>
                                           removeTag({
                                             _tagId: e._id,
@@ -616,7 +625,21 @@ function KeywordList() {
                                         }
                                       />
                                     ))
-                                  : tags.map(e => <Chip className="ml-1" label={e.tagName} />)}
+                                  : tags.map(e => (
+                                      <Chip
+                                        className="ml-1"
+                                        key={e._id}
+                                        onClick={() =>
+                                          history.push({
+                                            pathname: `/project/tag-keyword/${e._id}`,
+                                            state: {
+                                              tagName: e.tagName,
+                                            },
+                                          })
+                                        }
+                                        label={e.tagName}
+                                      />
+                                    ))}
                               </TableCell>
                               {/* <TableCell>{getKeywordFrequency(keywordCheckFrequency)}</TableCell> */}
                               <TableCell>{prevRankGroup || '-'}</TableCell>
