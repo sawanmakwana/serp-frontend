@@ -77,7 +77,7 @@ function KeywordList() {
   const getkeywordRowtocall = window.localStorage.getItem('keywordRowtocall')
   const [page, setPage] = useState(0)
   const [keyWordModal, setKeywordModal] = useState(false)
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 100)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [weekSortingtype, setweekSortingtype] = useState('asc')
@@ -624,7 +624,8 @@ function KeywordList() {
                                 {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
                               </TableCell>
                               <Tooltip
-                                onClick={() => {
+                                onClick={e => {
+                                  e.stopPropagation()
                                   if (url) {
                                     const win = window.open(url, '_blank')
                                     win.focus()

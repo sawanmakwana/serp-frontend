@@ -34,7 +34,7 @@ function TagList() {
   const queryClient = useQueryClient()
   const {permissionLevel} = useContext(GlobalContext)
   const getRows = JSON.parse(window.localStorage.getItem('taglistRow'))
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 100)
   const [page, setPage] = useState(0)
   const [editId, setEditId] = useState(null)
   const [Sorting, setSorting] = useState('')

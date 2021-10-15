@@ -35,7 +35,7 @@ function KeywordTagList() {
   const {tagId} = useParams()
   const {state} = useLocation()
   const getRows = JSON.parse(window.localStorage.getItem('KeywordTagListRow'))
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 100)
   const [page, setPage] = useState(0)
   const [keywordId, setKeywordID] = useState(0)
   const [keywordName, setKeywordName] = useState('')
@@ -60,7 +60,7 @@ function KeywordTagList() {
 
   const {data, isFetching} = useQuery(
     ['keywordsForTags', page, rowsPerPage, Sorting],
-    () => client(`keywordsForTags/${tagId}?limit=${rowsPerPage}page=${page + 1}${Sorting}`),
+    () => client(`keywordsForTags/${tagId}?limit=${rowsPerPage}&page=${page + 1}${Sorting}`),
     {
       keepPreviousData: true,
     }
@@ -220,7 +220,8 @@ function KeywordTagList() {
                                 {getDifference(prevRankGroup, rankGroup, 'GET_ICON')}
                               </TableCell>
                               <Tooltip
-                                onClick={() => {
+                                onClick={e => {
+                                  e.stopPropagation()
                                   if (url) {
                                     const win = window.open(url, '_blank')
                                     win.focus()

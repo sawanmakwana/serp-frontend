@@ -64,7 +64,7 @@ function SubProjectList() {
   const {permissionLevel} = useContext(GlobalContext)
   const getRows = JSON.parse(window.localStorage.getItem('subprojectlistRow'))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 100)
   const [Sorting, setSorting] = useState('')
   const [keySortingtype, setkeySortingtype] = useState('asc')
   const [frequencytype, setFrequencySortingtype] = useState('asc')

@@ -44,7 +44,7 @@ function PorjectList() {
   const {permissionLevel} = useContext(GlobalContext)
   const getRows = JSON.parse(window.localStorage.getItem('projectlistRow'))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 50)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 100)
   const [Sorting, setSorting] = useState('')
   const [projectSortingtype, setprojectSortingtype] = useState('asc')
   const [urlSortingtype, setUrlSortingtype] = useState('asc')

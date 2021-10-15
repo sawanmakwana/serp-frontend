@@ -36,7 +36,7 @@ function User() {
 
   const [page, setPage] = useState(0)
   const getRows = JSON.parse(window.localStorage.getItem('userListRow'))
-  const [rowsPerPage, setRowsPerPage] = useState(getRows || 5)
+  const [rowsPerPage, setRowsPerPage] = useState(getRows || 100)
   const [anchorEl, setAnchorEl] = useState(null)
   const [addUserModal, setAddUserModal] = useState(false)
   const [editId, setEditId] = useState(null)
@@ -162,7 +162,7 @@ function User() {
                       {data?.data?.result?.length === 0 ? (
                         <TableRow hover>
                           <TableCell className="emptyTable" colSpan="6">
-                            No Project Available
+                            No User Available
                           </TableCell>
                         </TableRow>
                       ) : (
