@@ -72,8 +72,8 @@
   height: 90vh;
 }
 .urlEcllips {
-  max-width: 430px;
-  min-width: 430px;
+  max-width: 400px;
+  min-width: 400px;
   word-wrap: break-word;
 }
 .urlEcllips:hover {
