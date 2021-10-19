@@ -145,7 +145,7 @@ function KeywordTagList() {
                         Keyword
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell className="prev-rank ">
+                    <TableCell className="prev-rank">
                       <TableSortLabel
                         active={Sorting.includes('prevRankGroup')}
                         direction={prwRank === 'asc' ? 'desc' : 'asc'}
@@ -154,10 +154,10 @@ function KeywordTagList() {
                           setSorting(`&sort=prevRankGroup:${prwRank}`)
                         }}
                       >
-                        <div>
+                        <div className="prev-rank-data">
                           Prev Rank
                           <Tooltip title={`Previous Date: ${getFormetedData(data?.data?.result[0]?.prevDate)}`}>
-                            <span className="ml-2">{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
+                            <span>{getFormetedData(data?.data?.result[0]?.prevDate)}</span>
                           </Tooltip>
                         </div>
                       </TableSortLabel>

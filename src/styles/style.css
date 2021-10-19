@@ -222,6 +222,17 @@
 .prev-rank p {
   line-height: 1.5;
 }
+.prev-rank-data {
+  display: flex;
+  flex-direction: column;
+}
+.prev-rank-data span {
+  opacity: 0.85;
+  font-size: 13px;
+}
+.prev-rank .MuiTableSortLabel-root {
+  flex-direction: initial;
+}
 /* .prev-rank span {
   opacity: 0.85;
   font-size: 12px;
