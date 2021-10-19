@@ -184,9 +184,9 @@
   padding: 7px !important;
   margin-right: 2px;
 }
-.tableHeader svg{
+/* .tableHeader svg{
   font-size: 21px !important;
-}
+} */
 .p-error {
   color: #f44336;
   margin-right: 14px;
@@ -231,11 +231,16 @@
   flex-direction: column;
 }
 .next-rank font{
-  line-height: 1.5;
+  line-height: 1.6;
 }
 .next-rank .next-rank-data {
   opacity: 0.85;
-  font-size: 12px;
+  font-size: 13px;
+}
+.next-rank-data-svg {
+  font-size: 9px !important;
+  color: rgba(0, 0, 0, 0.700);
+  margin: 0 12px !important;
 }
 .forget-link {
   float: right;

@@ -25,8 +25,9 @@ import Chart from 'react-apexcharts'
 import {useQuery} from 'react-query'
 import {useClient} from 'useClient'
 import {useParams, useHistory, useLocation} from 'react-router-dom'
-import {getDifference, getFormetedData} from 'util/app-utill'
+import {getDifference, getFormetedData, getKeywordFrequency} from 'util/app-utill'
 import {ArrowBack} from '@material-ui/icons'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import theme from 'theme'
 import {KeywordGraph} from 'components/keyword-graph-modal'
 
@@ -106,8 +107,23 @@ function KeywordTagList() {
       <Paper>
         <Card>
           <Toolbar className="d-flex ">
-            <Typography className="tableHeader" variant="h6" id="tableTitle" component="div">
-              Current page <span> ({page + 1})</span>
+            <Typography className="tableHeader next-rank" variant="h6" id="tableTitle" component="div">
+              <font>
+                Current page <span> ({page + 1})</span>
+              </font>
+              <span style={{display: 'flex', alignItems: 'center'}}>
+                <Tooltip title={`Next Date: ${getFormetedData(data?.data?.result[0]?.nextDate)}`}>
+                  <span className="next-rank-data">{getFormetedData(data?.data?.result[0]?.nextDate)}</span>
+                </Tooltip>
+                <FiberManualRecordIcon className="next-rank-data-svg" />
+                <Tooltip
+                  title={`Keyword Frequency: ${getKeywordFrequency(data?.data?.result[0]?.keywordCheckFrequency)}`}
+                >
+                  <span className="next-rank-data">
+                    Keyword Frequency: {getKeywordFrequency(data?.data?.result[0]?.keywordCheckFrequency)}
+                  </span>
+                </Tooltip>
+              </span>
             </Typography>
           </Toolbar>
           <Divider />

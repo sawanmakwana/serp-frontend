@@ -48,8 +48,16 @@ import {
 } from '@material-ui/core/colors'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import {useTheme} from '@material-ui/core/styles'
-import {downloadResponseCSV, getCompoAccess, getDifference, getFormetedData, getLoaction} from 'util/app-utill'
+import {
+  downloadResponseCSV,
+  getCompoAccess,
+  getDifference,
+  getFormetedData,
+  getLoaction,
+  getKeywordFrequency,
+} from 'util/app-utill'
 import {ArrowBack, Delete} from '@material-ui/icons'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import {useClient} from 'useClient'
 import {AddKeywordModal} from 'components/add-keyword-modal'
 import {DeleteModal} from 'components/delete-modal'
@@ -429,9 +437,19 @@ function KeywordList() {
                   <font>
                     Current page <span> ({page + 1})</span>
                   </font>
-                  <Tooltip title={`Next Date: ${getFormetedData(data?.data?.result[0]?.nextDate)}`}>
-                    <span className="next-rank-data">{getFormetedData(data?.data?.result[0]?.nextDate)}</span>
-                  </Tooltip>
+                  <span style={{display: 'flex', alignItems: 'center'}}>
+                    <Tooltip title={`Next Date: ${getFormetedData(data?.data?.result[0]?.nextDate)}`}>
+                      <span className="next-rank-data">{getFormetedData(data?.data?.result[0]?.nextDate)}</span>
+                    </Tooltip>
+                    <FiberManualRecordIcon className="next-rank-data-svg" />
+                    <Tooltip
+                      title={`Keyword Frequency: ${getKeywordFrequency(data?.data?.result[0]?.keywordCheckFrequency)}`}
+                    >
+                      <span className="next-rank-data">
+                        Keyword Frequency: {getKeywordFrequency(data?.data?.result[0]?.keywordCheckFrequency)}
+                      </span>
+                    </Tooltip>
+                  </span>
                 </Typography>
               )}
               {selected.length > 0 && getCompoAccess[permissionLevel]?.action && (
