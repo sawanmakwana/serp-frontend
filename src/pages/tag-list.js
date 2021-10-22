@@ -69,8 +69,8 @@ function TagList() {
         id: 'basic-bar',
       },
       xaxis: {
-        categories: GraphData?.data?.map(Gd => Gd?.keywords?.map(fd => getFormetedData(fd?.date))) || [],
-      }[indexMaxData],
+        categories: GraphData?.data?.map(Gd => Gd?.keywords?.map(fd => getFormetedData(fd?.date)))[indexMaxData] || [],
+      },
       yaxis: {reversed: true},
     },
 
