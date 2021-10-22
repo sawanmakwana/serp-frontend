@@ -438,8 +438,10 @@ function KeywordList() {
                     Current page <span> ({page + 1})</span>
                   </font>
                   <span style={{display: 'flex', alignItems: 'center'}}>
-                    <Tooltip title={`Next Date: ${getFormetedData(data?.data?.result[0]?.nextDate)}`}>
-                      <span className="next-rank-data">{getFormetedData(data?.data?.result[0]?.nextDate)}</span>
+                    <Tooltip title={`Next Check Date: ${getFormetedData(data?.data?.result[0]?.nextDate)}`}>
+                      <span className="next-rank-data">
+                        Next Check: {getFormetedData(data?.data?.result[0]?.nextDate)}
+                      </span>
                     </Tooltip>
                     <FiberManualRecordIcon className="next-rank-data-svg" />
                     <Tooltip
