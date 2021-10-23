@@ -1,11 +1,11 @@
-import {BarChart, Settings, Users, Folder} from 'react-feather'
+import {Settings, Users, Folder} from 'react-feather'
 
 export const sidbarItem = [
-  {
-    href: '/dashboard',
-    icon: BarChart,
-    title: 'Dashboard',
-  },
+  // {
+  //   href: '/dashboard',
+  //   icon: BarChart,
+  //   title: 'Dashboard',
+  // },
   {
     href: '/project',
     icon: Folder,

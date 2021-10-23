@@ -2,7 +2,6 @@ import {Redirect, Route, Switch} from 'react-router-dom'
 import {PorjectList} from 'pages/project-list'
 import {SubProjectList} from 'pages/sub-project-list'
 import {DocumentTitle} from 'util/document-title'
-import {Dashbord} from 'pages/dashbord'
 import {KeywordList} from 'pages/keyword-list'
 import {User} from 'pages/user'
 import {MyAccount} from 'pages/my-account'
@@ -17,10 +16,10 @@ function AppRoutespath() {
 
   return (
     <Switch>
-      <Route exact path="/dashboard">
+      {/* <Route exact path="/dashboard">
         <DocumentTitle title="Dashboard" />
         <Dashbord />
-      </Route>
+      </Route> */}
       <Route exact path="/project">
         <DocumentTitle title="Project" />
         <PorjectList />
@@ -49,7 +48,7 @@ function AppRoutespath() {
         <MyAccount />
       </Route>
 
-      <Redirect to="/dashboard" />
+      <Redirect to="/project" />
     </Switch>
   )
 }
