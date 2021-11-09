@@ -12,11 +12,7 @@ export const SubProject = Joi.object({
     'any.required': `Keyword cannot be an empty field`,
   }),
   enableEmail: Joi.allow(),
-  tags: Joi.array().min(1).messages({
-    'array.empty': `Tag cannot be an empty field`,
-    'any.required': `Tag is a required field`,
-    'array.min': `Tag should have a minimum length of 1`,
-  }),
+  tags: Joi.array().allow(null),
 })
 
 export const editSubProject = Joi.object({
@@ -26,10 +22,7 @@ export const editSubProject = Joi.object({
     'string.empty': `Keyword cannot be an empty field`,
     'any.required': `Keyword cannot be an empty field`,
   }),
-  tags: Joi.required().messages({
-    'array.empty': `Tag cannot be an empty field`,
-    'any.required': `Tag is a required field`,
-  }),
+  tags: Joi.array().allow(null),
 })
 
 export const AddKeywordModalJoi = Joi.object({
@@ -37,11 +30,7 @@ export const AddKeywordModalJoi = Joi.object({
     'string.empty': `Keyword cannot be an empty field`,
     'any.required': `Keyword cannot be an empty field`,
   }),
-  tags: Joi.array().min(1).messages({
-    'array.empty': `Tag cannot be an empty field`,
-    'any.required': `Tag is a required field`,
-    'array.min': `Tag should have a minimum length of 1`,
-  }),
+  tags: Joi.array().allow(null),
 })
 
 export const AddTagJoi = Joi.object({
