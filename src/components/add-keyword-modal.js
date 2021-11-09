@@ -144,7 +144,7 @@ function AddKeywordModal({open, setOpen, editId, KeywordId}) {
               />
             )}
           />
-          <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
+          <FormHelperText className="helperText mb-1">Note: Each keyword to new line</FormHelperText>
 
           <Controller
             control={control}

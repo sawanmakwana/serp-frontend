@@ -236,7 +236,7 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
               />
             )}
           />
-          <FormHelperText className="helperText">Note: Each keyword to new line</FormHelperText>
+          <FormHelperText className="helperText mb-1">Note: Each keyword to new line</FormHelperText>
 
           <Controller
             control={control}
@@ -271,7 +271,14 @@ function AddSubProjectListModal({open, setOpen, domain, _projectId, data, editId
             )}
           />
           {errors.tags && <p className="p-error"> {errors.tags.message}</p>}
-          <TextField required variant="outlined" label="Enter Domain" disabled value={domain[0].domain} />
+          <TextField
+            required
+            className="mt-1"
+            variant="outlined"
+            label="Enter Domain"
+            disabled
+            value={domain[0].domain}
+          />
           {Boolean(!editId) && (
             <Controller
               control={control}

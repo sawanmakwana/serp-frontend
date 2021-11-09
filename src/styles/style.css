@@ -97,6 +97,12 @@
 .ml-2 {
   margin-left: 1rem !important;
 }
+.mb-1 {
+  margin-bottom: 0.8rem !important;
+}
+.mt-1 {
+  margin-top: 0.8rem !important;
+}
 .pl-4 {
   padding-left: 25px !important;
 }
