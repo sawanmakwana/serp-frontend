@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {
   TableHead,
   TablePagination,
@@ -30,6 +30,7 @@ import {
   Chip,
   Tabs,
   Tab,
+  CircularProgress,
 } from '@material-ui/core'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import AnalyticCard from 'components/analytic-card'
@@ -80,8 +81,6 @@ function KeywordList() {
   const {subProjectId: KeywordId, projectId} = useParams()
   const xsScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const getRows = JSON.parse(window.localStorage.getItem('keywordlistRow'))
-  const getkeywordName = window.localStorage.getItem('keywordName')
-  const getkeywordLocation = window.localStorage.getItem('keywordLocation')
   const getkeywordRowtocall = window.localStorage.getItem('keywordRowtocall')
   const [page, setPage] = useState(0)
   const [keyWordModal, setKeywordModal] = useState(false)
@@ -92,7 +91,7 @@ function KeywordList() {
   const [diffSortingtype, setdiffSortingtype] = useState('asc')
   const [urlSortingtype, setUrlSortingtype] = useState('asc')
   const [prwRank, setprwRank] = useState('asc')
-  const [selected, setSelected] = React.useState([])
+  const [selected, setSelected] = useState([])
   const [deleteModal, setDeleteModal] = useState(false)
   const [anchorE2, setAnchorE2] = useState(null)
   const open = Boolean(anchorE2)
@@ -101,28 +100,16 @@ function KeywordList() {
   const [anchorEl, setAnchorEl] = useState(null)
   const [editId, setEditId] = useState(null)
   const [appTagModal, setAddTagModal] = useState(false)
+  const [loc, setLoc] = useState(null)
+  const [proName, setProName] = useState('')
 
   const smallScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
-  // React.useEffect(() => {
-  //   window.history.pushState(null, '', window.location.href)
-  //   window.onpopstate = () => {
-  //     history.push(`/project/${projectId}`)
-  //   }
-  //   return () => (window.onpopstate = () => {})
-  // }, [history, projectId])
-
-  React.useEffect(() => {
-    if (state?.keywordName) {
-      window.localStorage.setItem('keywordName', state?.keywordName)
-    }
-    if (state?.keywordlocation) {
-      window.localStorage.setItem('keywordLocation', state?.keywordlocation)
-    }
+  useEffect(() => {
     if (state?.rowtoCall) {
       window.localStorage.setItem('keywordRowtocall', state?.rowtoCall)
     }
-  }, [state?.keywordName, state?.keywordlocation, state?.rowtoCall])
+  }, [state?.rowtoCall])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -145,7 +132,7 @@ function KeywordList() {
     isFetching: DdlistKeywordisFetching,
     isLoading: DdlistKeywordisLoading,
   } = useQuery(['DdlistKeyword'], () =>
-    client(`getSubProjectsList/${projectId}?limit=${state?.rowtoCall || getkeywordRowtocall}`)
+    client(`getSubProjectsList/${projectId}?limit=${state?.rowtoCall || getkeywordRowtocall || '20'}`)
   )
 
   const {data: csvData, isLoading: csvisLoading} = useQuery(
@@ -308,6 +295,22 @@ function KeywordList() {
     }
   )
 
+  const {data: projectlistData} = useQuery(['DdListforName'], () => client(`getProjectsListDrpDwn`))
+
+  useEffect(() => {
+    if (DdlistKeywordData) {
+      const loc = DdlistKeywordData?.data?.result?.filter(list => projectId === list._projectId)
+      setLoc(loc[0]?.locationCode)
+    }
+  }, [DdlistKeywordData, projectId])
+
+  useEffect(() => {
+    if (projectlistData) {
+      const proName = projectlistData?.data?.filter(list => projectId === list._id)
+      setProName(proName[0]?.projectName)
+    }
+  }, [projectlistData, projectId])
+
   return (
     <>
       <Box className="d-flex">
@@ -319,7 +322,8 @@ function KeywordList() {
           >
             <ArrowBack />
           </IconButton>
-          Keyword: {state?.keywordName || getkeywordName} - {state?.keywordlocation || getkeywordLocation}
+          Keyword: {proName || ''} -{' '}
+          {DdlistKeywordisFetching ? <CircularProgress style={{height: 17, width: 17}} /> : getLoaction(loc)}
         </Typography>
         <TextField
           select
@@ -331,12 +335,8 @@ function KeywordList() {
           disabled={DdlistKeywordisLoading}
         >
           {DdlistKeywordData?.data?.result?.map(data => (
-            <MenuItem
-              key={data._id}
-              value={data._id}
-              onClick={() => window.localStorage.setItem('keywordLocation', getLoaction(data.locationCode))}
-            >
-              {state?.keywordName || getkeywordName} - {getLoaction(data.locationCode) || getkeywordLocation}
+            <MenuItem key={data._id} value={data._id} onClick={() => setLoc(data.locationCode)}>
+              {proName} -{getLoaction(data.locationCode)}
             </MenuItem>
           ))}
         </TextField>

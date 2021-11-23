@@ -460,8 +460,6 @@ function SubProjectList() {
                             history.push({
                               pathname: `/project/${DomainId}/keyword/${_id}`,
                               state: {
-                                keywordName: domain && domain[0] && domain[0]?.projectName,
-                                keywordlocation: getLoaction(locationCode),
                                 rowtoCall: data?.data?.total,
                               },
                             })
