@@ -299,10 +299,10 @@ function KeywordList() {
 
   useEffect(() => {
     if (DdlistKeywordData) {
-      const loc = DdlistKeywordData?.data?.result?.filter(list => projectId === list._projectId)
+      const loc = DdlistKeywordData?.data?.result?.filter(list => KeywordId === list._id)
       setLoc(loc[0]?.locationCode)
     }
-  }, [DdlistKeywordData, projectId])
+  }, [DdlistKeywordData, KeywordId])
 
   useEffect(() => {
     if (projectlistData) {
